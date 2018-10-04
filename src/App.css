@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -29,4 +29,199 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+
+
+
+
+.todo {
+    top: 30px;
+    margin: auto;
+    width: 340px;
 }
+
+.input--add-task {
+    width: 75%;
+    height: 30px;
+}
+
+.add-task {
+    margin-bottom: -10px
+}
+
+.row-1 {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.row-2 {
+    height: 20px
+}
+
+.calendar {
+
+}
+
+.priority--top {
+    margin-left: 17px
+}
+
+.calendar-element {
+    height: 30px;
+    width: 136px;
+}
+
+.priority-element {
+    height: 30px;
+}
+
+.calendar-element--edit {
+    height: 100%
+}
+
+.priority--edit {
+    float: right;
+    margin-right: 11px;
+}
+
+.priority-element--edit {
+    height: 100%
+}
+
+.sort {
+    float: left
+}
+
+.sort-button {
+    height: 30px;
+    width: 29px;
+    float: right;
+    margin-right: 1px;
+    border: 1px solid #c4c4c4;
+    cursor: pointer;
+    font-size: large;
+    text-align: center;
+}
+
+.date-due {
+    margin-top: 10px;
+    float: right;
+    font-size: x-small;
+    color: #2f2f2f
+}
+
+.deleteItem {
+    height: 30px;
+    width: 23px;
+    float: right;
+    border: 1px solid #c4c4c4;
+    cursor: pointer;
+    font-size: large;
+    text-align: center
+}
+
+.edit-task {
+    height: 30px;
+    width: 95%;
+    margin-bottom: 2px;
+    border: 1px solid black
+}
+
+.settings {
+    float: left;
+    margin-top: 10px;
+}
+
+.settings-button {
+    float: right;
+    cursor: pointer;
+}
+
+.change-color {
+    margin: 5px;
+}
+
+.select-style {
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+.tag {
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-right: 5px;
+    background-color: grey;
+    color: white
+}
+
+.tag-dropdown {
+    float: left;
+    margin-left: 10px
+}
+
+.add-button {
+    height: 30px;
+    width: 23%;
+    margin-left: 5px;
+}
+
+.row-2 select {
+    height: 24px;
+    max-width: 87px;
+}
+
+.row-2 button {
+    height: 24px;
+}cd 
+
+.undo {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.edit-text-element {
+    width: 85%;
+    float: left
+}
+
+.edit-text-button {
+    width: 15%;
+    height: 34px;
+}
+
+ul {
+    margin-left: -42px;
+}
+
+li {
+    border-bottom: 2px solid white;
+    text-align: left;
+    float: left;
+    padding: 5px;
+    width: 80%;
+    list-style-type: none;
+    word-wrap: break-word
+}
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+
+.fade-enter {
+    opacity: 0.01;
+}
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+.fade-exit {
+    opacity: 1;
+}
+.fade-exit-active {
+    opacity: 0.01;
+    transition: opacity 500ms ease-in;
+}
+  

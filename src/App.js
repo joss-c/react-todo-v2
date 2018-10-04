@@ -1,28 +1,23 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { convertDate, articulateDateDue, arrayMove } from './functions'
+import ToDo from './ToDo'
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    render() {
+        const dataFile = "data"
+        const data = localStorage.getItem(dataFile)
+        const saveData = (data) => localStorage.setItem(dataFile, JSON.stringify(data))
+        return (
+            <ToDo
+                data={data}
+                saveData={saveData}
+                convertDate={convertDate}
+                articulateDateDue={articulateDateDue}
+                arrayMove={arrayMove}
+            />
+        )
+    }
 }
 
 export default App;
