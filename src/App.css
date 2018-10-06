@@ -31,10 +31,6 @@
   }
 } */
 
-
-
-
-
 .todo {
     top: 30px;
     margin: auto;
@@ -47,7 +43,8 @@
 }
 
 .add-task {
-    margin-bottom: -10px
+    margin-top: 10px;
+    margin-bottom: 7px
 }
 
 .row-1 {
@@ -161,8 +158,8 @@
 }
 
 .add-button {
-    height: 30px;
-    width: 23%;
+    height: 35px;
+    width: 22%;
     margin-left: 5px;
 }
 
@@ -173,7 +170,7 @@
 
 .row-2 button {
     height: 24px;
-}cd 
+}
 
 .undo {
     display: flex;
@@ -182,7 +179,7 @@
 }
 
 .edit-text-element {
-    width: 85%;
+    width: 82%;
     float: left
 }
 
