@@ -65,12 +65,12 @@
 }
 
 .calendar-element {
-    height: 30px;
+    height: 24px;
     width: 136px;
 }
 
 .priority-element {
-    height: 30px;
+    height: 24px;
 }
 
 .calendar-element--edit {
@@ -145,6 +145,7 @@
 }
 
 .tag {
+    font-size: x-small;
     padding-left: 2px;
     padding-right: 2px;
     margin-right: 5px;
@@ -179,13 +180,15 @@
 }
 
 .edit-text-element {
+    min-height: 24px;
     width: 82%;
+    resize: none;
     float: left
 }
 
 .edit-text-button {
     width: 15%;
-    height: 34px;
+    height: 30px;
 }
 
 ul {
@@ -202,8 +205,9 @@ li {
     word-wrap: break-word
 }
 
-body {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+* {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: medium;
 }
 
 

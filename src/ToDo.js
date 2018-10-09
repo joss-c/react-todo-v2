@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import TextareaAutosize from 'react-autosize-textarea'
+import uuid from 'uuid'
 import { convertDate, articulateDateDue, arrayMove } from './functions'
 import { firstBy } from './thenBy.min.js'
 
@@ -31,7 +33,42 @@ const List = (props) =>
         </ul>
     </div>
 
-const ListItem = ({ data, item, index, toggleEditItem, editText, children }) =>
+const ListItem = (props) =>
+    <React.Fragment>
+        <Task 
+            data={props.data} 
+            item={props.item} 
+            index={props.index} 
+            handleTextChange={props.handleTextChange} 
+            editText={props.editText} 
+            toggleEditItem={props.toggleEditItem}>
+            <TaskDetails 
+                item={props.item} 
+                articulateDateDue={props.articulateDateDue} />
+        </Task>
+        <ItemButtons 
+            item={props.item} 
+            index={props.index} 
+            markComplete={props.markComplete}
+             sortItems={props.sortItems} />
+        <ItemEditBox 
+            item={props.item} 
+            index={props.index}
+            markComplete={props.markComplete}>
+            <Calendar
+                value={props.convertDate(props.item.dateDue, "ISO")}
+                handleOnChange={(event) => props.editDate(event, props.index)} 
+                convertDate={props.convertDate} />
+            <div className="priority--edit">
+                <Priority 
+                    value={props.convertPriority(props.item.priority)} 
+                    handleOnChange={(event) => props.editPriority(event, props.index)} />
+            </div>
+        </ItemEditBox>
+    </React.Fragment>
+
+
+const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <li
         onClick={() => toggleEditItem(index)}
         style={{
@@ -42,26 +79,22 @@ const ListItem = ({ data, item, index, toggleEditItem, editText, children }) =>
                         data.settings.style.colorLow :
                         (item.priority === 2) ?
                             data.settings.style.colorMedium :
-                            data.settings.style.colorHigh
-        }}
-    >
+                            data.settings.style.colorHigh }}>
         <span className="task"
             style={{
                 textDecorationLine:
                     (item.active) ?
                         "none" :
-                        "line-through"
-            }}>
+                        "line-through" }}>
             {(item.editPanelHidden) ?
                 item.task :
                 <span className="edit-text">
-                    <textarea
+                    <TextareaAutosize
                         className="edit-text-element"
-                        onChange={(event) => editText(event, index)}
+                        onChange={(event) => handleTextChange(event)}
                         onClick={(event) => event.stopPropagation()}
-                        value={item.task}>
-                    </textarea>
-                    <button className="edit-text-button">OK</button>
+                        defaultValue={item.task} />
+                    <button className="edit-text-button" onClick={() => editText(index)}>OK</button>
                 </span>
             }
         </span>
@@ -73,7 +106,7 @@ const ListItem = ({ data, item, index, toggleEditItem, editText, children }) =>
         {children}
     </li>
 
-const ItemDetails = ({ item, articulateDateDue }) =>
+const TaskDetails = ({ item, articulateDateDue }) =>
     <span className="date-due">
         {(item.tag === null) ?
             null :
@@ -84,14 +117,14 @@ const ItemDetails = ({ item, articulateDateDue }) =>
     </span>
 
 const ItemButtons = ({ item, index, markComplete, sortItems }) =>
-    <div>
-        <span className="deleteItem" onClick={() => markComplete(index)}>
+    <div className="item-buttons">
+        <div className="deleteItem" onClick={() => markComplete(index)}>
             {(item.active) ? "✓" : "✕"}
-        </span>
-        <span className="sort-button" onClick={() => sortItems(index, true)}>↑</span>
+        </div>
+        <div className="sort-button" onClick={() => sortItems(index, true)}>↑</div>
     </div>
 
-const ItemEditBox = ({ item, index, convertPriority, markComplete, children }) =>
+const ItemEditBox = ({ item, index, markComplete, children }) =>
     <li className="edit-task" hidden={item.editPanelHidden}>
         <span hidden={!item.active}>
             <label>Edit Date: </label>
@@ -106,9 +139,8 @@ class AddTask extends Component {
     constructor(props) {
         super(props)
         this.inputElement = React.createRef()
-        this.createItem = this.createItem.bind(this)
     }
-    createItem(event) {
+    createItem = (event) => {
         const { data, selectedPriority, addItem, convertPriority, convertDate, selectedDate, selectedTag } = this.props
         const inputElementValue = this.inputElement.current.value
         const itemInstances = data.listItems.reduce(function (total, item) {
@@ -116,6 +148,7 @@ class AddTask extends Component {
         }, 1)
         const newItem = {
             active: true,
+            id: uuid().substring(0, 8),
             hidden: false,
             task: inputElementValue,
             priority: convertPriority(selectedPriority),
@@ -177,7 +210,8 @@ class ToDo extends Component {
             selectedDate: this.props.convertDate(Date.now(), "ISO"),
             settingsHidden: true,
             selectedStyle: "None",
-            selectedTag: "None"
+            selectedTag: "None",
+            editTaskText: ""
         }
         this.dropdownSortBy = React.createRef()
     }
@@ -377,16 +411,17 @@ class ToDo extends Component {
 
     toggleEditItem = (index) => {
         let { data } = this.state
-        const targetPanel = data.listItems[index]
-        const targetPanelState = targetPanel.editPanelHidden
+        const targetItem = data.listItems[index]
+        const targetPanelState = targetItem.editPanelHidden
         data.listItems.forEach(function (item, index) {
-            if (item.editPanelHidden === false && item !== targetPanel) {
+            if (item.editPanelHidden === false && item !== targetItem) {
                 item.editPanelHidden = true
             }
         })
         data.listItems[index].editPanelHidden = !targetPanelState
         this.setState({
-            data: data
+            data: data,
+            editTaskText: targetItem.task
         })
     }
 
@@ -478,12 +513,18 @@ class ToDo extends Component {
         })
     }
 
-    editText = (event, index) => {
-        const { data } = this.state
-        const currentText = event.target.value
-        data.listItems[index].task = currentText
+    editText = (index) => {
+        const { data, editTaskText } = this.state
+        data.listItems[index].task = editTaskText
         this.setState({
             data: data
+        })
+    }
+
+    handleTextChange = (event) => {
+        const currentText = event.target.value
+        this.setState({
+            editTaskText: currentText
         })
     }
 
@@ -502,8 +543,7 @@ class ToDo extends Component {
                         buttonDisabled={buttonDisabled}
                         selectedPriority={selectedPriority}
                         selectedDate={selectedDate}
-                        selectedTag={selectedTag}
-                    />
+                        selectedTag={selectedTag} />
                 </div>
                 <div className="row-1">
                     <div className="calendar">
@@ -546,21 +586,23 @@ class ToDo extends Component {
                         {data.listItems.map((item, index) =>
                             (item.hidden) ? null :
                                 <CSSTransition
-                                    key={item.task + item.instance}
+                                    key={item.id}
                                     timeout={500}
                                     classNames="fade">
-                                    <React.Fragment>
-                                        <ListItem data={data} item={item} index={index} editText={this.editText} toggleEditItem={this.toggleEditItem}>
-                                            <ItemDetails item={item} articulateDateDue={articulateDateDue} />
-                                        </ListItem>
-                                        <ItemButtons item={item} index={index} markComplete={this.markComplete} sortItems={this.sortItems} />
-                                        <ItemEditBox item={item} index={index} convertPriority={this.convertPriority} markComplete={this.markComplete}>
-                                            <Calendar value={convertDate(item.dateDue, "ISO")} handleOnChange={(event) => this.editDate(event, index)} convertDate={convertDate} />
-                                            <div className="priority--edit">
-                                                <Priority value={this.convertPriority(item.priority)} handleOnChange={(event) => this.editPriority(event, index)} />
-                                            </div>
-                                        </ItemEditBox>
-                                    </React.Fragment>
+                                    <ListItem
+                                        data={data}
+                                        item={item} 
+                                        index={index} 
+                                        handleTextChange={this.handleTextChange} 
+                                        editText={this.editText}
+                                        toggleEditItem={this.toggleEditItem}
+                                        articulateDateDue={articulateDateDue}
+                                        markComplete={this.markComplete} 
+                                        sortItems={this.sortItems} 
+                                        convertPriority={this.convertPriority}
+                                        editDate={this.editDate}
+                                        convertDate={convertDate}
+                                        editPriority={this.editPriority} />
                                 </CSSTransition>
                         )}
                     </TransitionGroup>
