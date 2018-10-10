@@ -47,13 +47,21 @@
     margin-bottom: 7px
 }
 
+.main-col {
+    float: none;
+    margin: 0 auto;
+}
+
+.row-0 {
+    display: flex
+}
+
 .row-1 {
-    display: flex;
     margin-bottom: 10px;
 }
 
 .row-2 {
-    height: 20px
+
 }
 
 .calendar {
@@ -153,24 +161,21 @@
     color: white
 }
 
-.tag-dropdown {
-    float: left;
-    margin-left: 10px
+.tag-select {
+    display: flex
 }
 
 .add-button {
     height: 35px;
-    width: 22%;
-    margin-left: 5px;
+    margin-left: -19px;
 }
 
 .row-2 select {
-    height: 24px;
-    max-width: 87px;
+
 }
 
 .row-2 button {
-    height: 24px;
+
 }
 
 .undo {
