@@ -38,8 +38,7 @@
 }
 
 .input--add-task {
-    width: 75%;
-    height: 30px;
+
 }
 
 .add-task {
@@ -74,12 +73,11 @@
 }
 
 .calendar-element {
-    height: 24px;
-    width: 136px;
+
 }
 
 .priority-element {
-    height: 24px;
+
 }
 
 .calendar-element--edit {
@@ -119,7 +117,8 @@
 
 .list {
     padding-left: 15px;
-    padding-right: 15px
+    padding-right: 15px;
+    margin-left: 2px;
 }
 
 .task {
