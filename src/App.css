@@ -31,8 +31,11 @@
   }
 } */
 
+.container {
+    margin-top: 10px
+}
+
 .todo {
-    top: 30px;
     margin: auto;
     width: 360px;
 }
@@ -179,7 +182,6 @@
 }
 
 .add-button {
-    height: 35px;
     margin-left: -19px;
 }
 
