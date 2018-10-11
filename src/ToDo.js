@@ -264,9 +264,9 @@ class ToDo extends Component {
                     settings:
                     {
                         style: {
-                            colorHigh: "#ff8680",
-                            colorMedium: "#ffe84b",
-                            colorLow: "#a8d7ea"
+                            colorHigh: "#f5c6cb",
+                            colorMedium: "#ffeeba",
+                            colorLow: "#bee5eb"
                         }
                     },
                     tags: ["None"]
@@ -531,9 +531,9 @@ class ToDo extends Component {
                 selectedStyle: style
             })
         } else if (style === "Default") {
-            data.settings.style.colorHigh = "#ff8680"
-            data.settings.style.colorMedium = "#ffe84b"
-            data.settings.style.colorLow = "#a8d7ea"
+            data.settings.style.colorHigh = "#f5c6cb"
+            data.settings.style.colorMedium = "#ffeeba"
+            data.settings.style.colorLow = "#bee5eb"
             this.setState({
                 data: data,
                 selectedStyle: style
@@ -621,7 +621,7 @@ class ToDo extends Component {
                             selectedPriority={selectedPriority}
                             selectedDate={selectedDate}
                             selectedTag={selectedTag} />
-                        <Row className="row-1">
+                        <Row className="row-1 no-gutters">
                             <Col>
                                 <div className="calendar">
                                     <Calendar value={selectedDate} handleOnChange={this.changeDate} convertDate={convertDate} />
@@ -644,8 +644,8 @@ class ToDo extends Component {
                                     <option value="Selected Tag">Selected Tag</option>
                                 </Input>
                             </Col>
-                            <Col className="tag-select" xs="auto" sm={{ offset: 2 }} md={{ offset: 1 }} xl={{ offset: 3 }}>
-                                <Input type="select" value={selectedTag} onChange={this.changeTag}>
+                            <Col className="manage-tags" xs="auto" sm={{ offset: 2 }} md={{ offset: 1 }} xl={{ offset: 3 }}>
+                                <Input type="select" className="select-tag" value={selectedTag} onChange={this.changeTag}>
                                     {this.state.data.tags.map((tag, index) =>
                                         <option key={index} value={tag}>{(tag === "None") ? "Tag: None" : tag}</option>
                                     )}

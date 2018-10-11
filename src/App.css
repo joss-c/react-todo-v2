@@ -182,8 +182,12 @@
     color: white
 }
 
-.tag-select {
+.manage-tags {
     display: flex
+}
+
+.select-tag {
+    max-width: 130px;
 }
 
 .add-button {
