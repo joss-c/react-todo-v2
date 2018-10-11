@@ -606,7 +606,7 @@ class ToDo extends Component {
                         </Row>
                         <Row className="row-2 no-gutters">
                             <Col className="sort padding-right" xs="auto">
-                                <Input type="select" value={selectedSort} innerRef={this.selectSortBy} onChange={this.sortItems}>
+                                <Input type="select" className="select-sort" value={selectedSort} innerRef={this.selectSortBy} onChange={this.sortItems}>
                                     <option value="None">Sort: None</option>
                                     <option value="Priority">Priority</option>
                                     <option value="Date Due">Date Due</option>
@@ -615,14 +615,14 @@ class ToDo extends Component {
                                     <option value="Selected Tag">Selected Tag</option>
                                 </Input>
                             </Col>
-                            <Col className="tag-select">
+                            <Col className="tag-select" xs="auto" sm={{ offset: 2 }} md={{ offset: 1 }} xl={{ offset: 3 }}>
                                 <Input type="select" value={selectedTag} onChange={this.changeTag}>
                                     {this.state.data.tags.map((tag, index) =>
                                         <option key={index} value={tag}>{(tag === "None") ? "Tag: None" : tag}</option>
                                     )}
                                 </Input>
-                                <Button outline color="secondary" onClick={this.removeTag}>-</Button>
-                                <Button outline color="secondary" onClick={this.addTag}>+</Button>
+                                <Button outline color="secondary" size="sm" onClick={this.removeTag}>-</Button>
+                                <Button outline color="secondary" size="sm" onClick={this.addTag}>+</Button>
                             </Col>
                         </Row>
                         <List className="list">

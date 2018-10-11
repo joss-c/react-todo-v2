@@ -105,7 +105,11 @@
 }
 
 .sort {
-    float: left
+
+}
+
+.select-sort {
+    max-width: 130px
 }
 
 .sort-button {
@@ -190,7 +194,7 @@
 }
 
 .row-2 select {
-    max-width: 130px
+
 }
 
 .row-2 button {
