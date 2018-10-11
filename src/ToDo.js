@@ -158,10 +158,20 @@ const TaskDetails = ({ item, articulateDateDue }) =>
 
 const ItemButtons = ({ item, index, markComplete, sortItems }) =>
     <div className="item-buttons">
-        <Button className="sort-button" size="sm" outline color="secondary" onClick={() => sortItems(index, true)}>↑</Button>
-        <Button className="delete-item-button" size="sm" outline color="success" onClick={() => markComplete(index)}>
-            {(item.active) ? "✓" : "✕"}
-        </Button>
+        <Button
+            className="sort-button"
+            size="sm"
+            outline
+            color="secondary"
+            onClick={() => sortItems(index, true)}>
+            ↑</Button>
+        <Button
+            className="delete-item-button"
+            size="sm"
+            outline
+            color={(item.active) ? "success" : "danger"}
+            onClick={() => markComplete(index)}>
+            {(item.active) ? "✓" : "✕"}</Button>
     </div>
 
 const ItemEditBox = ({ item, index, markComplete, children }) =>
@@ -210,12 +220,22 @@ class AddTask extends Component {
                 <FormGroup>
                     <Row className="row-0 no-gutters">
                         <Col className="padding-right" xs="9">
-                            <Input type="text" className="input--add-task" onChange={inputChange} innerRef={this.inputElement}
+                            <Input
+                                type="text"
+                                className="input--add-task"
+                                onChange={inputChange}
+                                innerRef={this.inputElement}
                                 placeholder="Enter Task">
                             </Input>
                         </Col>
                         <Col xs="3">
-                            <Button className="add-button" outline color="primary" disabled={buttonDisabled} type="submit">Add</Button>
+                            <Button
+                                className="add-button"
+                                outline
+                                color="primary"
+                                disabled={buttonDisabled}
+                                type="submit">
+                                Add</Button>
                         </Col>
                     </Row>
                 </FormGroup>
@@ -267,7 +287,7 @@ class ToDo extends Component {
         const { data } = this.state
         const { saveData } = this.props
         saveData(data)
-        console.log(data)
+        console.log(this.state)
     }
 
     componentDidMount() {
@@ -435,24 +455,33 @@ class ToDo extends Component {
     sortItems = (index, manual) => {
         const { data } = this.state
         const selectedSort = this.selectSortBy.current.value
-        if (manual && selectedSort === "None") {
-            data.listItems = this.sortItemsBy(data.listItems, "Manual", index)
-            this.setState({
-                data: data
-            })
-        }
-        if (selectedSort === "None") {
-            data.listItems = this.sortItemsBy(data.listItems, selectedSort)
-            this.setState({
-                data: data,
-                selectedSort: selectedSort
-            })
+        if (manual) {
+            if (selectedSort === "None") {
+                data.listItems = this.sortItemsBy(data.listItems, "Manual", index)
+                this.setState({
+                    data: data
+                })
+            } else {
+                data.listItems = this.sortItemsBy(data.listItems, "Manual", index)
+                this.setState({
+                    data: data,
+                    selectedSort: "None"
+                })
+            }
         } else {
-            data.listItems = this.sortItemsBy(data.listItems, selectedSort)
-            this.setState({
-                data: data,
-                selectedSort: selectedSort
-            })
+            if (selectedSort === "None") {
+                data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+                this.setState({
+                    data: data,
+                    selectedSort: selectedSort
+                })
+            } else {
+                data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+                this.setState({
+                    data: data,
+                    selectedSort: selectedSort
+                })
+            }
         }
     }
 
