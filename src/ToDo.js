@@ -110,6 +110,11 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                 <Row>
                     <Col>
                         {item.task}
+                        <span className="instance">
+                            {(item.instance > 1) ?
+                                ` (${item.instance})` :
+                                null}
+                        </span>
                     </Col>
                 </Row> :
                 <span>
@@ -132,11 +137,6 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                     </Row>
                 </span>
             }
-        </span>
-        <span className="instance">
-            {(item.instance > 1) ?
-                ` (${item.instance})` :
-                null}
         </span>
         {children}
     </div>
