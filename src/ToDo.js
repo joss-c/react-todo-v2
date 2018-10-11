@@ -29,37 +29,39 @@ const Priority = ({ handleOnChange, value }) =>
 
 const List = (props) =>
     <div className="list">
-        <ul>
-            {props.children}
-        </ul>
+        {props.children}
     </div>
 
 const ListItem = (props) =>
-    <div className="list-item">
-        <Row>
-            <Task
-                data={props.data}
-                item={props.item}
-                index={props.index}
-                handleTextChange={props.handleTextChange}
-                editText={props.editText}
-                toggleEditItem={props.toggleEditItem}>
-                <TaskDetails
+    <React.Fragment>
+        <Row className="no-gutters">
+            <Col xs="9">
+                <Task
+                    data={props.data}
                     item={props.item}
-                    articulateDateDue={props.articulateDateDue} />
-            </Task>
-            <TransitionGroup>
-                <CSSTransition
-                    key={props.item.id}
-                    timeout={500}
-                    classNames="fade">
-                    <ItemButtons
+                    index={props.index}
+                    handleTextChange={props.handleTextChange}
+                    editText={props.editText}
+                    toggleEditItem={props.toggleEditItem}>
+                    <TaskDetails
                         item={props.item}
-                        index={props.index}
-                        markComplete={props.markComplete}
-                        sortItems={props.sortItems} />
-                </CSSTransition>
-            </TransitionGroup>
+                        articulateDateDue={props.articulateDateDue} />
+                </Task>
+            </Col>
+            <Col xs="3">
+                <TransitionGroup>
+                    <CSSTransition
+                        key={props.item.id}
+                        timeout={500}
+                        classNames="fade">
+                        <ItemButtons
+                            item={props.item}
+                            index={props.index}
+                            markComplete={props.markComplete}
+                            sortItems={props.sortItems} />
+                    </CSSTransition>
+                </TransitionGroup>
+            </Col>
         </Row>
         <ItemEditBox
             item={props.item}
@@ -79,11 +81,13 @@ const ListItem = (props) =>
                 </Col>
             </Row>
         </ItemEditBox>
-    </div>
+    </React.Fragment>
+
 
 
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
-    <li
+    <div
+        className="task"
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
@@ -95,7 +99,7 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                             data.settings.style.colorMedium :
                             data.settings.style.colorHigh
         }}>
-        <span className="task"
+        <span
             style={{
                 textDecorationLine:
                     (item.active) ?
@@ -103,20 +107,29 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                         "line-through"
             }}>
             {(item.editPanelHidden) ?
-                item.task :
-                <span className="edit-text">
-                    <TextareaAutosize
-                        className="edit-text-element"
-                        onChange={(event) => handleTextChange(event)}
-                        onClick={(event) => event.stopPropagation()}
-                        defaultValue={item.task} />
-                    <Button 
-                        className="edit-text-button" 
-                        outline
-                        color="secondary" 
-                        size="sm" 
-                        onClick={() => editText(index)}>
-                    OK</Button>
+                <Row>
+                    <Col>
+                        {item.task}
+                    </Col>
+                </Row> :
+                <span>
+                    <Row className="edit-text no-gutters">
+                        <Col xs="10">
+                            <TextareaAutosize
+                                className="edit-text-element"
+                                onChange={(event) => handleTextChange(event)}
+                                onClick={(event) => event.stopPropagation()}
+                                defaultValue={item.task} />
+                        </Col>
+                        <Col xs="2">
+                            <Button
+                                className="edit-text-button"
+                                color="secondary"
+                                size="sm"
+                                onClick={() => editText(index)}
+                            >OK</Button>
+                        </Col>
+                    </Row>
                 </span>
             }
         </span>
@@ -126,35 +139,40 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                 null}
         </span>
         {children}
-    </li>
+    </div>
 
 const TaskDetails = ({ item, articulateDateDue }) =>
-    <span className="date-due">
-        {(item.tag === null) ?
-            null :
-            <span className="tag">{item.tag}</span>}
-        {(item.active) ?
-            `Due: ${articulateDateDue(item.dateDue)}` :
-            "Complete"}
-    </span>
+    <Row>
+        <Col className="task-details">
+            <span className="date-due">
+                {(item.tag === null) ?
+                    null :
+                    <span className="tag">{item.tag}</span>}
+                {(item.active) ?
+                    `Due: ${articulateDateDue(item.dateDue)}` :
+                    "Complete"}
+            </span>
+        </Col>
+    </Row>
+
 
 const ItemButtons = ({ item, index, markComplete, sortItems }) =>
     <div className="item-buttons">
-        <div className="delete-item-button" onClick={() => markComplete(index)}>
+        <Button className="sort-button" size="sm" outline color="secondary" onClick={() => sortItems(index, true)}>↑</Button>
+        <Button className="delete-item-button" size="sm" outline color="success" onClick={() => markComplete(index)}>
             {(item.active) ? "✓" : "✕"}
-        </div>
-        <div className="sort-button" onClick={() => sortItems(index, true)}>↑</div>
+        </Button>
     </div>
 
 const ItemEditBox = ({ item, index, markComplete, children }) =>
-    <li className="edit-task" hidden={item.editPanelHidden}>
+    <div className="edit-task" hidden={item.editPanelHidden}>
         <span hidden={!item.active}>
             {children}
         </span>
         <div className="undo">
-            <button hidden={item.active} className="undo-button" onClick={() => markComplete(index, true)}>Undo "Mark Complete"</button>
+            <Button hidden={item.active} className="undo-button" outline color="secondary" onClick={() => markComplete(index, true)}>Undo "Mark Complete"</Button>
         </div>
-    </li>
+    </div>
 
 class AddTask extends Component {
     constructor(props) {
@@ -190,13 +208,13 @@ class AddTask extends Component {
         return (
             <Form onSubmit={this.createItem}>
                 <FormGroup>
-                    <Row className="row-0">
-                        <Col xs="10">
+                    <Row className="row-0 no-gutters">
+                        <Col className="padding-right" xs="9">
                             <Input type="text" className="input--add-task" onChange={inputChange} innerRef={this.inputElement}
                                 placeholder="Enter Task">
                             </Input>
                         </Col>
-                        <Col xs="2">
+                        <Col xs="3">
                             <Button className="add-button" outline color="primary" disabled={buttonDisabled} type="submit">Add</Button>
                         </Col>
                     </Row>
@@ -562,106 +580,106 @@ class ToDo extends Component {
         const { convertDate, articulateDateDue } = this.props
         return (
             <Container>
-                <div className="todo">
-                    <AddTask
-                        data={data}
-                        addItem={this.addItem}
-                        inputChange={this.inputChange}
-                        convertPriority={this.convertPriority}
-                        convertDate={convertDate}
-                        buttonDisabled={buttonDisabled}
-                        selectedPriority={selectedPriority}
-                        selectedDate={selectedDate}
-                        selectedTag={selectedTag} />
-                    <Row className="row-1">
-                        <Col>
-                            <div className="calendar">
-                                <Calendar value={selectedDate} handleOnChange={this.changeDate} convertDate={convertDate} />
-                            </div>
-                        </Col>
-                        <Col>
-                            <div className="priority--top">
-                                <Priority value={selectedPriority} handleOnChange={this.changePriority} />
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row className="row-2">
-                        <Col className="sort" xs="auto">
-                            <Input type="select" value={selectedSort} innerRef={this.selectSortBy} onChange={this.sortItems}>
-                                <option value="None">Sort:</option>
-                                <option value="Priority">Priority</option>
-                                <option value="Date Due">Date Due</option>
-                                <option value="A-Z">A-Z</option>
-                                <option value="Tags">Tags</option>
-                                <option value="Selected Tag">Selected Tag</option>
-                            </Input>
-                        </Col>
-                        <Col className="tag-select" xs="auto">
-                            <Input type="select" value={selectedTag} onChange={this.changeTag}>
-                                {this.state.data.tags.map((tag, index) =>
-                                    <option key={index} value={tag}>{(tag === "None") ? "Tag:" : tag}</option>
+                <Row>
+                    <Col className="todo" sm="10" md="7" lg="5" xl="5">
+                        <AddTask
+                            data={data}
+                            addItem={this.addItem}
+                            inputChange={this.inputChange}
+                            convertPriority={this.convertPriority}
+                            convertDate={convertDate}
+                            buttonDisabled={buttonDisabled}
+                            selectedPriority={selectedPriority}
+                            selectedDate={selectedDate}
+                            selectedTag={selectedTag} />
+                        <Row className="row-1">
+                            <Col>
+                                <div className="calendar">
+                                    <Calendar value={selectedDate} handleOnChange={this.changeDate} convertDate={convertDate} />
+                                </div>
+                            </Col>
+                            <Col>
+                                <div className="priority--top">
+                                    <Priority value={selectedPriority} handleOnChange={this.changePriority} />
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row className="row-2 no-gutters">
+                            <Col className="sort padding-right" xs="auto">
+                                <Input type="select" value={selectedSort} innerRef={this.selectSortBy} onChange={this.sortItems}>
+                                    <option value="None">Sort: None</option>
+                                    <option value="Priority">Priority</option>
+                                    <option value="Date Due">Date Due</option>
+                                    <option value="A-Z">A-Z</option>
+                                    <option value="Tags">Tags</option>
+                                    <option value="Selected Tag">Selected Tag</option>
+                                </Input>
+                            </Col>
+                            <Col className="tag-select">
+                                <Input type="select" value={selectedTag} onChange={this.changeTag}>
+                                    {this.state.data.tags.map((tag, index) =>
+                                        <option key={index} value={tag}>{(tag === "None") ? "Tag: None" : tag}</option>
+                                    )}
+                                </Input>
+                                <Button outline color="secondary" onClick={this.removeTag}>-</Button>
+                                <Button outline color="secondary" onClick={this.addTag}>+</Button>
+                            </Col>
+                        </Row>
+                        <List className="list">
+                            <TransitionGroup>
+                                {data.listItems.map((item, index) =>
+                                    (item.hidden) ? null :
+                                        <CSSTransition
+                                            key={item.id}
+                                            timeout={500}
+                                            classNames="fade">
+                                            <ListItem
+                                                data={data}
+                                                item={item}
+                                                index={index}
+                                                handleTextChange={this.handleTextChange}
+                                                editText={this.editText}
+                                                toggleEditItem={this.toggleEditItem}
+                                                articulateDateDue={articulateDateDue}
+                                                markComplete={this.markComplete}
+                                                sortItems={this.sortItems}
+                                                convertPriority={this.convertPriority}
+                                                editDate={this.editDate}
+                                                convertDate={convertDate}
+                                                editPriority={this.editPriority} />
+                                        </CSSTransition>
                                 )}
-                            </Input>
-                            <Button outline color="secondary" onClick={this.removeTag}>-</Button>
-                            <Button outline color="secondary" onClick={this.addTag}>+</Button>
-                        </Col>
-                        <Col className="settings-button" xs="1">
-                            <div onClick={this.toggleSettings}>⚙</div>
-                        </Col>
-                    </Row>
-                    <List className="list">
-                        <TransitionGroup>
-                            {data.listItems.map((item, index) =>
-                                (item.hidden) ? null :
-                                    <CSSTransition
-                                        key={item.id}
-                                        timeout={500}
-                                        classNames="fade">
-                                        <ListItem
-                                            data={data}
-                                            item={item}
-                                            index={index}
-                                            handleTextChange={this.handleTextChange}
-                                            editText={this.editText}
-                                            toggleEditItem={this.toggleEditItem}
-                                            articulateDateDue={articulateDateDue}
-                                            markComplete={this.markComplete}
-                                            sortItems={this.sortItems}
-                                            convertPriority={this.convertPriority}
-                                            editDate={this.editDate}
-                                            convertDate={convertDate}
-                                            editPriority={this.editPriority} />
-                                    </CSSTransition>
-                            )}
-                        </TransitionGroup>
-                    </List>
-                    <div className="settings">
-                        <fieldset hidden={settingsHidden}>
-                            <div>
+                            </TransitionGroup>
+                        </List>
+                        <Button className="settings-button" outline color="secondary" onClick={this.toggleSettings}>⚙</Button>
+                        <div className="settings">
+                            <fieldset hidden={settingsHidden}>
                                 <div>
-                                    <select className="select-style" value={selectedStyle} onChange={this.changeStyle}>
-                                        <option value="None">None</option>
-                                        <option value="Default">Default</option>
-                                        <option value="Marie">Marie</option>
-                                    </select>
+                                    <div>
+                                        <select className="select-style" value={selectedStyle} onChange={this.changeStyle}>
+                                            <option value="None">None</option>
+                                            <option value="Default">Default</option>
+                                            <option value="Marie">Marie</option>
+                                        </select>
+                                    </div>
+                                    <legend>Choose your colours</legend>
+                                    <div>
+                                        <input className="change-color" type="color" value={data.settings.style.colorHigh} onChange={(event) => this.changeColor(event, "colorHigh")}></input>
+                                        <label>High Priority</label>
+                                    </div>
+                                    <div>
+                                        <input className="change-color" type="color" value={data.settings.style.colorMedium} onChange={(event) => this.changeColor(event, "colorMedium")}></input>
+                                        <label>Medium Priority</label>
+                                    </div>
+                                    <div>
+                                        <input className="change-color" type="color" value={data.settings.style.colorLow} onChange={(event) => this.changeColor(event, "colorLow")}></input>
+                                        <label>Low Priority</label>
+                                    </div>
                                 </div>
-                                <legend>Choose your colours</legend>
-                                <div>
-                                    <input className="change-color" type="color" value={data.settings.style.colorHigh} onChange={(event) => this.changeColor(event, "colorHigh")}></input>
-                                    <label>High Priority</label>
-                                </div>
-                                <div>
-                                    <input className="change-color" type="color" value={data.settings.style.colorMedium} onChange={(event) => this.changeColor(event, "colorMedium")}></input>
-                                    <label>Medium Priority</label>
-                                </div>
-                                <div>
-                                    <input className="change-color" type="color" value={data.settings.style.colorLow} onChange={(event) => this.changeColor(event, "colorLow")}></input>
-                                    <label>Low Priority</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
+                            </fieldset>
+                        </div>
+                    </Col>
+                </Row>
             </Container>
         )
     }
