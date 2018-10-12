@@ -21,7 +21,7 @@ const Calendar = ({ handleOnChange, value, convertDate }) =>
 const Priority = ({ handleOnChange, value }) =>
     <React.Fragment>
         <Input type="select" className="priority-element" value={value} onChange={handleOnChange}>
-            <option value="Low">Low</option>
+            <option value="Low">Priority: Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
         </Input>
@@ -253,7 +253,7 @@ class ToDo extends Component {
                     listItems:
                         [{
                             active: true,
-                            task: "Your First Task",
+                            task: "Sample Task ✨",
                             priority: 3,
                             time: Date.now(),
                             instance: 1,
@@ -287,7 +287,6 @@ class ToDo extends Component {
         const { data } = this.state
         const { saveData } = this.props
         saveData(data)
-        console.log(this.state)
     }
 
     componentDidMount() {
@@ -307,21 +306,25 @@ class ToDo extends Component {
 
     markComplete = (index, undo) => {
         const { data } = this.state
-        const itemIsActive = data.listItems[index].active
-        if (itemIsActive) {
-            data.listItems[index].active = false
-            this.setState({
-                data: data
-            })
-            this.sortItems()
-        } else if (undo) {
-            data.listItems[index].active = true
-            this.setState({
-                data: data
-            })
-            this.sortItems()
+        if (data.listItems.length === 0) {
+            console.log("List is empty")
         } else {
-            this.deleteItem(index)
+            const itemIsActive = data.listItems[index].active
+            if (itemIsActive) {
+                data.listItems[index].active = false
+                this.setState({
+                    data: data
+                })
+                this.sortItems()
+            } else if (undo) {
+                data.listItems[index].active = true
+                this.setState({
+                    data: data
+                })
+                this.sortItems()
+            } else {
+                this.deleteItem(index)
+            }
         }
     }
 
