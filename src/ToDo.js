@@ -131,8 +131,9 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                                 className="edit-text-button"
                                 color="secondary"
                                 size="sm"
-                                onClick={() => editText(index)}
-                            >OK</Button>
+                                onClick={() => editText(index)}>
+                                OK
+                            </Button>
                         </Col>
                     </Row>
                 </span>
@@ -244,7 +245,8 @@ class AddTask extends Component {
                                 color="primary"
                                 disabled={buttonDisabled}
                                 type="submit">
-                                Add</Button>
+                                Add
+                            </Button>
                         </Col>
                     </Row>
                 </FormGroup>
