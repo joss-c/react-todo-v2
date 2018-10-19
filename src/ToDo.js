@@ -164,14 +164,16 @@ const ItemButtons = ({ item, index, markComplete, sortItems }) =>
             outline
             color="secondary"
             onClick={() => sortItems(index, true)}>
-            ↑</Button>
+            ↑
+        </Button>
         <Button
             className="delete-item-button"
             size="sm"
             outline
             color={(item.active) ? "success" : "danger"}
             onClick={() => markComplete(index)}>
-            {(item.active) ? "✓" : "✕"}</Button>
+            {(item.active) ? "✓" : "✕"}
+        </Button>
     </div>
 
 const ItemEditBox = ({ item, index, markComplete, children }) =>
@@ -180,7 +182,14 @@ const ItemEditBox = ({ item, index, markComplete, children }) =>
             {children}
         </span>
         <div className="undo">
-            <Button hidden={item.active} className="undo-button" outline color="secondary" onClick={() => markComplete(index, true)}>Undo "Mark Complete"</Button>
+            <Button 
+                hidden={item.active} 
+                className="undo-button" 
+                outline 
+                color="secondary" 
+                onClick={() => markComplete(index, true)}>
+                Undo "Mark Complete"
+            </Button>
         </div>
     </div>
 
@@ -627,18 +636,28 @@ class ToDo extends Component {
                         <Row className="row-1 no-gutters">
                             <Col>
                                 <div className="calendar">
-                                    <Calendar value={selectedDate} handleOnChange={this.changeDate} convertDate={convertDate} />
+                                    <Calendar 
+                                        value={selectedDate} 
+                                        handleOnChange={this.changeDate} 
+                                        convertDate={convertDate} />
                                 </div>
                             </Col>
                             <Col>
                                 <div className="priority--top">
-                                    <Priority value={selectedPriority} handleOnChange={this.changePriority} />
+                                    <Priority 
+                                        value={selectedPriority} 
+                                        handleOnChange={this.changePriority} />
                                 </div>
                             </Col>
                         </Row>
                         <Row className="row-2 no-gutters">
                             <Col className="sort padding-right" xs="auto">
-                                <Input type="select" className="select-sort" value={selectedSort} innerRef={this.selectSortBy} onChange={this.sortItems}>
+                                <Input 
+                                    type="select" 
+                                    className="select-sort" 
+                                    value={selectedSort} 
+                                    innerRef={this.selectSortBy} 
+                                    onChange={this.sortItems}>
                                     <option value="None">Sort: None</option>
                                     <option value="Priority">Priority</option>
                                     <option value="Date Due">Date Due</option>
@@ -647,14 +666,39 @@ class ToDo extends Component {
                                     <option value="Selected Tag">Selected Tag</option>
                                 </Input>
                             </Col>
-                            <Col className="manage-tags" xs="auto" sm={{ offset: 2 }} md={{ offset: 1 }} xl={{ offset: 3 }}>
-                                <Input type="select" className="select-tag" value={selectedTag} onChange={this.changeTag}>
+                            <Col 
+                                className="manage-tags" 
+                                xs="auto" 
+                                sm={{ offset: 2 }} 
+                                md={{ offset: 1 }} 
+                                xl={{ offset: 3 }}>
+                                <Input 
+                                    type="select" 
+                                    className="select-tag" 
+                                    value={selectedTag} 
+                                    onChange={this.changeTag}>
                                     {this.state.data.tags.map((tag, index) =>
-                                        <option key={index} value={tag}>{(tag === "None") ? "Tag: None" : tag}</option>
+                                        <option 
+                                            key={index} 
+                                            value={tag}>
+                                            {(tag === "None") ? "Tag: None" : tag}
+                                        </option>
                                     )}
                                 </Input>
-                                <Button outline color="secondary" size="sm" onClick={this.removeTag}>-</Button>
-                                <Button outline color="secondary" size="sm" onClick={this.addTag}>+</Button>
+                                <Button 
+                                    outline 
+                                    color="secondary" 
+                                    size="sm" 
+                                    onClick={this.removeTag}>
+                                    -
+                                </Button>
+                                <Button 
+                                    outline 
+                                    color="secondary" 
+                                    size="sm" 
+                                    onClick={this.addTag}>
+                                    +
+                                </Button>
                             </Col>
                         </Row>
                         <List className="list">
@@ -683,12 +727,20 @@ class ToDo extends Component {
                                 )}
                             </TransitionGroup>
                         </List>
-                        <Button className="settings-button" outline color="secondary" onClick={this.toggleSettings}>⚙</Button>
+                        <Button 
+                            className="settings-button" 
+                            outline color="secondary" 
+                            onClick={this.toggleSettings}>
+                            ⚙
+                        </Button>
                         <div className="settings">
                             <fieldset hidden={settingsHidden}>
                                 <div>
                                     <div>
-                                        <select className="select-style" value={selectedStyle} onChange={this.changeStyle}>
+                                        <select 
+                                            className="select-style" 
+                                            value={selectedStyle} 
+                                            onChange={this.changeStyle}>
                                             <option value="None">None</option>
                                             <option value="Default">Default</option>
                                             <option value="Marie">Marie</option>
@@ -696,15 +748,30 @@ class ToDo extends Component {
                                     </div>
                                     <legend>Choose your colours</legend>
                                     <div>
-                                        <input className="change-color" type="color" value={data.settings.style.colorHigh} onChange={(event) => this.changeColor(event, "colorHigh")}></input>
+                                        <input 
+                                            className="change-color" 
+                                            type="color" 
+                                            value={data.settings.style.colorHigh} 
+                                            onChange={(event) => this.changeColor(event, "colorHigh")}>
+                                        </input>
                                         <label>High Priority</label>
                                     </div>
                                     <div>
-                                        <input className="change-color" type="color" value={data.settings.style.colorMedium} onChange={(event) => this.changeColor(event, "colorMedium")}></input>
+                                        <input 
+                                            className="change-color" 
+                                            type="color" 
+                                            value={data.settings.style.colorMedium} 
+                                            onChange={(event) => this.changeColor(event, "colorMedium")}>
+                                        </input>
                                         <label>Medium Priority</label>
                                     </div>
                                     <div>
-                                        <input className="change-color" type="color" value={data.settings.style.colorLow} onChange={(event) => this.changeColor(event, "colorLow")}></input>
+                                        <input 
+                                            className="change-color" 
+                                            type="color" 
+                                            value={data.settings.style.colorLow} 
+                                            onChange={(event) => this.changeColor(event, "colorLow")}>
+                                        </input>
                                         <label>Low Priority</label>
                                     </div>
                                 </div>
