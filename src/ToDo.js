@@ -653,7 +653,9 @@ class ToDo extends Component {
                             </Col>
                         </Row>
                         <Row className="row-2 no-gutters">
-                            <Col className="sort padding-right" xs="auto">
+                            <Col
+                                className="sort padding-right"
+                                xs="5">
                                 <Input 
                                     type="select" 
                                     className="select-sort" 
@@ -670,10 +672,7 @@ class ToDo extends Component {
                             </Col>
                             <Col 
                                 className="manage-tags" 
-                                xs="auto" 
-                                sm={{ offset: 2 }} 
-                                md={{ offset: 1 }} 
-                                xl={{ offset: 3 }}>
+                                xs="7">
                                 <Input 
                                     type="select" 
                                     className="select-tag" 
