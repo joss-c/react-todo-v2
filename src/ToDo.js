@@ -145,13 +145,13 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
 const TaskDetails = ({ item, articulateDateDue }) =>
     <Row>
         <Col className="task-details">
-            <span className="date-due">
+            <span className="date-due x-small">
                 {(item.tag === null) ?
                     null :
                     <span className="tag">{item.tag}</span>}
                 {(item.active) ?
                     `Due: ${articulateDateDue(item.dateDue)}` :
-                    <span>Complete <span className="star">★</span></span>}
+                    <span className="x-small">Complete <span className="star x-small">★</span></span>}
             </span>
         </Col>
     </Row>
