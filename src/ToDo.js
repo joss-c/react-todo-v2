@@ -87,7 +87,7 @@ const ListItem = (props) =>
 
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
-        className={(item.active) ? "task" : "task complete"}
+        className="task"
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
@@ -151,7 +151,7 @@ const TaskDetails = ({ item, articulateDateDue }) =>
                     <span className="tag">{item.tag}</span>}
                 {(item.active) ?
                     `Due: ${articulateDateDue(item.dateDue)}` :
-                    "Complete"}
+                    <span>Complete <span className="star">★</span></span>}
             </span>
         </Col>
     </Row>
@@ -333,6 +333,7 @@ class ToDo extends Component {
                     data: data
                 })
             } else if (undo) {
+                data.listItems[index].editPanelHidden = true
                 data.listItems[index].active = true
                 this.setState({
                     data: data
