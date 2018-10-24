@@ -87,7 +87,7 @@ const ListItem = (props) =>
 
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
-        className="task"
+        className={(item.active) ? "task" : "task complete"}
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
@@ -301,12 +301,18 @@ class ToDo extends Component {
     }
 
     componentDidMount() {
+        this.hideEditPanels()
         this.sortItems()
         console.log(this.state.data.listItems)
     }
 
+    clone = (object) => {
+        return JSON.parse(JSON.stringify(object))
+    }
+
     addItem = (newItem) => {
-        const { data, selectedSort } = this.state
+        const { selectedSort } = this.state
+        const data = this.clone(this.state.data)
         data.listItems = [...data.listItems, newItem]
         data.listItems = this.sortItemsBy(data.listItems, selectedSort)
         this.setState({
@@ -316,7 +322,7 @@ class ToDo extends Component {
     }
 
     markComplete = (index, undo) => {
-        const { data } = this.state
+        const data = this.clone(this.state.data)
         if (data.listItems.length === 0) {
             console.log("List is empty")
         } else {
@@ -326,13 +332,11 @@ class ToDo extends Component {
                 this.setState({
                     data: data
                 })
-                this.sortItems()
             } else if (undo) {
                 data.listItems[index].active = true
                 this.setState({
                     data: data
                 })
-                this.sortItems()
             } else {
                 this.deleteItem(index)
             }
@@ -340,7 +344,7 @@ class ToDo extends Component {
     }
 
     deleteItem = (key) => {
-        const { data } = this.state
+        const data = this.clone(this.state.data)
         data.listItems = data.listItems.filter((item, index) =>
             index !== key
         )
@@ -367,8 +371,8 @@ class ToDo extends Component {
     }
 
     editPriority = (event, index) => {
-        let { data } = this.state
         const { selectedSort } = this.state
+        const data = this.clone(this.state.data)
         const selectedPriority = event.target.value
         data.listItems[index].priority = this.convertPriority(selectedPriority)
         data.listItems[index].editPanelHidden = true
@@ -379,8 +383,8 @@ class ToDo extends Component {
     }
 
     editDate = (event, index) => {
-        let { data } = this.state
         const { selectedSort } = this.state
+        const data = this.clone(this.state.data)
         const newDate = event.target.value
         data.listItems[index].dateDue = convertDate(newDate, "timestamp")
         data.listItems[index].editPanelHidden = true
@@ -404,15 +408,15 @@ class ToDo extends Component {
     }
 
     toggleItems = (listItems, type, tag) => {
-        const updateList = listItems
+        const listItemsCopy = this.clone(listItems)
         if (type === "selected tag") {
-            updateList.forEach(item => (item.tag !== tag) && (item.hidden = true))
+            listItemsCopy.forEach(item => (item.tag !== tag) && (item.hidden = true))
         } else if (type === "tags only") {
-            updateList.forEach(item => (item.tag === null) && (item.hidden = true))
+            listItemsCopy.forEach(item => (item.tag === null) && (item.hidden = true))
         } else if (type === "show all") {
-            updateList.forEach(item => item.hidden = false)
+            listItemsCopy.forEach(item => (item.hidden === true) && (item.hidden = false))
         }
-        return updateList
+        return listItemsCopy
     }
 
     sortItemsBy = (listItems, selectedSort, moveFrom) => {
@@ -422,8 +426,7 @@ class ToDo extends Component {
             return this.props.arrayMove(listItems, moveFrom, moveTo)
         }
         if (selectedSort === "None") {
-            listItems = showAll
-            return listItems
+            return showAll
         } else if (selectedSort === "Priority") {
             listItems = showAll
             return listItems.sort(
@@ -467,7 +470,7 @@ class ToDo extends Component {
     }
 
     sortItems = (index, manual) => {
-        const { data } = this.state
+        const data = this.clone(this.state.data)
         const selectedSort = this.selectSortBy.current.value
         if (manual) {
             if (selectedSort === "None") {
@@ -500,7 +503,7 @@ class ToDo extends Component {
     }
 
     toggleEditItem = (index) => {
-        let { data } = this.state
+        const data = this.clone(this.state.data)
         const targetItem = data.listItems[index]
         const targetPanelState = targetItem.editPanelHidden
         data.listItems.forEach(function (item, index) {
@@ -523,7 +526,7 @@ class ToDo extends Component {
     }
 
     changeColor = (event, selectedColor) => {
-        const { data } = this.state
+        const data = this.clone(this.state.data)
         data.settings.style[selectedColor] = event.target.value
         this.setState({
             data: data,
@@ -538,7 +541,7 @@ class ToDo extends Component {
     }
 
     changeStyle = (event) => {
-        const { data } = this.state
+        const data = this.clone(this.state.data)
         const style = event.target.value
         if (style === "None") {
             this.setState({
@@ -564,7 +567,8 @@ class ToDo extends Component {
     }
 
     changeTag = (event) => {
-        const { data, selectedSort } = this.state
+        const { selectedSort } = this.state
+        const data = this.clone(this.state.data)
         const tag = event.target.value
         if (selectedSort === "Selected Tag") {
             this.toggleItems(data.listItems, "show all")
@@ -581,7 +585,7 @@ class ToDo extends Component {
     }
 
     addTag = () => {
-        const { data } = this.state
+        const data = this.clone(this.state.data)
         const newTag = prompt("Enter a new tag")
         if (newTag === "" || data.tags.includes(newTag)) {
             alert("Invalid tag or duplicate")
@@ -595,7 +599,8 @@ class ToDo extends Component {
     }
 
     removeTag = () => {
-        const { data, selectedTag } = this.state
+        const { selectedTag } = this.state
+        const data = this.clone(this.state.data)
         data.tags = data.tags.filter(tag => tag !== selectedTag || tag === "None")
         this.setState({
             data: data,
@@ -604,7 +609,8 @@ class ToDo extends Component {
     }
 
     editText = (index) => {
-        const { data, editTaskText } = this.state
+        const { editTaskText } = this.state
+        const data = this.clone(this.state.data)
         data.listItems[index].task = editTaskText
         this.setState({
             data: data
@@ -617,6 +623,15 @@ class ToDo extends Component {
             editTaskText: currentText
         })
     }
+
+    hideEditPanels = () => {
+        const data = this.clone(this.state.data)
+        data.listItems.forEach(item => (item.editPanelHidden === false) && (item.editPanelHidden = true))
+        this.setState({
+            data: data
+        })
+    }
+
 
     render() {
         const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, selectedStyle } = this.state

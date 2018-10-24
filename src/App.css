@@ -142,6 +142,10 @@
     word-wrap: break-word;
 }
 
+.complete {
+    animation: rainbow 500ms
+}
+
 .item-buttons {
     margin-left: 2px
 }
@@ -226,6 +230,10 @@
 
 }
 
+.star {
+    animation: rainbow 2s infinite
+}
+
 ul {
     margin-left: -42px;
 }
@@ -245,7 +253,6 @@ li {
     font-size: medium;
 }
 
-
 .fade-enter {
     opacity: 0.01;
 }
@@ -260,4 +267,12 @@ li {
     opacity: 0.01;
     transition: opacity 500ms ease-in;
 }
-  
+
+@keyframes rainbow {
+  0%   {background: red;}
+  25%  {background: yellow;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  90% {background: red;}
+  100% {background: #e5e5e5;}
+}
