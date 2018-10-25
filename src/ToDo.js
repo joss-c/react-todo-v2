@@ -131,7 +131,7 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                                 className="edit-text-button"
                                 color="secondary"
                                 size="sm"
-                                onClick={() => editText(index)}>
+                                onClick={(event) => editText(event, index)}>
                                 OK
                             </Button>
                         </Col>
@@ -609,10 +609,12 @@ class ToDo extends Component {
         })
     }
 
-    editText = (index) => {
+    editText = (event, index) => {
+        event.stopPropagation()
         const { editTaskText } = this.state
         const data = this.clone(this.state.data)
         data.listItems[index].task = editTaskText
+        data.listItems[index].editPanelHidden = true
         this.setState({
             data: data
         })

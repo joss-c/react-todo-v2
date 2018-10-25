@@ -232,6 +232,7 @@
 .star {
     color: gold;
     filter: drop-shadow(1px 0px 1px black);
+    -webkit-filter: drop-shadow(1px 0px 1px black);
     animation: golden 1s;
     -webkit-animation: golden 1s
 }
