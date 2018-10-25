@@ -239,10 +239,10 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
             </div>
             <React.Fragment>
                 <div>-----------</div>
-                <CustomInput 
+                <CustomInput
                     type="checkbox"
-                    id="checkbox" 
-                    label="Show completed tasks" 
+                    id="checkbox"
+                    label="Show completed tasks"
                     checked={!data.settings.hideInactive}
                     onChange={toggleInactiveTasks} />
             </React.Fragment>
@@ -787,8 +787,10 @@ class ToDo extends Component {
                         <List className="list">
                             <TransitionGroup>
                                 {data.listItems.map((item, index) =>
-                                    (item.hidden) ? null :
-                                        (!item.active && data.settings.hideInactive) ? null :
+                                    (item.hidden) ?
+                                        null :
+                                        (!item.active && data.settings.hideInactive) ?
+                                            null :
                                             <CSSTransition
                                                 key={item.id}
                                                 timeout={500}
@@ -812,11 +814,11 @@ class ToDo extends Component {
                             </TransitionGroup>
                         </List>
                         <Row className="row-3 no-gutters">
-                        <Button
-                            className="settings-button"
-                            outline color="secondary"
-                            onClick={this.toggleSettings}>
-                            ⚙
+                            <Button
+                                className="settings-button"
+                                outline color="secondary"
+                                onClick={this.toggleSettings}>
+                                ⚙
                         </Button>
                         </Row>
                         <Row className="settings no-gutters">
