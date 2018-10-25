@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { Container, Row, Col, Input, Button, Form, FormGroup } from 'reactstrap'
+import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup } from 'reactstrap'
 import TextareaAutosize from 'react-autosize-textarea'
 import uuid from 'uuid'
 import { convertDate, articulateDateDue, arrayMove } from './functions'
@@ -183,16 +183,71 @@ const ItemEditBox = ({ item, index, markComplete, children }) =>
             {children}
         </span>
         <div className="undo">
-            <Button 
-                hidden={item.active} 
-                className="undo-button" 
-                outline 
-                color="secondary" 
+            <Button
+                hidden={item.active}
+                className="undo-button"
+                outline
+                color="secondary"
                 onClick={() => markComplete(index, true)}>
                 Undo "Mark Complete"
             </Button>
         </div>
     </div>
+
+const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColor, toggleInactiveTasks }) =>
+    <React.Fragment>
+        <fieldset hidden={settingsHidden}>
+            <div>
+                <legend>Choose your colours</legend>
+                <div>
+                    <Input
+                        type="select"
+                        value={selectedStyle}
+                        onChange={changeStyle}>
+                        <option value="None">None</option>
+                        <option value="Default">Default</option>
+                        <option value="Marie">Marie</option>
+                    </Input>
+                </div>
+                <div>
+                    <input
+                        className="change-color"
+                        type="color"
+                        value={data.settings.style.colorHigh}
+                        onChange={(event) => changeColor(event, "colorHigh")}>
+                    </input>
+                    <label>High Priority</label>
+                </div>
+                <div>
+                    <input
+                        className="change-color"
+                        type="color"
+                        value={data.settings.style.colorMedium}
+                        onChange={(event) => changeColor(event, "colorMedium")}>
+                    </input>
+                    <label>Medium Priority</label>
+                </div>
+                <div>
+                    <input
+                        className="change-color"
+                        type="color"
+                        value={data.settings.style.colorLow}
+                        onChange={(event) => this.changeColor(event, "colorLow")}>
+                    </input>
+                    <label>Low Priority</label>
+                </div>
+            </div>
+            <React.Fragment>
+                <div>-----------</div>
+                <CustomInput 
+                    type="checkbox"
+                    id="checkbox" 
+                    label="Show completed tasks" 
+                    checked={!data.settings.hideInactive}
+                    onChange={toggleInactiveTasks} />
+            </React.Fragment>
+        </fieldset>
+    </React.Fragment>
 
 class AddTask extends Component {
     constructor(props) {
@@ -278,7 +333,8 @@ class ToDo extends Component {
                             colorHigh: "#f5c6cb",
                             colorMedium: "#ffeeba",
                             colorLow: "#bee5eb"
-                        }
+                        },
+                        hideInactive: false
                     },
                     tags: ["None"]
                 },
@@ -304,6 +360,7 @@ class ToDo extends Component {
         this.hideEditPanels()
         this.sortItems()
         console.log(this.state.data.listItems)
+        console.log(this.state.data.settings.hideInactiveTasks)
     }
 
     clone = (object) => {
@@ -635,6 +692,13 @@ class ToDo extends Component {
         })
     }
 
+    toggleInactiveTasks = () => {
+        const data = this.clone(this.state.data)
+        data.settings.hideInactive = !data.settings.hideInactive
+        this.setState({
+            data: data
+        })
+    }
 
     render() {
         const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, selectedStyle } = this.state
@@ -656,16 +720,16 @@ class ToDo extends Component {
                         <Row className="row-1 no-gutters">
                             <Col>
                                 <div className="calendar">
-                                    <Calendar 
-                                        value={selectedDate} 
-                                        handleOnChange={this.changeDate} 
+                                    <Calendar
+                                        value={selectedDate}
+                                        handleOnChange={this.changeDate}
                                         convertDate={convertDate} />
                                 </div>
                             </Col>
                             <Col>
                                 <div className="priority--top">
-                                    <Priority 
-                                        value={selectedPriority} 
+                                    <Priority
+                                        value={selectedPriority}
                                         handleOnChange={this.changePriority} />
                                 </div>
                             </Col>
@@ -674,11 +738,11 @@ class ToDo extends Component {
                             <Col
                                 className="sort padding-right"
                                 xs="5">
-                                <Input 
-                                    type="select" 
-                                    className="select-sort" 
-                                    value={selectedSort} 
-                                    innerRef={this.selectSortBy} 
+                                <Input
+                                    type="select"
+                                    className="select-sort"
+                                    value={selectedSort}
+                                    innerRef={this.selectSortBy}
                                     onChange={this.sortItems}>
                                     <option value="None">Sort: None</option>
                                     <option value="Priority">Priority</option>
@@ -688,33 +752,33 @@ class ToDo extends Component {
                                     <option value="Selected Tag">Selected Tag</option>
                                 </Input>
                             </Col>
-                            <Col 
-                                className="manage-tags" 
+                            <Col
+                                className="manage-tags"
                                 xs="7">
-                                <Input 
-                                    type="select" 
-                                    className="select-tag" 
-                                    value={selectedTag} 
+                                <Input
+                                    type="select"
+                                    className="select-tag"
+                                    value={selectedTag}
                                     onChange={this.changeTag}>
                                     {this.state.data.tags.map((tag, index) =>
-                                        <option 
-                                            key={index} 
+                                        <option
+                                            key={index}
                                             value={tag}>
                                             {(tag === "None") ? "Tag: None" : tag}
                                         </option>
                                     )}
                                 </Input>
-                                <Button 
-                                    outline 
-                                    color="secondary" 
-                                    size="sm" 
+                                <Button
+                                    outline
+                                    color="secondary"
+                                    size="sm"
                                     onClick={this.removeTag}>
                                     -
                                 </Button>
-                                <Button 
-                                    outline 
-                                    color="secondary" 
-                                    size="sm" 
+                                <Button
+                                    outline
+                                    color="secondary"
+                                    size="sm"
                                     onClick={this.addTag}>
                                     +
                                 </Button>
@@ -724,78 +788,46 @@ class ToDo extends Component {
                             <TransitionGroup>
                                 {data.listItems.map((item, index) =>
                                     (item.hidden) ? null :
-                                        <CSSTransition
-                                            key={item.id}
-                                            timeout={500}
-                                            classNames="fade">
-                                            <ListItem
-                                                data={data}
-                                                item={item}
-                                                index={index}
-                                                handleTextChange={this.handleTextChange}
-                                                editText={this.editText}
-                                                toggleEditItem={this.toggleEditItem}
-                                                articulateDateDue={articulateDateDue}
-                                                markComplete={this.markComplete}
-                                                sortItems={this.sortItems}
-                                                convertPriority={this.convertPriority}
-                                                editDate={this.editDate}
-                                                convertDate={convertDate}
-                                                editPriority={this.editPriority} />
-                                        </CSSTransition>
+                                        (!item.active && data.settings.hideInactive) ? null :
+                                            <CSSTransition
+                                                key={item.id}
+                                                timeout={500}
+                                                classNames="fade">
+                                                <ListItem
+                                                    data={data}
+                                                    item={item}
+                                                    index={index}
+                                                    handleTextChange={this.handleTextChange}
+                                                    editText={this.editText}
+                                                    toggleEditItem={this.toggleEditItem}
+                                                    articulateDateDue={articulateDateDue}
+                                                    markComplete={this.markComplete}
+                                                    sortItems={this.sortItems}
+                                                    convertPriority={this.convertPriority}
+                                                    editDate={this.editDate}
+                                                    convertDate={convertDate}
+                                                    editPriority={this.editPriority} />
+                                            </CSSTransition>
                                 )}
                             </TransitionGroup>
                         </List>
-                        <Button 
-                            className="settings-button" 
-                            outline color="secondary" 
+                        <Row className="row-3 no-gutters">
+                        <Button
+                            className="settings-button"
+                            outline color="secondary"
                             onClick={this.toggleSettings}>
                             ⚙
                         </Button>
-                        <div className="settings">
-                            <fieldset hidden={settingsHidden}>
-                                <div>
-                                    <div>
-                                        <select 
-                                            className="select-style" 
-                                            value={selectedStyle} 
-                                            onChange={this.changeStyle}>
-                                            <option value="None">None</option>
-                                            <option value="Default">Default</option>
-                                            <option value="Marie">Marie</option>
-                                        </select>
-                                    </div>
-                                    <legend>Choose your colours</legend>
-                                    <div>
-                                        <input 
-                                            className="change-color" 
-                                            type="color" 
-                                            value={data.settings.style.colorHigh} 
-                                            onChange={(event) => this.changeColor(event, "colorHigh")}>
-                                        </input>
-                                        <label>High Priority</label>
-                                    </div>
-                                    <div>
-                                        <input 
-                                            className="change-color" 
-                                            type="color" 
-                                            value={data.settings.style.colorMedium} 
-                                            onChange={(event) => this.changeColor(event, "colorMedium")}>
-                                        </input>
-                                        <label>Medium Priority</label>
-                                    </div>
-                                    <div>
-                                        <input 
-                                            className="change-color" 
-                                            type="color" 
-                                            value={data.settings.style.colorLow} 
-                                            onChange={(event) => this.changeColor(event, "colorLow")}>
-                                        </input>
-                                        <label>Low Priority</label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
+                        </Row>
+                        <Row className="settings no-gutters">
+                            <Settings
+                                data={data}
+                                settingsHidden={settingsHidden}
+                                selectedStyle={selectedStyle}
+                                changeStyle={this.changeStyle}
+                                changeColor={this.changeColor}
+                                toggleInactiveTasks={this.toggleInactiveTasks} />
+                        </Row>
                     </Col>
                 </Row>
             </Container>
