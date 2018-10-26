@@ -81,7 +81,7 @@
 }
 
 .priority--top {
-    margin-left: 17px
+    margin-left: 2px
 }
 
 .calendar-element {
@@ -166,13 +166,12 @@
     margin-top: 5px;
 }
 
-.change-color {
-    margin: 5px;
+.select-style {
+    margin-bottom: 10px
 }
 
-.select-style {
-    margin-top: 3px;
-    margin-bottom: 5px;
+.change-color {
+    margin: 5px;
 }
 
 .tag {

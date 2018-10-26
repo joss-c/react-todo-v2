@@ -201,6 +201,7 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
                 <legend>Choose your colours</legend>
                 <div>
                     <Input
+                        className="select-style"
                         type="select"
                         value={selectedStyle}
                         onChange={changeStyle}>
@@ -360,7 +361,6 @@ class ToDo extends Component {
         this.hideEditPanels()
         this.sortItems()
         console.log(this.state.data.listItems)
-        console.log(this.state.data.settings.hideInactiveTasks)
     }
 
     clone = (object) => {
@@ -481,7 +481,8 @@ class ToDo extends Component {
         const showAll = this.toggleItems(listItems, "show all")
         if (selectedSort === "Manual") {
             const moveTo = moveFrom - 1
-            return this.props.arrayMove(listItems, moveFrom, moveTo)
+            listItems = this.props.arrayMove(listItems, moveFrom, moveTo)
+            return listItems.sort(firstBy("active", -1))
         }
         if (selectedSort === "None") {
             return showAll
@@ -524,6 +525,8 @@ class ToDo extends Component {
                     .thenBy("dateDue")
                     .thenBy("task")
             )
+        } else if (selectedSort === "toggle inactive") {
+            return listItems.sort(firstBy("active", -1))
         }
     }
 
@@ -695,6 +698,7 @@ class ToDo extends Component {
     toggleInactiveTasks = () => {
         const data = this.clone(this.state.data)
         data.settings.hideInactive = !data.settings.hideInactive
+        data.listItems = this.sortItemsBy(data.listItems, "toggle inactive")
         this.setState({
             data: data
         })
