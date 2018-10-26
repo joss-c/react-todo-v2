@@ -320,6 +320,7 @@ class ToDo extends Component {
                     listItems:
                         [{
                             active: true,
+                            id: uuid().substring(0, 10),
                             task: "Sample Task ✨",
                             priority: 3,
                             time: Date.now(),
