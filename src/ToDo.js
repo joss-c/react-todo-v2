@@ -398,6 +398,18 @@ class ToDo extends Component {
         })
     }
 
+    animationTimeout = (data, index) => {
+        const item = data.listItems[index]
+        const timeout = setTimeout(() => {
+            item.animationPlayed = true
+            this.setState({
+                data: data
+            })},
+            1000
+        )
+        return timeout
+    }
+
     markComplete = (index, undo) => {
         const data = this.clone(this.state.data)
         const item = data.listItems[index]
@@ -406,13 +418,7 @@ class ToDo extends Component {
         } else {
             const itemIsActive = item.active
             if (itemIsActive) {
-                const timeout = setTimeout(() => {
-                    item.animationPlayed = true
-                    this.setState({
-                        data: data
-                    })},
-                    1000
-                )
+                this.animationTimeout(data, index)
                 item.active = false
                 this.setState({
                     data: data
@@ -431,6 +437,7 @@ class ToDo extends Component {
     }
 
     deleteItem = (key) => {
+        clearTimeout(this.animationTimeout)
         const data = this.clone(this.state.data)
         data.listItems = data.listItems.filter((item, index) =>
             index !== key
