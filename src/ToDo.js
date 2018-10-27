@@ -87,7 +87,7 @@ const ListItem = (props) =>
 
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
-        className="task"
+        className={(item.active) ? "task" : (item.animationPlayed) ? "task task-complete" : "task task-complete animate-background"}
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
@@ -145,14 +145,25 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
 const TaskDetails = ({ item, articulateDateDue }) =>
     <Row>
         <Col className="task-details">
-            <span className="date-due x-small">
+            <div className="date-due x-small">
                 {(item.tag === null) ?
                     null :
                     <span className="tag">{item.tag}</span>}
                 {(item.active) ?
                     `Due: ${articulateDateDue(item.dateDue)}` :
-                    <span className="x-small">Complete <span className="star x-small">★</span></span>}
-            </span>
+                    <span 
+                        className="x-small">
+                        {"Complete "}
+                        <span 
+                            className={(item.animationPlayed) ? "star x-small" : "star star-animated x-small"}>
+                            {"★"}
+                        </span>
+                        <span
+                            className={(item.animationPlayed) ? "plus-one x-small" : "plus-one plus-one-animated x-small"}>
+                            {" +1"}
+                        </span>
+                    </span>}
+            </div>
         </Col>
     </Row>
 
@@ -240,12 +251,17 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
             </div>
             <React.Fragment>
                 <div>-----------</div>
-                <CustomInput
-                    type="checkbox"
-                    id="checkbox"
-                    label="Show completed tasks"
-                    checked={!data.settings.hideInactive}
-                    onChange={toggleInactiveTasks} />
+                <Row>
+                    <Col>
+                        <CustomInput
+                            type="checkbox"
+                            id="checkbox"
+                            label="Show completed tasks"
+                            checked={!data.settings.hideInactive}
+                            onChange={toggleInactiveTasks} />
+                    </Col>
+                </Row>
+                <div>-----------</div>
             </React.Fragment>
         </fieldset>
     </React.Fragment>
@@ -272,7 +288,8 @@ class AddTask extends Component {
             instance: itemInstances,
             editPanelHidden: true,
             settingsHidden: true,
-            tag: (selectedTag === "None") ? null : selectedTag
+            tag: (selectedTag === "None") ? null : selectedTag,
+            animationPlayed: false
         }
         addItem(newItem)
         this.inputElement.current.value = ""
@@ -320,6 +337,7 @@ class ToDo extends Component {
                     listItems:
                         [{
                             active: true,
+                            hidden: false,
                             id: uuid().substring(0, 10),
                             task: "Sample Task ✨",
                             priority: 3,
@@ -327,7 +345,8 @@ class ToDo extends Component {
                             instance: 1,
                             editPanelHidden: true,
                             dateDue: Date.now(),
-                            tag: null
+                            tag: null,
+                            animationPlayed: false
                         }],
                     settings:
                     {
@@ -381,18 +400,27 @@ class ToDo extends Component {
 
     markComplete = (index, undo) => {
         const data = this.clone(this.state.data)
+        const item = data.listItems[index]
         if (data.listItems.length === 0) {
             console.log("List is empty")
         } else {
-            const itemIsActive = data.listItems[index].active
+            const itemIsActive = item.active
             if (itemIsActive) {
-                data.listItems[index].active = false
+                const timeout = setTimeout(() => {
+                    item.animationPlayed = true
+                    this.setState({
+                        data: data
+                    })},
+                    1000
+                )
+                item.active = false
                 this.setState({
                     data: data
                 })
             } else if (undo) {
-                data.listItems[index].editPanelHidden = true
-                data.listItems[index].active = true
+                item.editPanelHidden = true
+                item.active = true
+                item.animationPlayed = false
                 this.setState({
                     data: data
                 })
@@ -482,8 +510,8 @@ class ToDo extends Component {
         const showAll = this.toggleItems(listItems, "show all")
         if (selectedSort === "Manual") {
             const moveTo = moveFrom - 1
-            listItems = this.props.arrayMove(listItems, moveFrom, moveTo)
-            return listItems.sort(firstBy("active", -1))
+            return listItems = this.props.arrayMove(listItems, moveFrom, moveTo)
+            //return listItems.sort(firstBy("active", -1))
         }
         if (selectedSort === "None") {
             return showAll

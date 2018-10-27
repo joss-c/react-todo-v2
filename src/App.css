@@ -137,7 +137,7 @@
 }
 
 .task {
-    border-bottom: 2px solid white;
+    margin-bottom: 2px;
     border-radius: 0.25rem;
     text-align: left;
     padding: 3%;
@@ -232,8 +232,28 @@
     color: gold;
     filter: drop-shadow(1px 0px 1px black);
     -webkit-filter: drop-shadow(1px 0px 1px black);
+}
+
+.star-animated {
     animation: golden 1s;
     -webkit-animation: golden 1s
+}
+
+.plus-one {
+    position: absolute;
+    opacity: 0;
+}
+
+.plus-one-animated {
+    animation: move-up 500ms
+}
+
+.task-complete {
+    background-color: #e5e5e5;
+}
+
+.animate-background {
+    animation: animate-background 500ms
 }
 
 ul {
@@ -270,11 +290,21 @@ li {
     transition: opacity 500ms ease-in;
 }
 
+@keyframes animate-background {
+    0% {background-color: #e5e5e5;}
+    50% {background-color: #efefef;}
+    100% {background-color: #e5e5e5;}
+}
+
+@keyframes move-up {
+    0% {top: 0px; opacity: 1;}
+    100% {top: 5px; opacity: 0;}
+}
+
 @keyframes golden {
-  0%   {color: yellow;}
-  25%  {color: gold;}
-  50%  {color: goldenrod;}
-  75%  {color: gold;}
-  90% {color: yellow;}
-  100% {color: white;}
+    0%   {color: gold; opacity: 0;}
+    25%  {color: goldenrod; opacity: 1;}
+    50%  {color: #ffe971;}
+    75%  {color: goldenrod;}
+    100% {color: gold;}
 }

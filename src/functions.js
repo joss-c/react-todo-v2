@@ -32,13 +32,14 @@ const articulateDateDue = (dateDue) => {
 }
 
 const arrayMove = (arr, fromIndex, toIndex) => {
+    const arrCopy = arr.slice(0)
     const element = arr[fromIndex]
     if (fromIndex === 0) {
         toIndex = arr.length
     }
-    arr.splice(fromIndex, 1)
-    arr.splice(toIndex, 0, element)
-    return arr
+    arrCopy.splice(fromIndex, 1)
+    arrCopy.splice(toIndex, 0, element)
+    return arrCopy
 }
 
 export { convertDate, articulateDateDue, arrayMove }
