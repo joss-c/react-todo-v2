@@ -244,6 +244,7 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
                         <option value="None">None</option>
                         <option value="Default">Default</option>
                         <option value="Marie">Marie</option>
+                        <option value="Halloween">Halloween</option>
                     </Input>
                 </div>
                 <div>
@@ -389,7 +390,7 @@ class ToDo extends Component {
             settingsHidden: true,
             selectedStyle: "None",
             selectedTag: "None",
-            editTaskText: ""
+            editTaskText: "",
         }
         this.selectSortBy = React.createRef()
     }
@@ -649,22 +650,31 @@ class ToDo extends Component {
     changeStyle = (event) => {
         const data = this.clone(this.state.data)
         const style = event.target.value
+        const colors = data.settings.style
         if (style === "None") {
             this.setState({
                 selectedStyle: style
             })
         } else if (style === "Default") {
-            data.settings.style.colorHigh = "#f5c6cb"
-            data.settings.style.colorMedium = "#ffeeba"
-            data.settings.style.colorLow = "#bee5eb"
+            colors.colorHigh = "#f5c6cb"
+            colors.colorMedium = "#ffeeba"
+            colors.colorLow = "#bee5eb"
             this.setState({
                 data: data,
                 selectedStyle: style
             })
         } else if (style === "Marie") {
-            data.settings.style.colorHigh = "#f46ed0"
-            data.settings.style.colorMedium = "#f2b5e2"
-            data.settings.style.colorLow = "#fce8f7"
+            colors.colorHigh = "#f46ed0"
+            colors.colorMedium = "#f2b5e2"
+            colors.colorLow = "#fce8f7"
+            this.setState({
+                data: data,
+                selectedStyle: style
+            })
+        } else if (style === "Halloween") {
+            colors.colorHigh = "#e76427"
+            colors.colorMedium = "#ffa100"
+            colors.colorLow = "#feeeb8"
             this.setState({
                 data: data,
                 selectedStyle: style
@@ -733,11 +743,8 @@ class ToDo extends Component {
     }
 
     hideEditPanels = () => {
-        const data = this.clone(this.state.data)
+        const { data } = this.state
         data.listItems.forEach(item => (item.editPanelHidden === false) && (item.editPanelHidden = true))
-        this.setState({
-            data: data
-        })
     }
 
     toggleInactiveTasks = () => {
@@ -753,7 +760,7 @@ class ToDo extends Component {
         const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, selectedStyle } = this.state
         const { convertDate, articulateDateDue } = this.props
         return (
-            <Container>
+            <Container style={{ backgroundColor: (selectedStyle === "Halloween") ? "black" : "white" }}>
                 <Row>
                     <Col className="todo" sm="10" md="7" lg="5" xl="5">
                         <AddTask

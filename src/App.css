@@ -32,7 +32,7 @@
 } */
 
 .container {
-    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .padding {
@@ -228,18 +228,6 @@
 
 }
 
-.star2 {
-    color: gold;
-    opacity: 1;
-    filter: drop-shadow(1px 0px 1px black);
-    -webkit-filter: drop-shadow(1px 0px 1px black);
-}
-
-.star-animated {
-    animation: golden 1s;
-    -webkit-animation: golden 1s
-}
-
 .task-complete {
     background-color: #e5e5e5;
 }
@@ -286,7 +274,7 @@ li {
 
   }
   .star-enter-active {
-    animation: golden 1000ms;
+    animation: golden 1s;
   }
   .star-exit {
 
