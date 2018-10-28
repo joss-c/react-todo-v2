@@ -230,6 +230,7 @@
 
 .star {
     color: gold;
+    opacity: 1;
     filter: drop-shadow(1px 0px 1px black);
     -webkit-filter: drop-shadow(1px 0px 1px black);
 }

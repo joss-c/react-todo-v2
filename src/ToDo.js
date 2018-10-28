@@ -83,8 +83,6 @@ const ListItem = (props) =>
         </ItemEditBox>
     </React.Fragment>
 
-
-
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
         className={(item.active) ? "task" : (item.animationPlayed) ? "task task-complete" : "task task-complete animate-background"}
@@ -398,18 +396,6 @@ class ToDo extends Component {
         })
     }
 
-    animationTimeout = (data, index) => {
-        const item = data.listItems[index]
-        const timeout = setTimeout(() => {
-            item.animationPlayed = true
-            this.setState({
-                data: data
-            })},
-            1000
-        )
-        return timeout
-    }
-
     markComplete = (index, undo) => {
         const data = this.clone(this.state.data)
         const item = data.listItems[index]
@@ -418,7 +404,6 @@ class ToDo extends Component {
         } else {
             const itemIsActive = item.active
             if (itemIsActive) {
-                this.animationTimeout(data, index)
                 item.active = false
                 this.setState({
                     data: data
@@ -437,7 +422,6 @@ class ToDo extends Component {
     }
 
     deleteItem = (key) => {
-        clearTimeout(this.animationTimeout)
         const data = this.clone(this.state.data)
         data.listItems = data.listItems.filter((item, index) =>
             index !== key
@@ -467,9 +451,10 @@ class ToDo extends Component {
     editPriority = (event, index) => {
         const { selectedSort } = this.state
         const data = this.clone(this.state.data)
+        const item = data.listItems[index]
         const selectedPriority = event.target.value
-        data.listItems[index].priority = this.convertPriority(selectedPriority)
-        data.listItems[index].editPanelHidden = true
+        item.priority = this.convertPriority(selectedPriority)
+        item.editPanelHidden = true
         data.listItems = this.sortItemsBy(data.listItems, selectedSort)
         this.setState({
             data: data
