@@ -20,7 +20,12 @@ const Calendar = ({ handleOnChange, value, convertDate }) =>
 
 const Priority = ({ handleOnChange, value }) =>
     <React.Fragment>
-        <Input type="select" className="priority-element" value={value} onChange={handleOnChange}>
+        <Input 
+            type="select" 
+            className="priority-element" 
+            value={value} 
+            onChange={handleOnChange}
+        >
             <option value="Low">Priority: Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
@@ -42,10 +47,12 @@ const ListItem = (props) =>
                     index={props.index}
                     handleTextChange={props.handleTextChange}
                     editText={props.editText}
-                    toggleEditItem={props.toggleEditItem}>
+                    toggleEditItem={props.toggleEditItem}
+                >
                     <TaskDetails
                         item={props.item}
-                        articulateDateDue={props.articulateDateDue} />
+                        articulateDateDue={props.articulateDateDue} 
+                    />
                 </Task>
             </Col>
             <Col xs="3">
@@ -58,7 +65,8 @@ const ListItem = (props) =>
                             item={props.item}
                             index={props.index}
                             markComplete={props.markComplete}
-                            sortItems={props.sortItems} />
+                            sortItems={props.sortItems}
+                        />
                     </CSSTransition>
                 </TransitionGroup>
             </Col>
@@ -72,12 +80,14 @@ const ListItem = (props) =>
                     <Calendar
                         value={props.convertDate(props.item.dateDue, "ISO")}
                         handleOnChange={(event) => props.editDate(event, props.index)}
-                        convertDate={props.convertDate} />
+                        convertDate={props.convertDate}
+                    />
                 </Col>
                 <Col>
                     <Priority
                         value={props.convertPriority(props.item.priority)}
-                        handleOnChange={(event) => props.editPriority(event, props.index)} />
+                        handleOnChange={(event) => props.editPriority(event, props.index)}
+                    />
                 </Col>
             </Row>
         </ItemEditBox>
@@ -85,7 +95,7 @@ const ListItem = (props) =>
 
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
-        className={(item.active) ? "task" : (item.animationPlayed) ? "task task-complete" : "task task-complete animate-background"}
+        className={(item.active) ? "task" : "task task-complete animate-background"}
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
@@ -122,15 +132,17 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                                 className="edit-text-element"
                                 onChange={(event) => handleTextChange(event)}
                                 onClick={(event) => event.stopPropagation()}
-                                defaultValue={item.task} />
+                                defaultValue={item.task}
+                            />
                         </Col>
                         <Col xs="2">
                             <Button
                                 className="edit-text-button"
                                 color="secondary"
                                 size="sm"
-                                onClick={(event) => editText(event, index)}>
-                                OK
+                                onClick={(event) => editText(event, index)}
+                            >
+                                {"OK"}
                             </Button>
                         </Col>
                     </Row>
@@ -143,25 +155,40 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
 const TaskDetails = ({ item, articulateDateDue }) =>
     <Row>
         <Col className="task-details">
-            <div className="date-due x-small">
-                {(item.tag === null) ?
-                    null :
-                    <span className="tag">{item.tag}</span>}
-                {(item.active) ?
-                    `Due: ${articulateDateDue(item.dateDue)}` :
-                    <span 
-                        className="x-small">
-                        {"Complete "}
-                        <span 
-                            className={(item.animationPlayed) ? "star x-small" : "star star-animated x-small"}>
-                            {"★"}
-                        </span>
-                        <span
-                            className={(item.animationPlayed) ? "plus-one x-small" : "plus-one plus-one-animated x-small"}>
-                            {" +1"}
-                        </span>
-                    </span>}
-            </div>
+            <TransitionGroup>
+                <div className="date-due x-small">
+                    {(item.tag === null) ?
+                        null :
+                        <span className="tag">{item.tag}</span>}
+                    {(item.active) ?
+                        `Due: ${articulateDateDue(item.dateDue)}` :
+                        <React.Fragment>
+                            <span className="x-small">
+                                {"Complete "}
+                            </span>
+                            <CSSTransition
+                                in={!item.active}
+                                timeout={1000}
+                                classNames="star"
+                                //unmountOnExit
+                            >
+                                <span className="star x-small" >
+                                    {"★"}
+                                </span>
+                            </CSSTransition>
+                            <CSSTransition
+                                in={!item.active}
+                                timeout={1000}
+                                classNames="plus-one"
+                                //unmountOnExit
+                            >
+                                <span className="plus-one x-small">
+                                    {" +1"}
+                                </span>
+                            </CSSTransition>
+                        </React.Fragment>}
+                </div>
+            </TransitionGroup>
         </Col>
     </Row>
 
@@ -287,7 +314,6 @@ class AddTask extends Component {
             editPanelHidden: true,
             settingsHidden: true,
             tag: (selectedTag === "None") ? null : selectedTag,
-            animationPlayed: false
         }
         addItem(newItem)
         this.inputElement.current.value = ""
@@ -343,8 +369,7 @@ class ToDo extends Component {
                             instance: 1,
                             editPanelHidden: true,
                             dateDue: Date.now(),
-                            tag: null,
-                            animationPlayed: false
+                            tag: null
                         }],
                     settings:
                     {
@@ -411,7 +436,6 @@ class ToDo extends Component {
             } else if (undo) {
                 item.editPanelHidden = true
                 item.active = true
-                item.animationPlayed = false
                 this.setState({
                     data: data
                 })

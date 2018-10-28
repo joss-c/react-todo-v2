@@ -228,7 +228,7 @@
 
 }
 
-.star {
+.star2 {
     color: gold;
     opacity: 1;
     filter: drop-shadow(1px 0px 1px black);
@@ -238,15 +238,6 @@
 .star-animated {
     animation: golden 1s;
     -webkit-animation: golden 1s
-}
-
-.plus-one {
-    position: absolute;
-    opacity: 0;
-}
-
-.plus-one-animated {
-    animation: move-up 500ms
 }
 
 .task-complete {
@@ -275,6 +266,34 @@ li {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: medium;
 }
+
+.plus-one {
+    position: absolute;
+    opacity: 0;
+}
+
+.plus-one-enter-active {
+    animation: move-up 500ms
+}
+
+.star {
+    color: gold;
+    opacity: 1;
+    filter: drop-shadow(1px 0px 1px black);
+    -webkit-filter: drop-shadow(1px 0px 1px black);
+  }
+  .star-enter {
+
+  }
+  .star-enter-active {
+    animation: golden 1000ms;
+  }
+  .star-exit {
+
+  }
+  .star-exit-active {
+
+  }
 
 .fade-enter {
     opacity: 0.01;
