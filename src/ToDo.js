@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup } from 'reactstrap'
+import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import TextareaAutosize from 'react-autosize-textarea'
 import uuid from 'uuid'
 import { convertDate, articulateDateDue, arrayMove } from './functions'
@@ -391,6 +391,7 @@ class ToDo extends Component {
             selectedStyle: "None",
             selectedTag: "None",
             editTaskText: "",
+            modal: false
         }
         this.selectSortBy = React.createRef()
     }
@@ -643,7 +644,8 @@ class ToDo extends Component {
 
     toggleSettings = () => {
         this.setState(state => ({
-            settingsHidden: !state.settingsHidden
+            settingsHidden: false,
+            modal: !state.modal
         }))
     }
 
@@ -756,11 +758,36 @@ class ToDo extends Component {
         })
     }
 
+    toggleModal = () => {
+        this.setState(state => ({
+            modal: !state.modal,
+            settingsHidden: true
+        }))
+    }
+
     render() {
-        const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, selectedStyle } = this.state
+        const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, selectedStyle, modal } = this.state
         const { convertDate, articulateDateDue } = this.props
         return (
             <Container style={{ backgroundColor: (selectedStyle === "Halloween") ? "black" : "white" }}>
+                <Modal isOpen={modal} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>
+                    {"Settings"}
+                    </ModalHeader>
+                    <ModalBody>
+                        <Settings
+                            data={data}
+                            settingsHidden={settingsHidden}
+                            selectedStyle={selectedStyle}
+                            changeStyle={this.changeStyle}
+                            changeColor={this.changeColor}
+                            toggleInactiveTasks={this.toggleInactiveTasks}
+                        />
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.toggleModal}>OK</Button>
+                    </ModalFooter>
+                </Modal>
                 <Row>
                     <Col className="todo" sm="10" md="7" lg="5" xl="5">
                         <AddTask
@@ -878,13 +905,6 @@ class ToDo extends Component {
                         </Button>
                         </Row>
                         <Row className="settings no-gutters">
-                            <Settings
-                                data={data}
-                                settingsHidden={settingsHidden}
-                                selectedStyle={selectedStyle}
-                                changeStyle={this.changeStyle}
-                                changeColor={this.changeColor}
-                                toggleInactiveTasks={this.toggleInactiveTasks} />
                         </Row>
                     </Col>
                 </Row>
