@@ -5,7 +5,7 @@ import './App.css';
 
 class App extends Component {
     render() {
-        const dataFile = "data_5"
+        const dataFile = "data_6"
         const data = localStorage.getItem(dataFile)
         const saveData = (data) => localStorage.setItem(dataFile, JSON.stringify(data))
         return (

@@ -130,6 +130,14 @@
     font-size: x-small
 }
 
+.xxx-large {
+    font-size: -webkit-xxx-large
+}
+
+.align-center {
+    text-align: center
+}
+
 .date-due {
     float: right;
     margin-top: 9px;
@@ -164,6 +172,11 @@
 
 .settings-button {
     margin-top: 5px;
+}
+
+.stats-button {
+    margin-top: 5px;
+    margin-left: 5px
 }
 
 .select-style {
@@ -264,6 +277,15 @@ li {
     animation: move-up 500ms
 }
 
+.star-big {
+    color: gold;
+    font-size: 100px;
+    text-align: center;
+    filter: drop-shadow(1px 1px 2px black);
+    -webkit-filter: drop-shadow(1px 1px 2px black);
+    animation: golden_2 3s infinite
+}
+
 .star {
     color: gold;
     opacity: 1;
@@ -314,5 +336,13 @@ li {
     25%  {color: goldenrod; opacity: 1;}
     50%  {color: #ffe971;}
     75%  {color: goldenrod;}
+    100% {color: gold;}
+}
+
+@keyframes golden_2 {
+    0%   {color: gold;}
+    35%  {color: #fff5be}
+    50%  {color: gold;}
+    65%  {color: #fff5be;}
     100% {color: gold;}
 }

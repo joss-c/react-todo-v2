@@ -20,10 +20,10 @@ const Calendar = ({ handleOnChange, value, convertDate }) =>
 
 const Priority = ({ handleOnChange, value }) =>
     <React.Fragment>
-        <Input 
-            type="select" 
-            className="priority-element" 
-            value={value} 
+        <Input
+            type="select"
+            className="priority-element"
+            value={value}
             onChange={handleOnChange}
         >
             <option value="Low">Priority: Low</option>
@@ -51,7 +51,7 @@ const ListItem = (props) =>
                 >
                     <TaskDetails
                         item={props.item}
-                        articulateDateDue={props.articulateDateDue} 
+                        articulateDateDue={props.articulateDateDue}
                     />
                 </Task>
             </Col>
@@ -170,7 +170,7 @@ const TaskDetails = ({ item, articulateDateDue }) =>
                                 in={!item.active}
                                 timeout={1000}
                                 classNames="star"
-                                //unmountOnExit
+                            //unmountOnExit
                             >
                                 <span className="star x-small" >
                                     {"★"}
@@ -180,7 +180,7 @@ const TaskDetails = ({ item, articulateDateDue }) =>
                                 in={!item.active}
                                 timeout={1000}
                                 classNames="plus-one"
-                                //unmountOnExit
+                            //unmountOnExit
                             >
                                 <span className="plus-one x-small">
                                     {" +1"}
@@ -292,6 +292,17 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
         </fieldset>
     </React.Fragment>
 
+const Stats = ({ data, statsHidden }) =>
+    <div
+        className="align-center"
+        hidden={statsHidden}
+    >
+        <div className="star-big">
+            {"★"}
+        </div>
+        <h1>{`${data.stats.tasksCompleted} stars earned!`}</h1>
+    </div>
+
 class AddTask extends Component {
     constructor(props) {
         super(props)
@@ -372,8 +383,7 @@ class ToDo extends Component {
                             dateDue: Date.now(),
                             tag: null
                         }],
-                    settings:
-                    {
+                    settings: {
                         style: {
                             colorHigh: "#f5c6cb",
                             colorMedium: "#ffeeba",
@@ -381,13 +391,17 @@ class ToDo extends Component {
                         },
                         hideInactive: false
                     },
-                    tags: ["None"]
+                    tags: ["None"],
+                    stats: {
+                        tasksCompleted: 0
+                    }
                 },
             buttonDisabled: true,
             selectedPriority: "Low",
             selectedSort: "None",
             selectedDate: this.props.convertDate(Date.now(), "ISO"),
             settingsHidden: true,
+            statsHidden: true,
             selectedStyle: "None",
             selectedTag: "None",
             editTaskText: "",
@@ -432,12 +446,14 @@ class ToDo extends Component {
             const itemIsActive = item.active
             if (itemIsActive) {
                 item.active = false
+                data.stats.tasksCompleted ++
                 this.setState({
                     data: data
                 })
             } else if (undo) {
                 item.editPanelHidden = true
                 item.active = true
+                data.stats.tasksCompleted --
                 this.setState({
                     data: data
                 })
@@ -649,6 +665,13 @@ class ToDo extends Component {
         }))
     }
 
+    toggleStats = () => {
+        this.setState(state => ({
+            statsHidden: false,
+            modal: !state.modal
+        }))
+    }
+
     changeStyle = (event) => {
         const data = this.clone(this.state.data)
         const style = event.target.value
@@ -761,18 +784,19 @@ class ToDo extends Component {
     toggleModal = () => {
         this.setState(state => ({
             modal: !state.modal,
-            settingsHidden: true
+            settingsHidden: true,
+            statsHidden: true
         }))
     }
 
     render() {
-        const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, selectedStyle, modal } = this.state
+        const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, modal } = this.state
         const { convertDate, articulateDateDue } = this.props
         return (
             <Container style={{ backgroundColor: (selectedStyle === "Halloween") ? "black" : "white" }}>
                 <Modal isOpen={modal} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>
-                    {"Settings"}
+                        {(settingsHidden) ? "Stats" : "Settings"}
                     </ModalHeader>
                     <ModalBody>
                         <Settings
@@ -782,6 +806,10 @@ class ToDo extends Component {
                             changeStyle={this.changeStyle}
                             changeColor={this.changeColor}
                             toggleInactiveTasks={this.toggleInactiveTasks}
+                        />
+                        <Stats
+                            data={data}
+                            statsHidden={statsHidden}
                         />
                     </ModalBody>
                     <ModalFooter>
@@ -899,10 +927,20 @@ class ToDo extends Component {
                         <Row className="row-3 no-gutters">
                             <Button
                                 className="settings-button"
-                                outline color="secondary"
-                                onClick={this.toggleSettings}>
-                                ⚙
-                        </Button>
+                                outline
+                                color="secondary"
+                                onClick={this.toggleSettings}
+                            >
+                                {"⚙"}
+                            </Button>
+                            <Button
+                                className="stats-button"
+                                outline
+                                color="secondary"
+                                onClick={this.toggleStats}
+                            >
+                                {"★"}
+                            </Button>
                         </Row>
                         <Row className="settings no-gutters">
                         </Row>
