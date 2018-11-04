@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { MoonLoader } from 'react-spinners'
+import Notifications, {notify} from 'react-notify-toast'
 import TextareaAutosize from 'react-autosize-textarea'
 import uuid from 'uuid'
 import { convertDate, articulateDateDue, arrayMove } from './functions'
@@ -326,17 +327,17 @@ class Stats extends Component {
                     }
                     return total
                 }, 0)
-        let output
-        if (loading) {
-            output =
+        return (
+            (loading) ?
                 <div className="align-center">
                     <MoonLoader
                         color={'#007bff'}
+                        sizeUnit={"px"}
+                        size={100}
                         loading={loading}
                     />
                 </div>
-        } else {
-            output =
+                :
                 <div
                     className="align-center"
                     hidden={statsHidden}
@@ -349,11 +350,6 @@ class Stats extends Component {
                         {`Earned this week: ${totalStarsOneWeek}`}
                     </div>
                 </div>
-        }
-        return (
-            <React.Fragment>
-                {output}
-            </React.Fragment>
         )
     }
 }
@@ -482,6 +478,7 @@ class ToDo extends Component {
         this.sortItems()
         console.log(this.state.data.listItems)
         console.log(this.state.stats.tasksCompleted)
+        notify.show("You got this!", "custom", 2000, { background: "#007bff", text: "#ffffff" })
     }
 
     clone = (object) => {
@@ -517,6 +514,11 @@ class ToDo extends Component {
                     data: data,
                     stats: stats
                 })
+                if (Object.keys(stats.tasksCompleted).length % 10 == 0) {
+                    setTimeout(() => {
+                        notify.show("Great job!", "custom", 2000, { background: "#007bff", text: "#ffffff" })
+                    }, 1000)
+                }
             } else if (undo) {
                 item.editPanelHidden = true
                 item.active = true
@@ -862,6 +864,7 @@ class ToDo extends Component {
         const { convertDate, articulateDateDue } = this.props
         return (
             <Container style={{ backgroundColor: (selectedStyle === "Halloween") ? "black" : "white" }}>
+                <Notifications />
                 <Modal isOpen={showModal} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>
                         {(settingsHidden) ? "Stats" : "Settings"}
