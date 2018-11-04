@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { MoonLoader } from 'react-spinners'
 import TextareaAutosize from 'react-autosize-textarea'
 import uuid from 'uuid'
 import { convertDate, articulateDateDue, arrayMove } from './functions'
@@ -292,16 +293,70 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
         </fieldset>
     </React.Fragment>
 
-const Stats = ({ data, statsHidden }) =>
-    <div
-        className="align-center"
-        hidden={statsHidden}
-    >
-        <div className="star-big">
-            {"★"}
-        </div>
-        <h1>{`${data.stats.tasksCompleted} stars earned!`}</h1>
-    </div>
+class Stats extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            loading: true
+        }
+    }
+
+    componentWillMount() {
+        this.setState({
+            loading: true
+        })
+    }
+
+    componentDidMount() {
+        this.setState({
+            loading: false
+        })
+    }
+
+    render() {
+        const { stats, statsHidden } = this.props
+        const { loading } = this.state
+        const tasks = stats.tasksCompleted
+        const oneWeekAgo = Date.now() - (60 * 60 * 24 * 7 * 1000)
+        const totalStarsOneWeek =
+            Object.keys(tasks)
+                .reduce((total, id) => {
+                    if (tasks[id].timeCompleted > oneWeekAgo) {
+                        total++
+                    }
+                    return total
+                }, 0)
+        let output
+        if (loading) {
+            output =
+                <div className="align-center">
+                    <MoonLoader
+                        color={'#007bff'}
+                        loading={loading}
+                    />
+                </div>
+        } else {
+            output =
+                <div
+                    className="align-center"
+                    hidden={statsHidden}
+                >
+                    <div className="star-big">
+                        {"★"}
+                    </div>
+                    <h1>{`${Object.keys(stats.tasksCompleted).length} stars earned!`}</h1>
+                    <div>
+                        {`Earned this week: ${totalStarsOneWeek}`}
+                    </div>
+                </div>
+        }
+        return (
+            <React.Fragment>
+                {output}
+            </React.Fragment>
+        )
+    }
+}
 
 class AddTask extends Component {
     constructor(props) {
@@ -316,11 +371,11 @@ class AddTask extends Component {
         }, 1)
         const newItem = {
             active: true,
-            id: uuid().substring(0, 10),
+            id: uuid().substring(0, 12),
             hidden: false,
             task: inputElementValue,
             priority: convertPriority(selectedPriority),
-            time: Date.now(),
+            timeCreated: Date.now(),
             dateDue: convertDate(selectedDate, "timestamp"),
             instance: itemInstances,
             editPanelHidden: true,
@@ -391,10 +446,11 @@ class ToDo extends Component {
                         },
                         hideInactive: false
                     },
-                    tags: ["None"],
-                    stats: {
-                        tasksCompleted: 0
-                    }
+                    tags: ["None"]
+                },
+            stats: (this.props.stats) ? JSON.parse(this.props.stats) :
+                {
+                    tasksCompleted: {}
                 },
             buttonDisabled: true,
             selectedPriority: "Low",
@@ -405,21 +461,27 @@ class ToDo extends Component {
             selectedStyle: "None",
             selectedTag: "None",
             editTaskText: "",
-            modal: false
+            showModal: false
         }
         this.selectSortBy = React.createRef()
     }
 
-    componentDidUpdate() {
-        const { data } = this.state
+    componentDidUpdate(prevProps, prevState) {
+        const { data, stats } = this.state
         const { saveData } = this.props
-        saveData(data)
+        if (prevState.data !== data) {
+            saveData(data, "data_7")
+        }
+        if (prevState.stats !== stats) {
+            saveData(stats, "stats")
+        }
     }
 
     componentDidMount() {
         this.hideEditPanels()
         this.sortItems()
         console.log(this.state.data.listItems)
+        console.log(this.state.stats.tasksCompleted)
     }
 
     clone = (object) => {
@@ -439,6 +501,7 @@ class ToDo extends Component {
 
     markComplete = (index, undo) => {
         const data = this.clone(this.state.data)
+        const stats = this.clone(this.state.stats)
         const item = data.listItems[index]
         if (data.listItems.length === 0) {
             console.log("List is empty")
@@ -446,16 +509,21 @@ class ToDo extends Component {
             const itemIsActive = item.active
             if (itemIsActive) {
                 item.active = false
-                data.stats.tasksCompleted ++
+                stats.tasksCompleted[item.id] = {
+                    timeCreated: item.timeCreated,
+                    timeCompleted: Date.now()
+                }
                 this.setState({
-                    data: data
+                    data: data,
+                    stats: stats
                 })
             } else if (undo) {
                 item.editPanelHidden = true
                 item.active = true
-                data.stats.tasksCompleted --
+                delete stats.tasksCompleted[item.id]
                 this.setState({
-                    data: data
+                    data: data,
+                    stats: stats
                 })
             } else {
                 this.deleteItem(index)
@@ -661,14 +729,14 @@ class ToDo extends Component {
     toggleSettings = () => {
         this.setState(state => ({
             settingsHidden: false,
-            modal: !state.modal
+            showModal: !state.showModal
         }))
     }
 
     toggleStats = () => {
         this.setState(state => ({
             statsHidden: false,
-            modal: !state.modal
+            showModal: !state.showModal
         }))
     }
 
@@ -783,18 +851,18 @@ class ToDo extends Component {
 
     toggleModal = () => {
         this.setState(state => ({
-            modal: !state.modal,
+            showModal: !state.showModal,
             settingsHidden: true,
             statsHidden: true
         }))
     }
 
     render() {
-        const { data, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, modal } = this.state
+        const { data, stats, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
         const { convertDate, articulateDateDue } = this.props
         return (
             <Container style={{ backgroundColor: (selectedStyle === "Halloween") ? "black" : "white" }}>
-                <Modal isOpen={modal} toggle={this.toggleModal}>
+                <Modal isOpen={showModal} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>
                         {(settingsHidden) ? "Stats" : "Settings"}
                     </ModalHeader>
@@ -808,7 +876,7 @@ class ToDo extends Component {
                             toggleInactiveTasks={this.toggleInactiveTasks}
                         />
                         <Stats
-                            data={data}
+                            stats={stats}
                             statsHidden={statsHidden}
                         />
                     </ModalBody>
