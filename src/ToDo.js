@@ -460,6 +460,7 @@ class ToDo extends Component {
             showModal: false
         }
         this.selectSortBy = React.createRef()
+        this.showToast = notify.createShowQueue()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -478,7 +479,7 @@ class ToDo extends Component {
         this.sortItems()
         console.log(this.state.data.listItems)
         console.log(this.state.stats.tasksCompleted)
-        notify.show("You got this! 😊", "custom", 2000, { background: "#007bff", text: "#ffffff" })
+        this.showToast("You got this! 😊", "custom", 2000, { background: "#007bff", text: "#ffffff" })
     }
 
     clone = (object) => {
@@ -514,9 +515,9 @@ class ToDo extends Component {
                     data: data,
                     stats: stats
                 })
-                if (Object.keys(stats.tasksCompleted).length % 5 == 0) {
+                if (Object.keys(stats.tasksCompleted).length % 5 === 0) {
                     setTimeout(() => {
-                        notify.show("Great job! ⭐", "custom", 2000, { background: "#007bff", text: "#ffffff" })
+                        this.showToast("Great job! ⭐", "custom", 2000, { background: "#007bff", text: "#ffffff" })
                     }, 1000)
                 }
             } else if (undo) {
