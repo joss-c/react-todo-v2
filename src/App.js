@@ -5,8 +5,8 @@ import './App.css';
 
 class App extends Component {
     render() {
-        const data = localStorage.getItem("data_7")
-        const stats = localStorage.getItem("stats")
+        const data = localStorage.getItem("data_9")
+        const stats = localStorage.getItem("stats_3")
         const saveData = (data, fileName) => localStorage.setItem(fileName, JSON.stringify(data))
         return (
             <ToDo

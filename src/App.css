@@ -241,10 +241,6 @@
 
 }
 
-.task-complete {
-    background-color: #e5e5e5;
-}
-
 .animate-background {
     animation: animate-background 500ms
 }
@@ -275,6 +271,15 @@ li {
 
 .plus-one-enter-active {
     animation: move-up 500ms
+}
+
+.complete {
+    background-color: #e5e5e5;
+    animation: animate-background 500ms
+}
+
+.complete-enter-active {
+    animation: animate-background 500ms
 }
 
 .star-big {

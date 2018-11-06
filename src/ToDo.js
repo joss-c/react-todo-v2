@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { MoonLoader } from 'react-spinners'
-import Notifications, {notify} from 'react-notify-toast'
+import Notifications, { notify } from 'react-notify-toast'
 import TextareaAutosize from 'react-autosize-textarea'
 import uuid from 'uuid'
 import { convertDate, articulateDateDue, arrayMove } from './functions'
+import { randomMessage } from './randomMessage'
 import { firstBy } from './thenBy.min.js'
 
 const Calendar = ({ handleOnChange, value, convertDate }) =>
@@ -39,65 +40,9 @@ const List = (props) =>
         {props.children}
     </div>
 
-const ListItem = (props) =>
-    <React.Fragment>
-        <Row className="no-gutters">
-            <Col xs="9">
-                <Task
-                    data={props.data}
-                    item={props.item}
-                    index={props.index}
-                    handleTextChange={props.handleTextChange}
-                    editText={props.editText}
-                    toggleEditItem={props.toggleEditItem}
-                >
-                    <TaskDetails
-                        item={props.item}
-                        articulateDateDue={props.articulateDateDue}
-                    />
-                </Task>
-            </Col>
-            <Col xs="3">
-                <TransitionGroup>
-                    <CSSTransition
-                        key={props.item.id}
-                        timeout={500}
-                        classNames="fade">
-                        <ItemButtons
-                            item={props.item}
-                            index={props.index}
-                            markComplete={props.markComplete}
-                            sortItems={props.sortItems}
-                        />
-                    </CSSTransition>
-                </TransitionGroup>
-            </Col>
-        </Row>
-        <ItemEditBox
-            item={props.item}
-            index={props.index}
-            markComplete={props.markComplete}>
-            <Row>
-                <Col>
-                    <Calendar
-                        value={props.convertDate(props.item.dateDue, "ISO")}
-                        handleOnChange={(event) => props.editDate(event, props.index)}
-                        convertDate={props.convertDate}
-                    />
-                </Col>
-                <Col>
-                    <Priority
-                        value={props.convertPriority(props.item.priority)}
-                        handleOnChange={(event) => props.editPriority(event, props.index)}
-                    />
-                </Col>
-            </Row>
-        </ItemEditBox>
-    </React.Fragment>
-
 const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
-        className={(item.active) ? "task" : "task task-complete animate-background"}
+        className={(item.active) ? "task" : "task animate-background"}
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
@@ -193,7 +138,6 @@ const TaskDetails = ({ item, articulateDateDue }) =>
             </TransitionGroup>
         </Col>
     </Row>
-
 
 const ItemButtons = ({ item, index, markComplete, sortItems }) =>
     <div className="item-buttons">
@@ -294,6 +238,62 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
         </fieldset>
     </React.Fragment>
 
+const ListItem = (props) =>
+    <React.Fragment>
+        <Row className="no-gutters">
+            <Col xs="9">
+                <Task
+                    data={props.data}
+                    item={props.item}
+                    index={props.index}
+                    handleTextChange={props.handleTextChange}
+                    editText={props.editText}
+                    toggleEditItem={props.toggleEditItem}
+                >
+                    <TaskDetails
+                        item={props.item}
+                        articulateDateDue={props.articulateDateDue}
+                    />
+                </Task>
+            </Col>
+            <Col xs="3">
+                <TransitionGroup>
+                    <CSSTransition
+                        key={props.item.id}
+                        timeout={500}
+                        classNames="fade">
+                        <ItemButtons
+                            item={props.item}
+                            index={props.index}
+                            markComplete={props.markComplete}
+                            sortItems={props.sortItems}
+                        />
+                    </CSSTransition>
+                </TransitionGroup>
+            </Col>
+        </Row>
+        <ItemEditBox
+            item={props.item}
+            index={props.index}
+            markComplete={props.markComplete}>
+            <Row>
+                <Col>
+                    <Calendar
+                        value={props.convertDate(props.item.dateDue, "ISO")}
+                        handleOnChange={(event) => props.editDate(event, props.index)}
+                        convertDate={props.convertDate}
+                    />
+                </Col>
+                <Col>
+                    <Priority
+                        value={props.convertPriority(props.item.priority)}
+                        handleOnChange={(event) => props.editPriority(event, props.index)}
+                    />
+                </Col>
+            </Row>
+        </ItemEditBox>
+    </React.Fragment>
+
 class Stats extends Component {
     constructor(props) {
         super(props)
@@ -317,12 +317,13 @@ class Stats extends Component {
     render() {
         const { stats, statsHidden } = this.props
         const { loading } = this.state
-        const tasks = stats.tasksCompleted
+        const tasksCompleted = stats.tasksCompleted
+        const totalTasksCompleted = Object.keys(tasksCompleted).length
         const oneWeekAgo = Date.now() - (60 * 60 * 24 * 7 * 1000)
-        const totalStarsOneWeek =
-            Object.keys(tasks)
+        const totalTasksCompletedOneWeek =
+            Object.keys(tasksCompleted)
                 .reduce((total, id) => {
-                    if (tasks[id].timeCompleted > oneWeekAgo) {
+                    if (tasksCompleted[id].timeCompleted > oneWeekAgo) {
                         total++
                     }
                     return total
@@ -345,9 +346,12 @@ class Stats extends Component {
                     <div className="star-big">
                         {"★"}
                     </div>
-                    <h1>{`${Object.keys(stats.tasksCompleted).length} stars earned!`}</h1>
+                    <h1>{`${totalTasksCompleted + stats.bonusStars} stars earned!`}</h1>
                     <div>
-                        {`Earned this week: ${totalStarsOneWeek}`}
+                        {`Tasks completed: ${totalTasksCompleted}`}
+                    </div>
+                    <div>
+                        {`This week: ${totalTasksCompletedOneWeek}`}
                     </div>
                 </div>
         )
@@ -446,7 +450,8 @@ class ToDo extends Component {
                 },
             stats: (this.props.stats) ? JSON.parse(this.props.stats) :
                 {
-                    tasksCompleted: {}
+                    tasksCompleted: {},
+                    bonusStars: 0
                 },
             buttonDisabled: true,
             selectedPriority: "Low",
@@ -460,26 +465,39 @@ class ToDo extends Component {
             showModal: false
         }
         this.selectSortBy = React.createRef()
-        this.showToast = notify.createShowQueue()
+        this.notify = notify.createShowQueue()
+        this.notifyStyle = { background: "#007bff", text: "#ffffff" }
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { data, stats } = this.state
         const { saveData } = this.props
         if (prevState.data !== data) {
-            saveData(data, "data_7")
+            saveData(data, "data_9")
         }
         if (prevState.stats !== stats) {
-            saveData(stats, "stats")
+            saveData(stats, "stats_3")
+        }
+        // Uncredit bonus stars on "mark uncomplete"
+        const prevTasksCompleted = Object.keys(prevState.stats.tasksCompleted).length
+        const tasksCompleted = Object.keys(stats.tasksCompleted).length
+        console.log(prevTasksCompleted, tasksCompleted)
+        if (tasksCompleted < prevTasksCompleted) {
+            if (prevTasksCompleted % 10 === 0) {
+                const revisedStats = this.clone(stats)
+                revisedStats.bonusStars -= 2
+                this.setState({
+                    stats: revisedStats
+                })
+            }
         }
     }
 
     componentDidMount() {
         this.hideEditPanels()
         this.sortItems()
-        console.log(this.state.data.listItems)
-        console.log(this.state.stats.tasksCompleted)
-        this.showToast("You got this! 😊", "custom", 2000, { background: "#007bff", text: "#ffffff" })
+        console.log(this.state)
+        this.notify("You got this! 😊", "custom", 2000, this.notifyStyle)
     }
 
     clone = (object) => {
@@ -515,10 +533,20 @@ class ToDo extends Component {
                     data: data,
                     stats: stats
                 })
-                if (Object.keys(stats.tasksCompleted).length % 5 === 0) {
+                const tasksCompleted = Object.keys(stats.tasksCompleted).length
+                if (tasksCompleted % 5 === 0) {
                     setTimeout(() => {
-                        this.showToast("Great job! ⭐", "custom", 2000, { background: "#007bff", text: "#ffffff" })
-                    }, 1000)
+                        this.notify(randomMessage(), "custom", 2000, this.notifyStyle)
+                    }, 500)
+                }
+                if (tasksCompleted % 10 === 0) {
+                    setTimeout(() => {
+                        this.notify("+2⭐!", "custom", 2000, { background: "#fff5be", text: "#000000" })
+                        stats.bonusStars += 2
+                        this.setState({
+                            stats: stats
+                        })
+                    }, 500)
                 }
             } else if (undo) {
                 item.editPanelHidden = true
@@ -822,9 +850,7 @@ class ToDo extends Component {
 
     editText = (event, index) => {
         event.stopPropagation()
-        const { editTaskText } = this.state
         const data = this.clone(this.state.data)
-        data.listItems[index].task = editTaskText
         data.listItems[index].editPanelHidden = true
         this.setState({
             data: data
@@ -863,8 +889,13 @@ class ToDo extends Component {
     render() {
         const { data, stats, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
         const { convertDate, articulateDateDue } = this.props
+        if (selectedStyle === "Halloween") {
+            document.body.style.backgroundColor = "black"
+        } else {
+            document.body.style.backgroundColor = "white"
+        }
         return (
-            <Container style={{ backgroundColor: (selectedStyle === "Halloween") ? "black" : "white" }}>
+            <Container>
                 <Notifications />
                 <Modal isOpen={showModal} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>
