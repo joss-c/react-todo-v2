@@ -436,13 +436,14 @@ class ToDo extends Component {
                     dateDue: convertDate(convertDate(Date.now(), "ISO"), "timestamp"),
                     tag: null
                 }],
-            settings: {
-                style: {
-                    colorHigh: "#f5c6cb",
-                    colorMedium: "#ffeeba",
-                    colorLow: "#bee5eb",
-                    backgroundColor: "#ffffff",
-                    font: ""
+            settings: (this.props.settings) ? JSON.parse(this.props.settings) :
+                {
+                    style: {
+                        colorHigh: "#f5c6cb",
+                        colorMedium: "#ffeeba",
+                        colorLow: "#bee5eb",
+                        backgroundColor: "#ffffff",
+                        font: ""
                 },
                 tags: ["None"],
                 hideInactive: false
@@ -489,11 +490,11 @@ class ToDo extends Component {
         // Uncredit bonus stars on "mark uncomplete"
         const prevTasksCompleted = Object.keys(prevState.stats.tasksCompleted).length
         const tasksCompleted = Object.keys(stats.tasksCompleted).length
-        console.log(prevTasksCompleted, tasksCompleted)
         if (tasksCompleted < prevTasksCompleted) {
             if (prevTasksCompleted % 10 === 0) {
-                const revisedStats = this.clone(stats)
+                let revisedStats = this.clone(stats)
                 revisedStats.bonusStars -= 2
+                console.log("Stars are being removed..")
                 this.setState({
                     stats: revisedStats
                 })
@@ -524,8 +525,8 @@ class ToDo extends Component {
     }
 
     markComplete = (index, undo) => {
-        const tasks = this.clone(this.state.tasks)
-        const stats = this.clone(this.state.stats)
+        let tasks = this.clone(this.state.tasks)
+        let stats = this.clone(this.state.stats)
         const task = tasks[index]
         if (tasks.length === 0) {
             console.log("List is empty")
@@ -636,7 +637,7 @@ class ToDo extends Component {
     }
 
     toggleItems = (tasks, type, tag) => {
-        const tasksCopy = this.clone(tasks)
+        let tasksCopy = this.clone(tasks)
         if (type === "selected tag") {
             tasksCopy.forEach(task => (task.tag !== tag) && (task.hidden = true))
         } else if (type === "tags only") {
@@ -734,7 +735,7 @@ class ToDo extends Component {
     }
 
     toggleEditItem = (index) => {
-        const tasks = this.clone(this.state.tasks)
+        let tasks = this.clone(this.state.tasks)
         const targetTask = tasks[index]
         const targetPanelState = targetTask.editPanelHidden
         tasks.forEach((task) => {
@@ -757,7 +758,7 @@ class ToDo extends Component {
     }
 
     changeColor = (event, selectedColor) => {
-        const settings = this.clone(this.state.settings)
+        let settings = this.clone(this.state.settings)
         settings.style[selectedColor] = event.target.value
         this.setState({
             settings: settings,
@@ -780,7 +781,7 @@ class ToDo extends Component {
     }
 
     changeStyle = (event) => {
-        const settings = this.clone(this.state.settings)
+        let settings = this.clone(this.state.settings)
         const selectedStyle = event.target.value
         const style = settings.style
         if (style === "None") {
@@ -801,7 +802,7 @@ class ToDo extends Component {
 
     changeTag = (event) => {
         const { selectedSort } = this.state
-        const tasks = this.clone(this.state.tasks)
+        let tasks = this.clone(this.state.tasks)
         const tag = event.target.value
         if (selectedSort === "Selected Tag") {
             this.toggleItems(tasks, "show all")
@@ -818,7 +819,7 @@ class ToDo extends Component {
     }
 
     addTag = () => {
-        const settings = this.clone(this.state.settings)
+        let settings = this.clone(this.state.settings)
         const newTag = prompt("Enter a new tag")
         if (newTag === "" || settings.tags.includes(newTag)) {
             alert("Invalid tag or duplicate")
@@ -833,7 +834,7 @@ class ToDo extends Component {
 
     removeTag = () => {
         const { selectedTag } = this.state
-        const settings = this.clone(this.state.settings)
+        let settings = this.clone(this.state.settings)
         settings.tags = settings.tags.filter(tag => tag !== selectedTag || tag === "None")
         this.setState({
             settings: settings,
@@ -865,7 +866,7 @@ class ToDo extends Component {
 
     toggleInactiveTasks = () => {
         let tasks = this.clone(this.state.tasks)
-        const settings = this.clone(this.state.settings)
+        let settings = this.clone(this.state.settings)
         settings.hideInactive = !settings.hideInactive
         tasks = this.sortItemsBy(tasks, "toggle inactive")
         this.setState({
