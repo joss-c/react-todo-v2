@@ -444,8 +444,8 @@ class ToDo extends Component {
                         colorLow: "#bee5eb",
                         backgroundColor: "#ffffff",
                         font: ""
-                },
-                hideInactive: false
+                    },
+                    hideInactive: false
                 },
             stats: (this.props.stats) ? JSON.parse(this.props.stats) :
                 {
@@ -534,42 +534,47 @@ class ToDo extends Component {
         if (tasks.length === 0) {
             console.log("List is empty")
         } else {
-            const itemIsActive = task.active
-            if (itemIsActive) {
-                task.active = false
-                stats.tasksCompleted[task.id] = {
-                    timeCreated: task.timeCreated,
-                    timeCompleted: Date.now()
+            try {
+                const itemIsActive = task.active
+                if (itemIsActive) {
+                    task.active = false
+                    stats.tasksCompleted[task.id] = {
+                        timeCreated: task.timeCreated,
+                        timeCompleted: Date.now()
+                    }
+                    this.setState({
+                        tasks: tasks,
+                        stats: stats
+                    })
+                    const tasksCompleted = Object.keys(stats.tasksCompleted).length
+                    if (tasksCompleted % 5 === 0) {
+                        setTimeout(() => {
+                            this.notify(randomMessage(), "custom", 2000, this.notifyStyle)
+                        }, 500)
+                    }
+                    if (tasksCompleted % 10 === 0) {
+                        setTimeout(() => {
+                            this.notify("⭐+2 STARS BONUS⭐", "custom", 2000, { background: "#fff5be", text: "#000000" })
+                            stats.bonusStars += 2
+                            this.setState({
+                                stats: stats
+                            })
+                        }, 500)
+                    }
+                } else if (undo) {
+                    task.editPanelHidden = true
+                    task.active = true
+                    delete stats.tasksCompleted[task.id]
+                    this.setState({
+                        tasks: tasks,
+                        stats: stats
+                    })
+                } else {
+                    this.deleteItem(index)
                 }
-                this.setState({
-                    tasks: tasks,
-                    stats: stats
-                })
-                const tasksCompleted = Object.keys(stats.tasksCompleted).length
-                if (tasksCompleted % 5 === 0) {
-                    setTimeout(() => {
-                        this.notify(randomMessage(), "custom", 2000, this.notifyStyle)
-                    }, 500)
-                }
-                if (tasksCompleted % 10 === 0) {
-                    setTimeout(() => {
-                        this.notify("⭐+2 STARS BONUS⭐", "custom", 2000, { background: "#fff5be", text: "#000000" })
-                        stats.bonusStars += 2
-                        this.setState({
-                            stats: stats
-                        })
-                    }, 500)
-                }
-            } else if (undo) {
-                task.editPanelHidden = true
-                task.active = true
-                delete stats.tasksCompleted[task.id]
-                this.setState({
-                    tasks: tasks,
-                    stats: stats
-                })
-            } else {
-                this.deleteItem(index)
+            }
+            catch (err) {
+                console.log(err)
             }
         }
     }
