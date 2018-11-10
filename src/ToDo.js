@@ -445,7 +445,6 @@ class ToDo extends Component {
                         backgroundColor: "#ffffff",
                         font: ""
                 },
-                tags: ["None"],
                 hideInactive: false
                 },
             stats: (this.props.stats) ? JSON.parse(this.props.stats) :
@@ -454,6 +453,7 @@ class ToDo extends Component {
                     bonusStars: 0,
                     starsUsed: 0,
                 },
+            tags: (this.props.tags) ? JSON.parse(this.props.tags) : ["None"],
             buttonDisabled: true,
             selectedPriority: "Low",
             selectedSort: "None",
@@ -476,7 +476,7 @@ class ToDo extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { tasks, settings, stats } = this.state
+        const { tasks, settings, stats, tags } = this.state
         const { saveData } = this.props
         if (prevState.tasks !== tasks) {
             saveData(tasks, "tasks")
@@ -486,6 +486,9 @@ class ToDo extends Component {
         }
         if (prevState.stats !== stats) {
             saveData(stats, "stats_5")
+        }
+        if (prevState.tags !== tags) {
+            saveData(tags, "tags")
         }
         // Uncredit bonus stars on "mark uncomplete"
         const prevTasksCompleted = Object.keys(prevState.stats.tasksCompleted).length
@@ -550,7 +553,7 @@ class ToDo extends Component {
                 }
                 if (tasksCompleted % 10 === 0) {
                     setTimeout(() => {
-                        this.notify("+2⭐!", "custom", 2000, { background: "#fff5be", text: "#000000" })
+                        this.notify("⭐+2 STARS BONUS⭐", "custom", 2000, { background: "#fff5be", text: "#000000" })
                         stats.bonusStars += 2
                         this.setState({
                             stats: stats
@@ -648,56 +651,56 @@ class ToDo extends Component {
         return tasksCopy
     }
 
-    sortItemsBy = (listItems, selectedSort, moveFrom) => {
-        const showAll = this.toggleItems(listItems, "show all")
+    sortItemsBy = (tasks, selectedSort, moveFrom) => {
+        const showAll = this.toggleItems(tasks, "show all")
         if (selectedSort === "Manual") {
             const moveTo = moveFrom - 1
-            return listItems = this.props.arrayMove(listItems, moveFrom, moveTo)
-            //return listItems.sort(firstBy("active", -1))
+            return tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
+            //return tasks.sort(firstBy("active", -1))
         }
         if (selectedSort === "None") {
             return showAll
         } else if (selectedSort === "Priority") {
-            listItems = showAll
-            return listItems.sort(
+            tasks = showAll
+            return tasks.sort(
                 firstBy("active", -1)
                     .thenBy("priority")
                     .thenBy("dateDue")
                     .thenBy("task")
             )
         } else if (selectedSort === "Date Due") {
-            listItems = showAll
-            return listItems.sort(
+            tasks = showAll
+            return tasks.sort(
                 firstBy("active", -1)
                     .thenBy("dateDue")
                     .thenBy("priority")
                     .thenBy("task")
             )
         } else if (selectedSort === "A-Z") {
-            listItems = showAll
-            return listItems.sort(
+            tasks = showAll
+            return tasks.sort(
                 firstBy("active", -1)
                     .thenBy("task")
             )
         } else if (selectedSort === "Tags") {
-            listItems = showAll
-            listItems = this.toggleItems(listItems, "tags only")
-            return listItems.sort(
+            tasks = showAll
+            tasks = this.toggleItems(tasks, "tags only")
+            return tasks.sort(
                 firstBy("tag")
                     .thenBy("priority")
                     .thenBy("dateDue")
                     .thenBy("task")
             )
         } else if (selectedSort === "Selected Tag") {
-            listItems = this.toggleItems(listItems, "selected tag", this.state.selectedTag)
-            return listItems.sort(
+            tasks = this.toggleItems(tasks, "selected tag", this.state.selectedTag)
+            return tasks.sort(
                 firstBy("tag")
                     .thenBy("priority")
                     .thenBy("dateDue")
                     .thenBy("task")
             )
         } else if (selectedSort === "toggle inactive") {
-            return listItems.sort(firstBy("active", -1))
+            return tasks.sort(firstBy("active", -1))
         }
     }
 
@@ -819,14 +822,14 @@ class ToDo extends Component {
     }
 
     addTag = () => {
-        let settings = this.clone(this.state.settings)
+        let tags = this.clone(this.state.tags)
         const newTag = prompt("Enter a new tag")
-        if (newTag === "" || settings.tags.includes(newTag)) {
+        if (newTag === "" || tags.includes(newTag)) {
             alert("Invalid tag or duplicate")
         } else {
-            settings.tags = [...settings.tags, newTag]
+            tags = [...tags, newTag]
             this.setState({
-                settings: settings,
+                tags: tags,
                 selectedTag: newTag
             })
         }
@@ -834,10 +837,10 @@ class ToDo extends Component {
 
     removeTag = () => {
         const { selectedTag } = this.state
-        let settings = this.clone(this.state.settings)
-        settings.tags = settings.tags.filter(tag => tag !== selectedTag || tag === "None")
+        let tags = this.clone(this.state.tags)
+        tags = tags.filter(tag => tag !== selectedTag || tag === "None")
         this.setState({
-            settings: settings,
+            tags: tags,
             selectedTag: "None"
         })
     }
@@ -884,7 +887,7 @@ class ToDo extends Component {
     }
 
     render() {
-        const { tasks, settings, stats, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
+        const { tasks, settings, stats, tags, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
         const { convertDate, articulateDateDue } = this.props
         document.body.style.backgroundColor = settings.style.backgroundColor
         return (
@@ -967,7 +970,7 @@ class ToDo extends Component {
                                     className="select-tag"
                                     value={selectedTag}
                                     onChange={this.changeTag}>
-                                    {settings.tags.map((tag, index) =>
+                                    {tags.map((tag, index) =>
                                         <option
                                             key={index}
                                             value={tag}>
