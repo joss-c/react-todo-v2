@@ -5,12 +5,14 @@ import './App.css';
 
 class App extends Component {
     render() {
-        const data = localStorage.getItem("data_9")
-        const stats = localStorage.getItem("stats_3")
+        const tasks = localStorage.getItem("tasks")
+        const settings = localStorage.getItem("settings")
+        const stats = localStorage.getItem("stats_5")
         const saveData = (data, fileName) => localStorage.setItem(fileName, JSON.stringify(data))
         return (
             <ToDo
-                data={data}
+                tasks={tasks}
+                settings={settings}
                 stats={stats}
                 saveData={saveData}
                 convertDate={convertDate}

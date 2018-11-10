@@ -40,34 +40,34 @@ const List = (props) =>
         {props.children}
     </div>
 
-const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, children }) =>
+const Task = ({ settings, task, index, toggleEditItem, handleTextChange, editText, children }) =>
     <div
-        className={(item.active) ? "task" : "task animate-background"}
+        className={(task.active) ? "task" : "task animate-background"}
         onClick={() => toggleEditItem(index)}
         style={{
             backgroundColor:
-                (!item.active) ?
+                (!task.active) ?
                     "#e5e5e5" :
-                    (item.priority === 3) ?
-                        data.settings.style.colorLow :
-                        (item.priority === 2) ?
-                            data.settings.style.colorMedium :
-                            data.settings.style.colorHigh
+                    (task.priority === 3) ?
+                        settings.style.colorLow :
+                        (task.priority === 2) ?
+                            settings.style.colorMedium :
+                            settings.style.colorHigh
         }}>
         <span
             style={{
                 textDecorationLine:
-                    (item.active) ?
+                    (task.active) ?
                         "none" :
                         "line-through"
             }}>
-            {(item.editPanelHidden) ?
+            {(task.editPanelHidden) ?
                 <Row>
                     <Col>
-                        {item.task}
+                        {task.text}
                         <span className="instance">
-                            {(item.instance > 1) ?
-                                ` (${item.instance})` :
+                            {(task.instance > 1) ?
+                                ` (${task.instance})` :
                                 null}
                         </span>
                     </Col>
@@ -79,7 +79,7 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
                                 className="edit-text-element"
                                 onChange={(event) => handleTextChange(event)}
                                 onClick={(event) => event.stopPropagation()}
-                                defaultValue={item.task}
+                                defaultValue={task.text}
                             />
                         </Col>
                         <Col xs="2">
@@ -99,22 +99,22 @@ const Task = ({ data, item, index, toggleEditItem, handleTextChange, editText, c
         {children}
     </div>
 
-const TaskDetails = ({ item, articulateDateDue }) =>
+const TaskDetails = ({ task, articulateDateDue }) =>
     <Row>
         <Col className="task-details">
             <TransitionGroup>
                 <div className="date-due x-small">
-                    {(item.tag === null) ?
+                    {(task.tag === null) ?
                         null :
-                        <span className="tag">{item.tag}</span>}
-                    {(item.active) ?
-                        `Due: ${articulateDateDue(item.dateDue)}` :
+                        <span className="tag">{task.tag}</span>}
+                    {(task.active) ?
+                        `Due: ${articulateDateDue(task.dateDue)}` :
                         <React.Fragment>
                             <span className="x-small">
                                 {"Complete "}
                             </span>
                             <CSSTransition
-                                in={!item.active}
+                                in={!task.active}
                                 timeout={1000}
                                 classNames="star"
                             //unmountOnExit
@@ -124,7 +124,7 @@ const TaskDetails = ({ item, articulateDateDue }) =>
                                 </span>
                             </CSSTransition>
                             <CSSTransition
-                                in={!item.active}
+                                in={!task.active}
                                 timeout={1000}
                                 classNames="plus-one"
                             //unmountOnExit
@@ -139,7 +139,7 @@ const TaskDetails = ({ item, articulateDateDue }) =>
         </Col>
     </Row>
 
-const ItemButtons = ({ item, index, markComplete, sortItems }) =>
+const ItemButtons = ({ task, index, markComplete, sortItems }) =>
     <div className="item-buttons">
         <Button
             className="sort-button"
@@ -153,20 +153,20 @@ const ItemButtons = ({ item, index, markComplete, sortItems }) =>
             className="delete-item-button"
             size="sm"
             outline
-            color={(item.active) ? "success" : "danger"}
+            color={(task.active) ? "success" : "danger"}
             onClick={() => markComplete(index)}>
-            {(item.active) ? "✓" : "✕"}
+            {(task.active) ? "✓" : "✕"}
         </Button>
     </div>
 
-const ItemEditBox = ({ item, index, markComplete, children }) =>
-    <div className="edit-task" hidden={item.editPanelHidden}>
-        <span hidden={!item.active}>
+const ItemEditBox = ({ task, index, markComplete, children }) =>
+    <div className="edit-task" hidden={task.editPanelHidden}>
+        <span hidden={!task.active}>
             {children}
         </span>
         <div className="undo">
             <Button
-                hidden={item.active}
+                hidden={task.active}
                 className="undo-button"
                 outline
                 color="secondary"
@@ -176,7 +176,7 @@ const ItemEditBox = ({ item, index, markComplete, children }) =>
         </div>
     </div>
 
-const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColor, toggleInactiveTasks }) =>
+const Settings = ({ settings, settingsHidden, selectedStyle, changeStyle, changeColor, toggleInactiveTasks }) =>
     <React.Fragment>
         <fieldset hidden={settingsHidden}>
             <div>
@@ -197,7 +197,7 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
                     <input
                         className="change-color"
                         type="color"
-                        value={data.settings.style.colorHigh}
+                        value={settings.style.colorHigh}
                         onChange={(event) => changeColor(event, "colorHigh")}>
                     </input>
                     <label>High Priority</label>
@@ -206,7 +206,7 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
                     <input
                         className="change-color"
                         type="color"
-                        value={data.settings.style.colorMedium}
+                        value={settings.style.colorMedium}
                         onChange={(event) => changeColor(event, "colorMedium")}>
                     </input>
                     <label>Medium Priority</label>
@@ -215,7 +215,7 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
                     <input
                         className="change-color"
                         type="color"
-                        value={data.settings.style.colorLow}
+                        value={settings.style.colorLow}
                         onChange={(event) => this.changeColor(event, "colorLow")}>
                     </input>
                     <label>Low Priority</label>
@@ -229,7 +229,7 @@ const Settings = ({ data, settingsHidden, selectedStyle, changeStyle, changeColo
                             type="checkbox"
                             id="checkbox"
                             label="Show completed tasks"
-                            checked={!data.settings.hideInactive}
+                            checked={!settings.hideInactive}
                             onChange={toggleInactiveTasks} />
                     </Col>
                 </Row>
@@ -243,15 +243,15 @@ const ListItem = (props) =>
         <Row className="no-gutters">
             <Col xs="9">
                 <Task
-                    data={props.data}
-                    item={props.item}
+                    settings={props.settings}
+                    task={props.task}
                     index={props.index}
                     handleTextChange={props.handleTextChange}
                     editText={props.editText}
                     toggleEditItem={props.toggleEditItem}
                 >
                     <TaskDetails
-                        item={props.item}
+                        task={props.task}
                         articulateDateDue={props.articulateDateDue}
                     />
                 </Task>
@@ -259,11 +259,11 @@ const ListItem = (props) =>
             <Col xs="3">
                 <TransitionGroup>
                     <CSSTransition
-                        key={props.item.id}
+                        key={props.task.id}
                         timeout={500}
                         classNames="fade">
                         <ItemButtons
-                            item={props.item}
+                            task={props.task}
                             index={props.index}
                             markComplete={props.markComplete}
                             sortItems={props.sortItems}
@@ -273,20 +273,20 @@ const ListItem = (props) =>
             </Col>
         </Row>
         <ItemEditBox
-            item={props.item}
+            task={props.task}
             index={props.index}
             markComplete={props.markComplete}>
             <Row>
                 <Col>
                     <Calendar
-                        value={props.convertDate(props.item.dateDue, "ISO")}
+                        value={props.convertDate(props.task.dateDue, "ISO")}
                         handleOnChange={(event) => props.editDate(event, props.index)}
                         convertDate={props.convertDate}
                     />
                 </Col>
                 <Col>
                     <Priority
-                        value={props.convertPriority(props.item.priority)}
+                        value={props.convertPriority(props.task.priority)}
                         handleOnChange={(event) => props.editPriority(event, props.index)}
                     />
                 </Col>
@@ -346,7 +346,7 @@ class Stats extends Component {
                     <div className="star-big">
                         {"★"}
                     </div>
-                    <h1>{`${totalTasksCompleted + stats.bonusStars} stars earned!`}</h1>
+                    <h1>{`${totalTasksCompleted + stats.bonusStars - stats.starsUsed} stars earned!`}</h1>
                     <div>
                         {`Tasks completed: ${totalTasksCompleted}`}
                     </div>
@@ -364,16 +364,16 @@ class AddTask extends Component {
         this.inputElement = React.createRef()
     }
     createItem = (event) => {
-        const { data, selectedPriority, addItem, convertPriority, convertDate, selectedDate, selectedTag } = this.props
+        const { tasks, selectedPriority, addItem, convertPriority, convertDate, selectedDate, selectedTag } = this.props
         const inputElementValue = this.inputElement.current.value
-        const itemInstances = data.listItems.reduce(function (total, item) {
-            return total + (inputElementValue === item.task ? 1 : 0)
+        const itemInstances = tasks.reduce(function (total, task) {
+            return total + (inputElementValue === task.text ? 1 : 0)
         }, 1)
         const newItem = {
             active: true,
             id: uuid().substring(0, 12),
             hidden: false,
-            task: inputElementValue,
+            text: inputElementValue,
             priority: convertPriority(selectedPriority),
             timeCreated: Date.now(),
             dateDue: convertDate(selectedDate, "timestamp"),
@@ -423,35 +423,35 @@ class ToDo extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: (this.props.data) ? JSON.parse(this.props.data) :
-                {
-                    listItems:
-                        [{
-                            active: true,
-                            hidden: false,
-                            id: uuid().substring(0, 10),
-                            task: "Sample Task ✨",
-                            priority: 3,
-                            time: Date.now(),
-                            instance: 1,
-                            editPanelHidden: true,
-                            dateDue: Date.now(),
-                            tag: null
-                        }],
-                    settings: {
-                        style: {
-                            colorHigh: "#f5c6cb",
-                            colorMedium: "#ffeeba",
-                            colorLow: "#bee5eb"
-                        },
-                        hideInactive: false
-                    },
-                    tags: ["None"]
+            tasks: (this.props.tasks) ? JSON.parse(this.props.tasks) :
+                [{
+                    active: true,
+                    hidden: false,
+                    id: uuid().substring(0, 10),
+                    text: "Sample Task ✨",
+                    priority: 3,
+                    time: Date.now(),
+                    instance: 1,
+                    editPanelHidden: true,
+                    dateDue: Date.now(),
+                    tag: null
+                }],
+            settings: {
+                style: {
+                    colorHigh: "#f5c6cb",
+                    colorMedium: "#ffeeba",
+                    colorLow: "#bee5eb",
+                    backgroundColor: "#ffffff",
+                    font: ""
+                },
+                tags: ["None"],
+                hideInactive: false
                 },
             stats: (this.props.stats) ? JSON.parse(this.props.stats) :
                 {
                     tasksCompleted: {},
-                    bonusStars: 0
+                    bonusStars: 0,
+                    starsUsed: 0,
                 },
             buttonDisabled: true,
             selectedPriority: "Low",
@@ -466,17 +466,25 @@ class ToDo extends Component {
         }
         this.selectSortBy = React.createRef()
         this.notify = notify.createShowQueue()
+        this.styles = {
+            Default: ["#bee5eb", "#ffeeba", "#f5c6cb", "#ffffff"],
+            Marie: ["#fce8f7", "#f2b5e2", "#f46ed0", "#ffffff"],
+            Halloween: ["#feeeb8", "#ffa100", "#e76427", "#000000"]
+        }
         this.notifyStyle = { background: "#007bff", text: "#ffffff" }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { data, stats } = this.state
+        const { tasks, settings, stats } = this.state
         const { saveData } = this.props
-        if (prevState.data !== data) {
-            saveData(data, "data_9")
+        if (prevState.tasks !== tasks) {
+            saveData(tasks, "tasks")
+        }
+        if (prevState.settings !== settings) {
+            saveData(settings, "settings")
         }
         if (prevState.stats !== stats) {
-            saveData(stats, "stats_3")
+            saveData(stats, "stats_5")
         }
         // Uncredit bonus stars on "mark uncomplete"
         const prevTasksCompleted = Object.keys(prevState.stats.tasksCompleted).length
@@ -506,31 +514,31 @@ class ToDo extends Component {
 
     addItem = (newItem) => {
         const { selectedSort } = this.state
-        const data = this.clone(this.state.data)
-        data.listItems = [...data.listItems, newItem]
-        data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+        let tasks = this.clone(this.state.tasks)
+        tasks = [...tasks, newItem]
+        tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({
-            data: data,
+            tasks: tasks,
             buttonDisabled: true
         })
     }
 
     markComplete = (index, undo) => {
-        const data = this.clone(this.state.data)
+        const tasks = this.clone(this.state.tasks)
         const stats = this.clone(this.state.stats)
-        const item = data.listItems[index]
-        if (data.listItems.length === 0) {
+        const task = tasks[index]
+        if (tasks.length === 0) {
             console.log("List is empty")
         } else {
-            const itemIsActive = item.active
+            const itemIsActive = task.active
             if (itemIsActive) {
-                item.active = false
-                stats.tasksCompleted[item.id] = {
-                    timeCreated: item.timeCreated,
+                task.active = false
+                stats.tasksCompleted[task.id] = {
+                    timeCreated: task.timeCreated,
                     timeCompleted: Date.now()
                 }
                 this.setState({
-                    data: data,
+                    tasks: tasks,
                     stats: stats
                 })
                 const tasksCompleted = Object.keys(stats.tasksCompleted).length
@@ -549,11 +557,11 @@ class ToDo extends Component {
                     }, 500)
                 }
             } else if (undo) {
-                item.editPanelHidden = true
-                item.active = true
-                delete stats.tasksCompleted[item.id]
+                task.editPanelHidden = true
+                task.active = true
+                delete stats.tasksCompleted[task.id]
                 this.setState({
-                    data: data,
+                    tasks: tasks,
                     stats: stats
                 })
             } else {
@@ -563,12 +571,12 @@ class ToDo extends Component {
     }
 
     deleteItem = (key) => {
-        const data = this.clone(this.state.data)
-        data.listItems = data.listItems.filter((item, index) =>
+        let tasks = this.clone(this.state.tasks)
+        tasks = tasks.filter((item, index) =>
             index !== key
         )
         this.setState({
-            data: data
+            tasks: tasks
         })
     }
 
@@ -591,26 +599,26 @@ class ToDo extends Component {
 
     editPriority = (event, index) => {
         const { selectedSort } = this.state
-        const data = this.clone(this.state.data)
-        const item = data.listItems[index]
+        let tasks = this.clone(this.state.tasks)
+        const task = tasks[index]
         const selectedPriority = event.target.value
-        item.priority = this.convertPriority(selectedPriority)
-        item.editPanelHidden = true
-        data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+        task.priority = this.convertPriority(selectedPriority)
+        task.editPanelHidden = true
+        tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({
-            data: data
+            tasks: tasks
         })
     }
 
     editDate = (event, index) => {
         const { selectedSort } = this.state
-        const data = this.clone(this.state.data)
+        let tasks = this.clone(this.state.tasks)
         const newDate = event.target.value
-        data.listItems[index].dateDue = convertDate(newDate, "timestamp")
-        data.listItems[index].editPanelHidden = true
-        data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+        tasks[index].dateDue = convertDate(newDate, "timestamp")
+        tasks[index].editPanelHidden = true
+        tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({
-            data: data
+            tasks: tasks
         })
     }
 
@@ -627,16 +635,16 @@ class ToDo extends Component {
         }
     }
 
-    toggleItems = (listItems, type, tag) => {
-        const listItemsCopy = this.clone(listItems)
+    toggleItems = (tasks, type, tag) => {
+        const tasksCopy = this.clone(tasks)
         if (type === "selected tag") {
-            listItemsCopy.forEach(item => (item.tag !== tag) && (item.hidden = true))
+            tasksCopy.forEach(task => (task.tag !== tag) && (task.hidden = true))
         } else if (type === "tags only") {
-            listItemsCopy.forEach(item => (item.tag === null) && (item.hidden = true))
+            tasksCopy.forEach(task => (task.tag === null) && (task.hidden = true))
         } else if (type === "show all") {
-            listItemsCopy.forEach(item => (item.hidden === true) && (item.hidden = false))
+            tasksCopy.forEach(task => (task.hidden === true) && (task.hidden = false))
         }
-        return listItemsCopy
+        return tasksCopy
     }
 
     sortItemsBy = (listItems, selectedSort, moveFrom) => {
@@ -693,32 +701,32 @@ class ToDo extends Component {
     }
 
     sortItems = (index, manual) => {
-        const data = this.clone(this.state.data)
+        let tasks = this.clone(this.state.tasks)
         const selectedSort = this.selectSortBy.current.value
         if (manual) {
             if (selectedSort === "None") {
-                data.listItems = this.sortItemsBy(data.listItems, "Manual", index)
+                tasks = this.sortItemsBy(tasks, "Manual", index)
                 this.setState({
-                    data: data
+                    tasks: tasks
                 })
             } else {
-                data.listItems = this.sortItemsBy(data.listItems, "Manual", index)
+                tasks = this.sortItemsBy(tasks, "Manual", index)
                 this.setState({
-                    data: data,
+                    tasks: tasks,
                     selectedSort: "None"
                 })
             }
         } else {
             if (selectedSort === "None") {
-                data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+                tasks = this.sortItemsBy(tasks, selectedSort)
                 this.setState({
-                    data: data,
+                    tasks: tasks,
                     selectedSort: selectedSort
                 })
             } else {
-                data.listItems = this.sortItemsBy(data.listItems, selectedSort)
+                tasks = this.sortItemsBy(tasks, selectedSort)
                 this.setState({
-                    data: data,
+                    tasks: tasks,
                     selectedSort: selectedSort
                 })
             }
@@ -726,18 +734,18 @@ class ToDo extends Component {
     }
 
     toggleEditItem = (index) => {
-        const data = this.clone(this.state.data)
-        const targetItem = data.listItems[index]
-        const targetPanelState = targetItem.editPanelHidden
-        data.listItems.forEach(function (item, index) {
-            if (item.editPanelHidden === false && item !== targetItem) {
-                item.editPanelHidden = true
+        const tasks = this.clone(this.state.tasks)
+        const targetTask = tasks[index]
+        const targetPanelState = targetTask.editPanelHidden
+        tasks.forEach((task) => {
+            if (task.editPanelHidden === false && task !== targetTask) {
+                task.editPanelHidden = true
             }
         })
-        data.listItems[index].editPanelHidden = !targetPanelState
+        tasks[index].editPanelHidden = !targetPanelState
         this.setState({
-            data: data,
-            editTaskText: targetItem.task
+            tasks: tasks,
+            editTaskText: targetTask.text
         })
     }
 
@@ -749,10 +757,10 @@ class ToDo extends Component {
     }
 
     changeColor = (event, selectedColor) => {
-        const data = this.clone(this.state.data)
-        data.settings.style[selectedColor] = event.target.value
+        const settings = this.clone(this.state.settings)
+        settings.style[selectedColor] = event.target.value
         this.setState({
-            data: data,
+            settings: settings,
             selectedStyle: "None"
         })
     }
@@ -772,49 +780,34 @@ class ToDo extends Component {
     }
 
     changeStyle = (event) => {
-        const data = this.clone(this.state.data)
-        const style = event.target.value
-        const colors = data.settings.style
+        const settings = this.clone(this.state.settings)
+        const selectedStyle = event.target.value
+        const style = settings.style
         if (style === "None") {
             this.setState({
-                selectedStyle: style
+                selectedStyle: selectedStyle
             })
-        } else if (style === "Default") {
-            colors.colorHigh = "#f5c6cb"
-            colors.colorMedium = "#ffeeba"
-            colors.colorLow = "#bee5eb"
+        } else {
+            style.colorLow = this.styles[selectedStyle][0]
+            style.colorMedium = this.styles[selectedStyle][1]
+            style.colorHigh = this.styles[selectedStyle][2]
+            style.backgroundColor = this.styles[selectedStyle][3]
             this.setState({
-                data: data,
-                selectedStyle: style
-            })
-        } else if (style === "Marie") {
-            colors.colorHigh = "#f46ed0"
-            colors.colorMedium = "#f2b5e2"
-            colors.colorLow = "#fce8f7"
-            this.setState({
-                data: data,
-                selectedStyle: style
-            })
-        } else if (style === "Halloween") {
-            colors.colorHigh = "#e76427"
-            colors.colorMedium = "#ffa100"
-            colors.colorLow = "#feeeb8"
-            this.setState({
-                data: data,
-                selectedStyle: style
+                settings: settings,
+                selectedStyle: selectedStyle
             })
         }
     }
 
     changeTag = (event) => {
         const { selectedSort } = this.state
-        const data = this.clone(this.state.data)
+        const tasks = this.clone(this.state.tasks)
         const tag = event.target.value
         if (selectedSort === "Selected Tag") {
-            this.toggleItems(data.listItems, "show all")
-            this.toggleItems(data.listItems, "selected tag", tag)
+            this.toggleItems(tasks, "show all")
+            this.toggleItems(tasks, "selected tag", tag)
             this.setState({
-                data: data,
+                tasks: tasks,
                 selectedTag: tag
             })
         } else {
@@ -825,14 +818,14 @@ class ToDo extends Component {
     }
 
     addTag = () => {
-        const data = this.clone(this.state.data)
+        const settings = this.clone(this.state.settings)
         const newTag = prompt("Enter a new tag")
-        if (newTag === "" || data.tags.includes(newTag)) {
+        if (newTag === "" || settings.tags.includes(newTag)) {
             alert("Invalid tag or duplicate")
         } else {
-            data.tags = [...data.tags, newTag]
+            settings.tags = [...settings.tags, newTag]
             this.setState({
-                data: data,
+                settings: settings,
                 selectedTag: newTag
             })
         }
@@ -840,20 +833,21 @@ class ToDo extends Component {
 
     removeTag = () => {
         const { selectedTag } = this.state
-        const data = this.clone(this.state.data)
-        data.tags = data.tags.filter(tag => tag !== selectedTag || tag === "None")
+        const settings = this.clone(this.state.settings)
+        settings.tags = settings.tags.filter(tag => tag !== selectedTag || tag === "None")
         this.setState({
-            data: data,
+            settings: settings,
             selectedTag: "None"
         })
     }
 
     editText = (event, index) => {
         event.stopPropagation()
-        const data = this.clone(this.state.data)
-        data.listItems[index].editPanelHidden = true
+        let tasks = this.clone(this.state.tasks)
+        tasks[index].text = this.state.editTaskText
+        tasks[index].editPanelHidden = true
         this.setState({
-            data: data
+            tasks: tasks
         })
     }
 
@@ -865,16 +859,18 @@ class ToDo extends Component {
     }
 
     hideEditPanels = () => {
-        const { data } = this.state
-        data.listItems.forEach(item => (item.editPanelHidden === false) && (item.editPanelHidden = true))
+        const { tasks } = this.state
+        tasks.forEach(task => (task.editPanelHidden === false) && (task.editPanelHidden = true))
     }
 
     toggleInactiveTasks = () => {
-        const data = this.clone(this.state.data)
-        data.settings.hideInactive = !data.settings.hideInactive
-        data.listItems = this.sortItemsBy(data.listItems, "toggle inactive")
+        let tasks = this.clone(this.state.tasks)
+        const settings = this.clone(this.state.settings)
+        settings.hideInactive = !settings.hideInactive
+        tasks = this.sortItemsBy(tasks, "toggle inactive")
         this.setState({
-            data: data
+            tasks: tasks,
+            settings: settings
         })
     }
 
@@ -887,13 +883,9 @@ class ToDo extends Component {
     }
 
     render() {
-        const { data, stats, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
+        const { tasks, settings, stats, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
         const { convertDate, articulateDateDue } = this.props
-        if (selectedStyle === "Halloween") {
-            document.body.style.backgroundColor = "black"
-        } else {
-            document.body.style.backgroundColor = "white"
-        }
+        document.body.style.backgroundColor = settings.style.backgroundColor
         return (
             <Container>
                 <Notifications />
@@ -903,7 +895,7 @@ class ToDo extends Component {
                     </ModalHeader>
                     <ModalBody>
                         <Settings
-                            data={data}
+                            settings={settings}
                             settingsHidden={settingsHidden}
                             selectedStyle={selectedStyle}
                             changeStyle={this.changeStyle}
@@ -922,7 +914,7 @@ class ToDo extends Component {
                 <Row>
                     <Col className="todo" sm="10" md="7" lg="5" xl="5">
                         <AddTask
-                            data={data}
+                            tasks={tasks}
                             addItem={this.addItem}
                             inputChange={this.inputChange}
                             convertPriority={this.convertPriority}
@@ -974,7 +966,7 @@ class ToDo extends Component {
                                     className="select-tag"
                                     value={selectedTag}
                                     onChange={this.changeTag}>
-                                    {this.state.data.tags.map((tag, index) =>
+                                    {settings.tags.map((tag, index) =>
                                         <option
                                             key={index}
                                             value={tag}>
@@ -1000,18 +992,19 @@ class ToDo extends Component {
                         </Row>
                         <List className="list">
                             <TransitionGroup>
-                                {data.listItems.map((item, index) =>
-                                    (item.hidden) ?
+                                {tasks.map((task, index) =>
+                                    (task.hidden) ?
                                         null :
-                                        (!item.active && data.settings.hideInactive) ?
+                                        (!task.active && settings.hideInactive) ?
                                             null :
                                             <CSSTransition
-                                                key={item.id}
+                                                key={task.id}
                                                 timeout={500}
                                                 classNames="fade">
                                                 <ListItem
-                                                    data={data}
-                                                    item={item}
+                                                    tasks={tasks}
+                                                    settings={settings}
+                                                    task={task}
                                                     index={index}
                                                     handleTextChange={this.handleTextChange}
                                                     editText={this.editText}
