@@ -433,7 +433,7 @@ class ToDo extends Component {
                     time: Date.now(),
                     instance: 1,
                     editPanelHidden: true,
-                    dateDue: Date.now(),
+                    dateDue: convertDate(convertDate(Date.now(), "ISO"), "timestamp"),
                     tag: null
                 }],
             settings: {
