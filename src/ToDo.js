@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { MoonLoader } from 'react-spinners'
@@ -294,6 +295,55 @@ const ListItem = (props) =>
         </ItemEditBox>
     </React.Fragment>
 
+class CatGif extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            loading: true
+        }
+    }
+
+    componentWillMount() {
+        this.setState({
+            loading: true
+        })
+    }
+
+    componentDidMount() {
+        axios.defaults.headers.common["x-api-key"] = "f5568fae-d85b-4310-8e88-cb282e0e2bac"
+        axios.get("https://api.thecatapi.com/v1/images/search?limit=1&mime_types=gif&format=json&order=RANDOM")
+            .then(response => {
+                const gif = response.data
+                console.log(gif[0].url)
+                this.setState({ 
+                    loading: false,
+                    gif 
+                })
+            })
+    }
+    render() {
+        const { loading, gif } = this.state
+        return (
+            (loading) ?
+                <div className="align-center">
+                    <MoonLoader
+                        color={'#007bff'}
+                        sizeUnit={"px"}
+                        size={50}
+                        loading={loading}
+                    />
+                </div>
+                :
+                <div
+                    className="align-center"
+                    hidden={this.props.catGifHidden}
+                >
+                    <img style={{ width: "100px" }} src={gif[0].url} alt="This should be a cat gif..." />
+                </div>
+        )
+    }
+}
+
 class Stats extends Component {
     constructor(props) {
         super(props)
@@ -460,6 +510,7 @@ class ToDo extends Component {
             selectedDate: this.props.convertDate(Date.now(), "ISO"),
             settingsHidden: true,
             statsHidden: true,
+            catGifHidden: false,
             selectedStyle: "None",
             selectedTag: "None",
             editTaskText: "",
@@ -892,8 +943,26 @@ class ToDo extends Component {
     }
 
     render() {
-        const { tasks, settings, stats, tags, buttonDisabled, selectedPriority, selectedDate, selectedTag, selectedSort, settingsHidden, statsHidden, selectedStyle, showModal } = this.state
-        const { convertDate, articulateDateDue } = this.props
+        const { 
+            tasks, 
+            settings, 
+            stats, 
+            tags, 
+            buttonDisabled, 
+            selectedPriority,
+            selectedDate, 
+            selectedTag, 
+            selectedSort, 
+            settingsHidden, 
+            statsHidden, 
+            selectedStyle, 
+            showModal, 
+            catGifHidden 
+        } = this.state
+        const { 
+            convertDate, 
+            articulateDateDue 
+        } = this.props
         document.body.style.backgroundColor = settings.style.backgroundColor
         return (
             <Container>
@@ -914,6 +983,9 @@ class ToDo extends Component {
                         <Stats
                             stats={stats}
                             statsHidden={statsHidden}
+                        />
+                        <CatGif
+                            catGifHidden={catGifHidden}
                         />
                     </ModalBody>
                     <ModalFooter>
