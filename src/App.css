@@ -141,6 +141,14 @@
     justify-content: center
 }
 
+.margin-top-5 {
+    margin-top: 5px;
+}
+
+.margin-top-10 {
+    margin-top: 10px
+}
+
 .date-due {
     float: right;
     margin-top: 9px;
@@ -186,6 +194,14 @@
     margin-top : 5px;
     margin-left: 5px;
     font-size: small
+}
+
+.cat-gif {
+    margin-top: 20px
+}
+
+.shop-items {
+    font-size: larger
 }
 
 .select-style {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter, Badge } from 'reactstrap'
 import { ClipLoader } from 'react-spinners'
 import Notifications, { notify } from 'react-notify-toast'
 import TextareaAutosize from 'react-autosize-textarea'
@@ -393,31 +393,42 @@ class Shop extends Component {
             showGif: false
         }
     }
-    buyGif = () => {
+    buyGif = (stars) => {
         this.setState({
             showGif: true
         })
+        this.props.deductStars(stars)
     }
     render() {
+        const { stats } = this.props
+        const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
         return (
             <React.Fragment>
                 <Row>
-                <Col xs={{ size: 'auto', offset: 1 }}>
-                {"Purchase 1 cat gif!"}
-                </Col>
-                <Col xs={{ size: 'auto', offset: 1 }}>
+                    <Col xs={{ offset: 8 }}>
+                        <Button color="primary" outline>
+                            {"Stars "}<Badge color="primary">{totalStars}</Badge>
+                        </Button>
+                    </Col>
+                </Row>
+                <Row className="margin-top-10">
+                    <Col xs={{ size: 10, offset: 1 }}>
+                        <span className="shop-items">
+                            {"1 x Cat Gif: "}
+                        </span>
                     <Button
                         className="buy-button"
-                        outline
-                        color="secondary"
-                        onClick={this.buyGif}
+                        color="warning"
+                        onClick={() => this.buyGif(2)}
                     >
                         {"2⭐"}
                     </Button>
-                </Col>
-            </Row>
-            {(!this.state.showGif) ? null :
-                <CatGif />}
+                    </Col>
+                </Row>
+                <div className="cat-gif">
+                    {(!this.state.showGif) ? null :
+                        <CatGif />}
+                </div>
             </React.Fragment>
         )
     }
@@ -944,6 +955,14 @@ class ToDo extends Component {
         })
     }
 
+    deductStars = (stars) => {
+        let stats = this.clone(this.state.stats)
+        stats.starsUsed += stars
+        this.setState({
+            stats: stats
+        })
+    }
+
     render() {
         const { 
             tasks, 
@@ -1136,7 +1155,10 @@ class ToDo extends Component {
                     toggleModal={this.toggleModal}
                 >
                     <div className="align-center">
-                        <Shop />
+                        <Shop 
+                            stats={stats}
+                            deductStars={this.deductStars}
+                        />
                     </div>
                 </CustomModal>
             </Container>
