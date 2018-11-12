@@ -348,12 +348,6 @@ class CatGif extends Component {
         }
     }
 
-    componentWillMount() {
-        this.setState({
-            loading: true
-        })
-    }
-
     componentDidMount() {
         axios.defaults.headers.common["x-api-key"] = "f5568fae-d85b-4310-8e88-cb282e0e2bac"
         axios.get("https://api.thecatapi.com/v1/images/search?limit=1&mime_types=gif&format=json&order=RANDOM")
@@ -390,17 +384,20 @@ class Shop extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showGif: false
+            showGif: false,
+            buttonDisabled: false
         }
     }
     buyGif = (stars) => {
         this.setState({
-            showGif: true
+            showGif: true,
+            buttonDisabled: true
         })
         this.props.deductStars(stars)
     }
     render() {
         const { stats } = this.props
+        const { buttonDisabled } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
         return (
             <React.Fragment>
@@ -419,6 +416,7 @@ class Shop extends Component {
                     <Button
                         className="buy-button"
                         color="warning"
+                        disabled={buttonDisabled}
                         onClick={() => this.buyGif(2)}
                     >
                         {"2⭐"}
@@ -1141,7 +1139,7 @@ class ToDo extends Component {
                 <CustomModal
                     isOpen={modals.statsModal}
                     modalType="statsModal"
-                    header="Settings"
+                    header="Stats"
                     toggleModal={this.toggleModal}
                 >
                     <Stats
@@ -1151,7 +1149,7 @@ class ToDo extends Component {
                 <CustomModal
                     isOpen={modals.shopModal}
                     modalType="shopModal"
-                    header="Settings"
+                    header="Cat Gif Shop!"
                     toggleModal={this.toggleModal}
                 >
                     <div className="align-center">
