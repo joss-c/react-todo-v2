@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { Container, Row, Col, Input, CustomInput, Button, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
-import { MoonLoader } from 'react-spinners'
+import { ClipLoader } from 'react-spinners'
 import Notifications, { notify } from 'react-notify-toast'
 import TextareaAutosize from 'react-autosize-textarea'
 import uuid from 'uuid'
@@ -177,9 +177,9 @@ const ItemEditBox = ({ task, index, markComplete, children }) =>
         </div>
     </div>
 
-const Settings = ({ settings, settingsHidden, selectedStyle, changeStyle, changeColor, toggleInactiveTasks }) =>
+const Settings = ({ settings, selectedStyle, changeStyle, changeColor, toggleInactiveTasks }) =>
     <React.Fragment>
-        <fieldset hidden={settingsHidden}>
+        <fieldset>
             <div>
                 <legend>Choose your colours</legend>
                 <div>
@@ -295,6 +295,51 @@ const ListItem = (props) =>
         </ItemEditBox>
     </React.Fragment>
 
+const Stats = ({ stats }) => {
+    const tasksCompleted = stats.tasksCompleted
+    const totalTasksCompleted = Object.keys(tasksCompleted).length
+    const oneWeekAgo = Date.now() - (60 * 60 * 24 * 7 * 1000)
+    const totalTasksCompletedOneWeek =
+        Object.keys(tasksCompleted)
+            .reduce((total, id) => {
+                if (tasksCompleted[id].timeCompleted > oneWeekAgo) {
+                    total++
+                }
+                return total
+            }, 0)
+    return (
+        <div className="align-center">
+            <div className="star-big">
+                {"★"}
+            </div>
+            <h1>{`${totalTasksCompleted + stats.bonusStars - stats.starsUsed} stars earned!`}</h1>
+            <div>
+                {`Tasks completed: ${totalTasksCompleted}`}
+            </div>
+            <div>
+                {`This week: ${totalTasksCompletedOneWeek}`}
+            </div>
+        </div>
+    )
+}
+
+const CustomModal = (props) => {
+    const { isOpen, modalType, header, toggleModal } = props
+    return (
+        <Modal isOpen={isOpen} toggle={() => toggleModal(modalType)}>
+            <ModalHeader toggle={() => toggleModal(modalType)}>
+                {header}
+            </ModalHeader>
+            <ModalBody>
+                {props.children}
+            </ModalBody>
+            <ModalFooter>
+                <Button color="primary" onClick={() => toggleModal(modalType)}>OK</Button>
+            </ModalFooter>
+        </Modal>
+    )
+}
+
 class CatGif extends Component {
     constructor(props) {
         super(props)
@@ -326,84 +371,54 @@ class CatGif extends Component {
         return (
             (loading) ?
                 <div className="align-center">
-                    <MoonLoader
-                        color={'#007bff'}
-                        sizeUnit={"px"}
+                    <ClipLoader
+                        color="#007bff"
+                        sizeUnit="px"
                         size={50}
                         loading={loading}
                     />
                 </div>
                 :
-                <div
-                    className="align-center"
-                    hidden={this.props.catGifHidden}
-                >
-                    <img style={{ width: "100px" }} src={gif[0].url} alt="This should be a cat gif..." />
+                <div className="align-center">
+                    <img style={{ width: "280px" }} src={gif[0].url} alt="This should be a cat gif..." />
                 </div>
         )
     }
 }
 
-class Stats extends Component {
+class Shop extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            loading: true
+            showGif: false
         }
     }
-
-    componentWillMount() {
+    buyGif = () => {
         this.setState({
-            loading: true
+            showGif: true
         })
     }
-
-    componentDidMount() {
-        this.setState({
-            loading: false
-        })
-    }
-
     render() {
-        const { stats, statsHidden } = this.props
-        const { loading } = this.state
-        const tasksCompleted = stats.tasksCompleted
-        const totalTasksCompleted = Object.keys(tasksCompleted).length
-        const oneWeekAgo = Date.now() - (60 * 60 * 24 * 7 * 1000)
-        const totalTasksCompletedOneWeek =
-            Object.keys(tasksCompleted)
-                .reduce((total, id) => {
-                    if (tasksCompleted[id].timeCompleted > oneWeekAgo) {
-                        total++
-                    }
-                    return total
-                }, 0)
         return (
-            (loading) ?
-                <div className="align-center">
-                    <MoonLoader
-                        color={'#007bff'}
-                        sizeUnit={"px"}
-                        size={100}
-                        loading={loading}
-                    />
-                </div>
-                :
-                <div
-                    className="align-center"
-                    hidden={statsHidden}
-                >
-                    <div className="star-big">
-                        {"★"}
-                    </div>
-                    <h1>{`${totalTasksCompleted + stats.bonusStars - stats.starsUsed} stars earned!`}</h1>
-                    <div>
-                        {`Tasks completed: ${totalTasksCompleted}`}
-                    </div>
-                    <div>
-                        {`This week: ${totalTasksCompletedOneWeek}`}
-                    </div>
-                </div>
+            <React.Fragment>
+                <Row>
+                <Col xs={{ size: 'auto', offset: 1 }}>
+                {"Purchase 1 cat gif!"}
+                </Col>
+                <Col xs={{ size: 'auto', offset: 1 }}>
+                    <Button
+                        className="buy-button"
+                        outline
+                        color="secondary"
+                        onClick={this.buyGif}
+                    >
+                        {"2⭐"}
+                    </Button>
+                </Col>
+            </Row>
+            {(!this.state.showGif) ? null :
+                <CatGif />}
+            </React.Fragment>
         )
     }
 }
@@ -459,7 +474,7 @@ class AddTask extends Component {
                                 color="primary"
                                 disabled={buttonDisabled}
                                 type="submit">
-                                Add
+                                {"Add"}
                             </Button>
                         </Col>
                     </Row>
@@ -503,18 +518,19 @@ class ToDo extends Component {
                     bonusStars: 0,
                     starsUsed: 0,
                 },
+            modals: {
+                    settingsModal: false,
+                    statsModal: false,
+                    shopModal: false
+                },
             tags: (this.props.tags) ? JSON.parse(this.props.tags) : ["None"],
             buttonDisabled: true,
             selectedPriority: "Low",
             selectedSort: "None",
             selectedDate: this.props.convertDate(Date.now(), "ISO"),
-            settingsHidden: true,
-            statsHidden: true,
-            catGifHidden: false,
             selectedStyle: "None",
             selectedTag: "None",
             editTaskText: "",
-            showModal: false
         }
         this.selectSortBy = React.createRef()
         this.notify = notify.createShowQueue()
@@ -825,20 +841,6 @@ class ToDo extends Component {
         })
     }
 
-    toggleSettings = () => {
-        this.setState(state => ({
-            settingsHidden: false,
-            showModal: !state.showModal
-        }))
-    }
-
-    toggleStats = () => {
-        this.setState(state => ({
-            statsHidden: false,
-            showModal: !state.showModal
-        }))
-    }
-
     changeStyle = (event) => {
         let settings = this.clone(this.state.settings)
         const selectedStyle = event.target.value
@@ -934,12 +936,12 @@ class ToDo extends Component {
         })
     }
 
-    toggleModal = () => {
-        this.setState(state => ({
-            showModal: !state.showModal,
-            settingsHidden: true,
-            statsHidden: true
-        }))
+    toggleModal = (modalType) => {
+        let modals = this.clone(this.state.modals)
+        modals[modalType] = !modals[modalType]
+        this.setState({
+            modals: modals
+        })
     }
 
     render() {
@@ -953,11 +955,8 @@ class ToDo extends Component {
             selectedDate, 
             selectedTag, 
             selectedSort, 
-            settingsHidden, 
-            statsHidden, 
             selectedStyle, 
-            showModal, 
-            catGifHidden 
+            modals
         } = this.state
         const { 
             convertDate, 
@@ -967,31 +966,6 @@ class ToDo extends Component {
         return (
             <Container>
                 <Notifications />
-                <Modal isOpen={showModal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>
-                        {(settingsHidden) ? "Stats" : "Settings"}
-                    </ModalHeader>
-                    <ModalBody>
-                        <Settings
-                            settings={settings}
-                            settingsHidden={settingsHidden}
-                            selectedStyle={selectedStyle}
-                            changeStyle={this.changeStyle}
-                            changeColor={this.changeColor}
-                            toggleInactiveTasks={this.toggleInactiveTasks}
-                        />
-                        <Stats
-                            stats={stats}
-                            statsHidden={statsHidden}
-                        />
-                        <CatGif
-                            catGifHidden={catGifHidden}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.toggleModal}>OK</Button>
-                    </ModalFooter>
-                </Modal>
                 <Row>
                     <Col className="todo" sm="10" md="7" lg="5" xl="5">
                         <AddTask
@@ -1106,7 +1080,7 @@ class ToDo extends Component {
                                 className="settings-button"
                                 outline
                                 color="secondary"
-                                onClick={this.toggleSettings}
+                                onClick={() => this.toggleModal("settingsModal")}
                             >
                                 {"⚙"}
                             </Button>
@@ -1114,15 +1088,57 @@ class ToDo extends Component {
                                 className="stats-button"
                                 outline
                                 color="secondary"
-                                onClick={this.toggleStats}
+                                onClick={() => this.toggleModal("statsModal")}
                             >
-                                {"★"}
+                                {"⭐"}
+                            </Button>
+                            <Button
+                                className="cat-button"
+                                outline
+                                color="secondary"
+                                onClick={() => this.toggleModal("shopModal")}
+                            >
+                                {"🐱"}
                             </Button>
                         </Row>
                         <Row className="settings no-gutters">
                         </Row>
                     </Col>
                 </Row>
+                <CustomModal
+                    isOpen={modals.settingsModal}
+                    modalType="settingsModal"
+                    header="Settings"
+                    toggleModal={this.toggleModal}
+                >
+                    <Settings
+                        settings={settings}
+                        selectedStyle={selectedStyle}
+                        changeStyle={this.changeStyle}
+                        changeColor={this.changeColor}
+                        toggleInactiveTasks={this.toggleInactiveTasks}
+                    />
+                </CustomModal>
+                <CustomModal
+                    isOpen={modals.statsModal}
+                    modalType="statsModal"
+                    header="Settings"
+                    toggleModal={this.toggleModal}
+                >
+                    <Stats
+                        stats={stats}
+                    />
+                </CustomModal>
+                <CustomModal
+                    isOpen={modals.shopModal}
+                    modalType="shopModal"
+                    header="Settings"
+                    toggleModal={this.toggleModal}
+                >
+                    <div className="align-center">
+                        <Shop />
+                    </div>
+                </CustomModal>
             </Container>
         )
     }

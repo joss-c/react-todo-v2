@@ -135,7 +135,10 @@
 }
 
 .align-center {
-    text-align: center
+    text-align: center;
+    vertical-align: middle;
+    align-content: center;
+    justify-content: center
 }
 
 .date-due {
@@ -177,6 +180,12 @@
 .stats-button {
     margin-top: 5px;
     margin-left: 5px
+}
+
+.cat-button {
+    margin-top : 5px;
+    margin-left: 5px;
+    font-size: small
 }
 
 .select-style {
