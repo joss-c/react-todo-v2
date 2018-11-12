@@ -399,6 +399,7 @@ class Shop extends Component {
         const { stats } = this.props
         const { buttonDisabled } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
+        console.log(false || true)
         return (
             <React.Fragment>
                 <Row>
@@ -416,7 +417,7 @@ class Shop extends Component {
                     <Button
                         className="buy-button"
                         color="warning"
-                        disabled={buttonDisabled}
+                        disabled={buttonDisabled || totalStars < 2}
                         onClick={() => this.buyGif(2)}
                     >
                         {"2⭐"}
