@@ -16,6 +16,14 @@ const convertDate = (date, convertTo) => {
     }
 }
 
+const getDate = (time) => {
+    if (time === "today") {
+        const todayISO = convertDate(Date.now(), "ISO")
+        const todayTimestamp = convertDate(todayISO, "timestamp")
+        return todayTimestamp
+    }
+}
+
 const articulateDateDue = (dateDue) => {
     let today = convertDate(Date.now(), "ISO")
     today = convertDate(today, "timestamp")
@@ -42,4 +50,4 @@ const arrayMove = (arr, fromIndex, toIndex) => {
     return arrCopy
 }
 
-export { convertDate, articulateDateDue, arrayMove }
+export { convertDate, getDate, articulateDateDue, arrayMove }
