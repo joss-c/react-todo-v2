@@ -10,6 +10,7 @@ export class Shop extends Component {
             buttonDisabled: false
         }
     }
+
     buyGif = (stars) => {
         this.setState({
             showGif: true,
@@ -17,6 +18,7 @@ export class Shop extends Component {
         })
         this.props.deductStars(stars)
     }
+    
     render() {
         const { stats } = this.props
         const { buttonDisabled } = this.state

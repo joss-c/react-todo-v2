@@ -555,7 +555,8 @@ class ToDo extends Component {
                             </Col>
                             <Col
                                 className="manage-tags"
-                                xs="7">
+                                xs="7"
+                            >
                                 <Input
                                     type="select"
                                     className="select-tag"
@@ -573,15 +574,17 @@ class ToDo extends Component {
                                     outline
                                     color="secondary"
                                     size="sm"
-                                    onClick={this.removeTag}>
-                                    -
+                                    onClick={this.removeTag}
+                                >
+                                    {"-"}
                                 </Button>
                                 <Button
                                     outline
                                     color="secondary"
                                     size="sm"
-                                    onClick={this.addTag}>
-                                    +
+                                    onClick={this.addTag}
+                                >
+                                    {"+"}
                                 </Button>
                             </Col>
                         </Row>
@@ -595,7 +598,8 @@ class ToDo extends Component {
                                             <CSSTransition
                                                 key={task.id}
                                                 timeout={500}
-                                                classNames="fade">
+                                                classNames="fade"
+                                            >
                                                 <Task
                                                     tasks={tasks}
                                                     settings={settings}
@@ -610,7 +614,8 @@ class ToDo extends Component {
                                                     convertPriority={this.convertPriority}
                                                     editDate={this.editDate}
                                                     convertDate={convertDate}
-                                                    editPriority={this.editPriority} />
+                                                    editPriority={this.editPriority}
+                                                />
                                             </CSSTransition>
                                 )}
                             </TransitionGroup>
