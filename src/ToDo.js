@@ -5,7 +5,7 @@ import uuid from 'uuid'
 import { convertDate, getDate, articulateDateDue, arrayMove } from './functions'
 import { randomMessage } from './randomMessage'
 import { firstBy } from './thenBy.min.js'
-import { Container, Row, Col, Input, Button} from 'reactstrap'
+import { Container, Row, Col, Input, Button } from 'reactstrap'
 import { Stats } from './Stats'
 import { Calendar } from './Calendar'
 import { Shop } from './Shop'
@@ -15,6 +15,7 @@ import { Priority } from './Priority'
 import { List } from './List'
 import { Settings } from './Settings'
 import { Task } from './Task'
+import { Tags } from './Tags'
 
 class ToDo extends Component {
     constructor(props) {
@@ -31,7 +32,7 @@ class ToDo extends Component {
                     instance: 1,
                     editPanelHidden: true,
                     dateDue: getDate("today"),
-                    tag: null
+                    tag: "None"
                 }],
             settings: (this.props.settings) ? JSON.parse(this.props.settings) :
                 {
@@ -51,10 +52,10 @@ class ToDo extends Component {
                     starsUsed: 0,
                 },
             modals: {
-                    settingsModal: false,
-                    statsModal: false,
-                    shopModal: false
-                },
+                settingsModal: false,
+                statsModal: false,
+                shopModal: false
+            },
             tags: (this.props.tags) ? JSON.parse(this.props.tags) : ["None"],
             buttonDisabled: true,
             selectedPriority: "Low",
@@ -87,7 +88,7 @@ class ToDo extends Component {
             saveData(stats, "stats_5")
         }
         if (prevState.tags !== tags) {
-            saveData(tags, "tags")
+            saveData(tags, "tags_2")
         }
         // Uncredit bonus stars on "mark uncomplete"
         const prevTasksCompleted = Object.keys(prevState.stats.tasksCompleted).length
@@ -435,6 +436,14 @@ class ToDo extends Component {
         })
     }
 
+    editTaskTag = (event, index) => {
+        let tasks = this.clone(this.state.tasks)
+        tasks[index].tag = event.target.value
+        this.setState({
+            tasks: tasks
+        })
+    }
+
     editText = (event, index) => {
         event.stopPropagation()
         let tasks = this.clone(this.state.tasks)
@@ -485,22 +494,22 @@ class ToDo extends Component {
     }
 
     render() {
-        const { 
-            tasks, 
-            settings, 
-            stats, 
-            tags, 
-            buttonDisabled, 
+        const {
+            tasks,
+            settings,
+            stats,
+            tags,
+            buttonDisabled,
             selectedPriority,
-            selectedDate, 
-            selectedTag, 
-            selectedSort, 
-            selectedStyle, 
+            selectedDate,
+            selectedTag,
+            selectedSort,
+            selectedStyle,
             modals
         } = this.state
-        const { 
-            convertDate, 
-            articulateDateDue 
+        const {
+            convertDate,
+            articulateDateDue
         } = this.props
         document.body.style.backgroundColor = settings.style.backgroundColor
         return (
@@ -544,7 +553,8 @@ class ToDo extends Component {
                                     className="select-sort"
                                     value={selectedSort}
                                     innerRef={this.selectSortBy}
-                                    onChange={this.sortItems}>
+                                    onChange={this.sortItems}
+                                >
                                     <option value="None">Sort: None</option>
                                     <option value="Priority">Priority</option>
                                     <option value="Date Due">Date Due</option>
@@ -557,35 +567,14 @@ class ToDo extends Component {
                                 className="manage-tags"
                                 xs="7"
                             >
-                                <Input
-                                    type="select"
-                                    className="select-tag"
-                                    value={selectedTag}
-                                    onChange={this.changeTag}>
-                                    {tags.map((tag, index) =>
-                                        <option
-                                            key={index}
-                                            value={tag}>
-                                            {(tag === "None") ? "Tag: None" : tag}
-                                        </option>
-                                    )}
-                                </Input>
-                                <Button
-                                    outline
-                                    color="secondary"
-                                    size="sm"
-                                    onClick={this.removeTag}
-                                >
-                                    {"-"}
-                                </Button>
-                                <Button
-                                    outline
-                                    color="secondary"
-                                    size="sm"
-                                    onClick={this.addTag}
-                                >
-                                    {"+"}
-                                </Button>
+                                <Tags
+                                    tags={tags}
+                                    selectedTag={selectedTag}
+                                    changeTag={this.changeTag}
+                                    addTag={this.addTag}
+                                    removeTag={this.removeTag}
+                                    showButtons
+                                />
                             </Col>
                         </Row>
                         <List className="list">
@@ -615,6 +604,10 @@ class ToDo extends Component {
                                                     editDate={this.editDate}
                                                     convertDate={convertDate}
                                                     editPriority={this.editPriority}
+                                                    tags={tags}
+                                                    editTaskTag={this.editTaskTag}
+                                                    addTag={this.addTag}
+                                                    removeTag={this.removeTag}
                                                 />
                                             </CSSTransition>
                                 )}
@@ -681,7 +674,7 @@ class ToDo extends Component {
                     toggleModal={this.toggleModal}
                 >
                     <div className="align-center">
-                        <Shop 
+                        <Shop
                             stats={stats}
                             deductStars={this.deductStars}
                         />

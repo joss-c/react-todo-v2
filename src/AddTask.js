@@ -32,7 +32,7 @@ export class AddTask extends Component {
             instance: itemInstances,
             editPanelHidden: true,
             settingsHidden: true,
-            tag: (selectedTag === "None") ? null : selectedTag,
+            tag: (selectedTag === "None") ? "None" : selectedTag,
         }
         addItem(newItem)
         this.inputElement.current.value = ""

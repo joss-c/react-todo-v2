@@ -7,7 +7,7 @@ export const TaskDetails = ({ task, articulateDateDue }) =>
         <Col className="task-details">
             <TransitionGroup>
                 <div className="date-due x-small">
-                    {(task.tag === null) ?
+                    {(task.tag === "None") ?
                         null :
                         <span className="tag">{task.tag}</span>}
                     {(task.active) ?

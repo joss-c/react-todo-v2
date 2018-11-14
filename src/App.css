@@ -141,6 +141,10 @@
     justify-content: center
 }
 
+.margin-top-2 {
+    margin-top: 2px
+}
+
 .margin-top-5 {
     margin-top: 5px;
 }

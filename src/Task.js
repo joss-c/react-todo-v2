@@ -7,6 +7,7 @@ import { TaskButtons } from './TaskButtons'
 import { TaskEditBox } from './TaskEditBox'
 import { Calendar } from './Calendar'
 import { Priority } from './Priority'
+import { Tags } from './Tags'
 
 export const Task = (props) => {
     return (
@@ -59,6 +60,18 @@ export const Task = (props) => {
                         <Priority
                             value={props.convertPriority(props.task.priority)}
                             handleOnChange={(event) => props.editPriority(event, props.index)}
+                        />
+                    </Col>
+                </Row>
+                <Row className="margin-top-2">
+                    <Col xs={{ size: 6, offset: 6 }}>
+                        <Tags
+                            tags={props.tags}
+                            index={props.index}
+                            selectedTag={props.task.tag}
+                            changeTag={(event) => props.editTaskTag(event, props.index)}
+                            addTag={props.addTag}
+                            removeTag={props.removeTag}
                         />
                     </Col>
                 </Row>
