@@ -98,9 +98,7 @@ class ToDo extends Component {
                 let revisedStats = this.clone(stats)
                 revisedStats.bonusStars -= 2
                 console.log("Stars are being removed..")
-                this.setState({
-                    stats: revisedStats
-                })
+                this.setState({ stats: revisedStats })
             }
         }
     }
@@ -156,9 +154,7 @@ class ToDo extends Component {
                         setTimeout(() => {
                             this.notify("⭐+2 STARS BONUS⭐", "custom", 2000, { background: "#fff5be", text: "#000000" })
                             stats.bonusStars += 2
-                            this.setState({
-                                stats: stats
-                            })
+                            this.setState({ stats: stats })
                         }, 500)
                     }
                 } else if (undo) {
@@ -184,9 +180,7 @@ class ToDo extends Component {
         tasks = tasks.filter((item, index) =>
             index !== key
         )
-        this.setState({
-            tasks: tasks
-        })
+        this.setState({ tasks: tasks })
     }
 
     changePriority = (event) => {
@@ -214,9 +208,7 @@ class ToDo extends Component {
         task.priority = this.convertPriority(selectedPriority)
         task.editPanelHidden = true
         tasks = this.sortItemsBy(tasks, selectedSort)
-        this.setState({
-            tasks: tasks
-        })
+        this.setState({ tasks: tasks })
     }
 
     editDate = (event, index) => {
@@ -226,21 +218,15 @@ class ToDo extends Component {
         tasks[index].dateDue = convertDate(newDate, "timestamp")
         tasks[index].editPanelHidden = true
         tasks = this.sortItemsBy(tasks, selectedSort)
-        this.setState({
-            tasks: tasks
-        })
+        this.setState({ tasks: tasks })
     }
 
     inputChange = (event) => {
         const currentText = event.target.value
         if (currentText === "") {
-            this.setState({
-                buttonDisabled: true
-            })
+            this.setState({ buttonDisabled: true })
         } else {
-            this.setState({
-                buttonDisabled: false
-            })
+            this.setState({ buttonDisabled: false })
         }
     }
 
@@ -315,9 +301,7 @@ class ToDo extends Component {
         if (manual) {
             if (selectedSort === "None") {
                 tasks = this.sortItemsBy(tasks, "Manual", index)
-                this.setState({
-                    tasks: tasks
-                })
+                this.setState({ tasks: tasks })
             } else {
                 tasks = this.sortItemsBy(tasks, "Manual", index)
                 this.setState({
@@ -360,9 +344,7 @@ class ToDo extends Component {
 
     changeDate = (event) => {
         const updateDate = event.target.value
-        this.setState({
-            selectedDate: updateDate
-        })
+        this.setState({ selectedDate: updateDate })
     }
 
     changeColor = (event, selectedColor) => {
@@ -379,9 +361,7 @@ class ToDo extends Component {
         const selectedStyle = event.target.value
         const style = settings.style
         if (style === "None") {
-            this.setState({
-                selectedStyle: selectedStyle
-            })
+            this.setState({ selectedStyle: selectedStyle })
         } else {
             style.colorLow = this.styles[selectedStyle][0]
             style.colorMedium = this.styles[selectedStyle][1]
@@ -406,9 +386,7 @@ class ToDo extends Component {
                 selectedTag: tag
             })
         } else {
-            this.setState({
-                selectedTag: tag
-            })
+            this.setState({ selectedTag: tag })
         }
     }
 
@@ -438,10 +416,10 @@ class ToDo extends Component {
 
     editTaskTag = (event, index) => {
         let tasks = this.clone(this.state.tasks)
-        tasks[index].tag = event.target.value
-        this.setState({
-            tasks: tasks
-        })
+        let task = tasks[index]
+        task.tag = event.target.value
+        task.editPanelHidden = true
+        this.setState({ tasks: tasks })
     }
 
     editText = (event, index) => {
@@ -449,16 +427,12 @@ class ToDo extends Component {
         let tasks = this.clone(this.state.tasks)
         tasks[index].text = this.state.editTaskText
         tasks[index].editPanelHidden = true
-        this.setState({
-            tasks: tasks
-        })
+        this.setState({ tasks: tasks })
     }
 
     handleTextChange = (event) => {
         const currentText = event.target.value
-        this.setState({
-            editTaskText: currentText
-        })
+        this.setState({ editTaskText: currentText })
     }
 
     hideEditPanels = () => {
@@ -480,17 +454,13 @@ class ToDo extends Component {
     toggleModal = (modalType) => {
         let modals = this.clone(this.state.modals)
         modals[modalType] = !modals[modalType]
-        this.setState({
-            modals: modals
-        })
+        this.setState({ modals: modals })
     }
 
     deductStars = (stars) => {
         let stats = this.clone(this.state.stats)
         stats.starsUsed += stars
-        this.setState({
-            stats: stats
-        })
+        this.setState({ stats: stats })
     }
 
     render() {
