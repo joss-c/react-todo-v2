@@ -23,7 +23,6 @@ export class Shop extends Component {
         const { stats } = this.props
         const { buttonDisabled } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
-        console.log(false || true)
         return (
             <React.Fragment>
                 <Row>
