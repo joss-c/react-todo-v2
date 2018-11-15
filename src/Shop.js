@@ -29,26 +29,26 @@ export class Shop extends Component {
                 <Row>
                     <Col xs={{ offset: 8 }}>
                         <h4>
-                            {"Stars "}<Badge color="primary">{totalStars}</Badge>
+                            {"Stars "}<Badge color='primary'>{totalStars}</Badge>
                         </h4>
                     </Col>
                 </Row>
-                <Row className="margin-top-10">
+                <Row className='margin-top-10'>
                     <Col xs={{ size: 10, offset: 1 }}>
-                        <span className="shop-items">
+                        <span className='shop-items'>
                             {"1 x Cat Gif: "}
                         </span>
                         <Button
-                            className="buy-button"
-                            color="warning"
+                            className='buy-button'
+                            color='warning'
                             disabled={buttonDisabled || totalStars < 2}
                             onClick={() => this.buyGif(2)}
                         >
-                            {"⭐2"}
+                            {'⭐2'}
                         </Button>
                     </Col>
                 </Row>
-                <div className="cat-gif">
+                <div className='cat-gif'>
                     {(!this.state.showGif) ? null :
                         <CatGif />}
                 </div>

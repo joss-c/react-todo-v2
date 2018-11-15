@@ -16,7 +16,7 @@ export const CustomModal = (props) => {
             </ModalBody>
             <ModalFooter>
                 <Button
-                    color="primary"
+                    color='primary'
                     onClick={() => toggleModal(modalType)}
                 >
                     {"OK"}

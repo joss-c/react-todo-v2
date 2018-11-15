@@ -5,11 +5,11 @@ import { Row, Col, Button } from 'reactstrap'
 export const TaskText = ({ settings, task, index, toggleEditItem, handleTextChange, editText, children }) => {
     return (
         <div
-            className={(task.active) ? "task" : "task animate-background"}
+            className={(task.active) ? 'task' : 'task animate-background'}
             onClick={() => toggleEditItem(index)}
             style={{
                 backgroundColor: (!task.active) ?
-                    "#e5e5e5" :
+                    '#e5e5e5' :
                     (task.priority === 3) ?
                         settings.style.colorLow :
                         (task.priority === 2) ?
@@ -20,15 +20,15 @@ export const TaskText = ({ settings, task, index, toggleEditItem, handleTextChan
             <span 
                 style={{
                 textDecorationLine: (task.active) ?
-                    "none" :
-                    "line-through"
+                    'none' :
+                    'line-through'
                 }}
             >
                 {(task.editPanelHidden) ?
                     <Row>
                         <Col>
                             {task.text}
-                            <span className="instance">
+                            <span className='instance'>
                                 {(task.instance > 1) ?
                                     ` (${task.instance})` :
                                     null}
@@ -36,20 +36,20 @@ export const TaskText = ({ settings, task, index, toggleEditItem, handleTextChan
                         </Col>
                     </Row> :
                     <span>
-                        <Row className="edit-text no-gutters">
-                            <Col xs="10">
+                        <Row className='edit-text no-gutters'>
+                            <Col xs='10'>
                                 <TextareaAutosize
-                                    className="edit-text-element"
+                                    className='edit-text-element'
                                     onChange={(event) => handleTextChange(event)}
                                     onClick={(event) => event.stopPropagation()}
                                     defaultValue={task.text}
                                 />
                             </Col>
-                            <Col xs="2">
+                            <Col xs='2'>
                                 <Button
-                                    className="edit-text-button"
-                                    color="secondary"
-                                    size="sm"
+                                    className='edit-text-button'
+                                    color='secondary'
+                                    size='sm'
                                     onClick={(event) => editText(event, index)}
                                 >
                                     {"OK"}

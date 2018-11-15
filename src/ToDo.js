@@ -31,17 +31,17 @@ class ToDo extends Component {
                     time: Date.now(),
                     instance: 1,
                     editPanelHidden: true,
-                    dateDue: getDate("today"),
-                    tag: "None"
+                    dateDue: getDate('today'),
+                    tag: 'None'
                 }],
             settings: (this.props.settings) ? JSON.parse(this.props.settings) :
                 {
                     style: {
-                        colorHigh: "#f5c6cb",
-                        colorMedium: "#ffeeba",
-                        colorLow: "#bee5eb",
-                        backgroundColor: "#ffffff",
-                        font: ""
+                        colorHigh: '#f5c6cb',
+                        colorMedium: '#ffeeba',
+                        colorLow: '#bee5eb',
+                        backgroundColor: '#ffffff',
+                        font: ''
                     },
                     hideInactive: false
                 },
@@ -56,41 +56,41 @@ class ToDo extends Component {
                 statsModal: false,
                 shopModal: false
             },
-            tags: (this.props.tags) ? JSON.parse(this.props.tags) : ["None"],
+            tags: (this.props.tags) ? JSON.parse(this.props.tags) : ['None'],
             buttonDisabled: true,
-            selectedPriority: "Low",
-            selectedSort: "None",
-            selectedDate: this.props.convertDate(Date.now(), "ISO"),
-            selectedStyle: "None",
-            selectedTag: "None",
-            editTaskText: "",
+            selectedPriority: 'Low',
+            selectedSort: 'None',
+            selectedDate: this.props.convertDate(Date.now(), 'ISO'),
+            selectedStyle: 'None',
+            selectedTag: 'None',
+            editTaskText: '',
         }
         this.selectSortBy = React.createRef()
         this.notify = notify.createShowQueue()
         this.styles = {
-            Default: ["#bee5eb", "#ffeeba", "#f5c6cb", "#ffffff"],
-            Marie: ["#fce8f7", "#f2b5e2", "#f46ed0", "#ffffff"],
-            Halloween: ["#feeeb8", "#ffa100", "#e76427", "#000000"]
+            Default: ['#bee5eb', '#ffeeba', '#f5c6cb', '#ffffff'],
+            Marie: ['#fce8f7', '#f2b5e2', '#f46ed0', '#ffffff'],
+            Halloween: ['#feeeb8', '#ffa100', '#e76427', '#000000']
         }
-        this.notifyStyle = { background: "#007bff", text: "#ffffff" }
+        this.notifyStyle = { background: '#007bff', text: '#ffffff' }
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { tasks, settings, stats, tags } = this.state
         const { saveData } = this.props
         if (prevState.tasks !== tasks) {
-            saveData(tasks, "tasks")
+            saveData(tasks, 'tasks')
         }
         if (prevState.settings !== settings) {
-            saveData(settings, "settings")
+            saveData(settings, 'settings')
         }
         if (prevState.stats !== stats) {
-            saveData(stats, "stats_5")
+            saveData(stats, 'stats_5')
         }
         if (prevState.tags !== tags) {
-            saveData(tags, "tags_2")
+            saveData(tags, 'tags_2')
         }
-        // Uncredit bonus stars on "mark uncomplete"
+        // Uncredit bonus stars on 'mark uncomplete'
         const prevTasksCompleted = Object.keys(prevState.stats.tasksCompleted).length
         const tasksCompleted = Object.keys(stats.tasksCompleted).length
         if (tasksCompleted < prevTasksCompleted) {
@@ -107,7 +107,7 @@ class ToDo extends Component {
         this.hideEditPanels()
         this.sortItems()
         console.log(this.state)
-        this.notify("You got this! 😊", "custom", 2000, this.notifyStyle)
+        this.notify("You got this! 😊", 'custom', 2000, this.notifyStyle)
     }
 
     clone = (object) => {
@@ -130,7 +130,7 @@ class ToDo extends Component {
         let stats = this.clone(this.state.stats)
         const task = tasks[index]
         if (tasks.length === 0) {
-            console.log("List is empty")
+            console.log('List is empty')
         } else {
             try {
                 const itemIsActive = task.active
@@ -147,12 +147,12 @@ class ToDo extends Component {
                     const tasksCompleted = Object.keys(stats.tasksCompleted).length
                     if (tasksCompleted % 5 === 0) {
                         setTimeout(() => {
-                            this.notify(randomMessage(), "custom", 2000, this.notifyStyle)
+                            this.notify(randomMessage(), 'custom', 2000, this.notifyStyle)
                         }, 500)
                     }
                     if (tasksCompleted % 10 === 0) {
                         setTimeout(() => {
-                            this.notify("⭐+2 STARS BONUS⭐", "custom", 2000, { background: "#fff5be", text: "#000000" })
+                            this.notify('⭐+2 STARS BONUS⭐', 'custom', 2000, { background: '#fff5be', text: '#000000' })
                             stats.bonusStars += 2
                             this.setState({ stats: stats })
                         }, 500)
@@ -190,13 +190,13 @@ class ToDo extends Component {
 
     convertPriority = (priority) => {
         if (typeof priority === 'string') {
-            return (priority === "Low") ? 3
-                : (priority === "Medium") ? 2
+            return (priority === 'Low') ? 3
+                : (priority === 'Medium') ? 2
                     : 1
         } else {
-            return (priority === 3) ? "Low"
-                : (priority === 2) ? "Medium"
-                    : "High"
+            return (priority === 3) ? 'Low'
+                : (priority === 2) ? 'Medium'
+                    : 'High'
         }
     }
 
@@ -215,7 +215,7 @@ class ToDo extends Component {
         const { selectedSort } = this.state
         let tasks = this.clone(this.state.tasks)
         const newDate = event.target.value
-        tasks[index].dateDue = convertDate(newDate, "timestamp")
+        tasks[index].dateDue = convertDate(newDate, 'timestamp')
         tasks[index].editPanelHidden = true
         tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({ tasks: tasks })
@@ -223,7 +223,7 @@ class ToDo extends Component {
 
     inputChange = (event) => {
         const currentText = event.target.value
-        if (currentText === "") {
+        if (currentText === '') {
             this.setState({ buttonDisabled: true })
         } else {
             this.setState({ buttonDisabled: false })
@@ -232,66 +232,66 @@ class ToDo extends Component {
 
     toggleItems = (tasks, type, tag) => {
         let tasksCopy = this.clone(tasks)
-        if (type === "selected tag") {
+        if (type === 'selected tag') {
             tasksCopy.forEach(task => (task.tag !== tag) && (task.hidden = true))
-        } else if (type === "tags only") {
+        } else if (type === 'tags only') {
             tasksCopy.forEach(task => (task.tag === null) && (task.hidden = true))
-        } else if (type === "show all") {
+        } else if (type === 'show all') {
             tasksCopy.forEach(task => (task.hidden === true) && (task.hidden = false))
         }
         return tasksCopy
     }
 
     sortItemsBy = (tasks, selectedSort, moveFrom) => {
-        const showAll = this.toggleItems(tasks, "show all")
-        if (selectedSort === "Manual") {
+        const showAll = this.toggleItems(tasks, 'show all')
+        if (selectedSort === 'Manual') {
             const moveTo = moveFrom - 1
             return tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
-            //return tasks.sort(firstBy("active", -1))
+            //return tasks.sort(firstBy('active', -1))
         }
-        if (selectedSort === "None") {
+        if (selectedSort === 'None') {
             return showAll
-        } else if (selectedSort === "Priority") {
+        } else if (selectedSort === 'Priority') {
             tasks = showAll
             return tasks.sort(
-                firstBy("active", -1)
-                    .thenBy("priority")
-                    .thenBy("dateDue")
-                    .thenBy("task")
+                firstBy('active', -1)
+                    .thenBy('priority')
+                    .thenBy('dateDue')
+                    .thenBy('task')
             )
-        } else if (selectedSort === "Date Due") {
+        } else if (selectedSort === 'Date Due') {
             tasks = showAll
             return tasks.sort(
-                firstBy("active", -1)
-                    .thenBy("dateDue")
-                    .thenBy("priority")
-                    .thenBy("task")
+                firstBy('active', -1)
+                    .thenBy('dateDue')
+                    .thenBy('priority')
+                    .thenBy('task')
             )
-        } else if (selectedSort === "A-Z") {
+        } else if (selectedSort === 'A-Z') {
             tasks = showAll
             return tasks.sort(
-                firstBy("active", -1)
-                    .thenBy("task")
+                firstBy('active', -1)
+                    .thenBy('task')
             )
-        } else if (selectedSort === "Tags") {
+        } else if (selectedSort === 'Tags') {
             tasks = showAll
-            tasks = this.toggleItems(tasks, "tags only")
+            tasks = this.toggleItems(tasks, 'tags only')
             return tasks.sort(
-                firstBy("tag")
-                    .thenBy("priority")
-                    .thenBy("dateDue")
-                    .thenBy("task")
+                firstBy('tag')
+                    .thenBy('priority')
+                    .thenBy('dateDue')
+                    .thenBy('task')
             )
-        } else if (selectedSort === "Selected Tag") {
-            tasks = this.toggleItems(tasks, "selected tag", this.state.selectedTag)
+        } else if (selectedSort === 'Selected Tag') {
+            tasks = this.toggleItems(tasks, 'selected tag', this.state.selectedTag)
             return tasks.sort(
-                firstBy("tag")
-                    .thenBy("priority")
-                    .thenBy("dateDue")
-                    .thenBy("task")
+                firstBy('tag')
+                    .thenBy('priority')
+                    .thenBy('dateDue')
+                    .thenBy('task')
             )
-        } else if (selectedSort === "toggle inactive") {
-            return tasks.sort(firstBy("active", -1))
+        } else if (selectedSort === 'toggle inactive') {
+            return tasks.sort(firstBy('active', -1))
         }
     }
 
@@ -299,18 +299,18 @@ class ToDo extends Component {
         let tasks = this.clone(this.state.tasks)
         const selectedSort = this.selectSortBy.current.value
         if (manual) {
-            if (selectedSort === "None") {
-                tasks = this.sortItemsBy(tasks, "Manual", index)
+            if (selectedSort === 'None') {
+                tasks = this.sortItemsBy(tasks, 'Manual', index)
                 this.setState({ tasks: tasks })
             } else {
-                tasks = this.sortItemsBy(tasks, "Manual", index)
+                tasks = this.sortItemsBy(tasks, 'Manual', index)
                 this.setState({
                     tasks: tasks,
-                    selectedSort: "None"
+                    selectedSort: 'None'
                 })
             }
         } else {
-            if (selectedSort === "None") {
+            if (selectedSort === 'None') {
                 tasks = this.sortItemsBy(tasks, selectedSort)
                 this.setState({
                     tasks: tasks,
@@ -352,7 +352,7 @@ class ToDo extends Component {
         settings.style[selectedColor] = event.target.value
         this.setState({
             settings: settings,
-            selectedStyle: "None"
+            selectedStyle: 'None'
         })
     }
 
@@ -360,7 +360,7 @@ class ToDo extends Component {
         let settings = this.clone(this.state.settings)
         const selectedStyle = event.target.value
         const style = settings.style
-        if (style === "None") {
+        if (style === 'None') {
             this.setState({ selectedStyle: selectedStyle })
         } else {
             style.colorLow = this.styles[selectedStyle][0]
@@ -378,9 +378,9 @@ class ToDo extends Component {
         const { selectedSort } = this.state
         let tasks = this.clone(this.state.tasks)
         const tag = event.target.value
-        if (selectedSort === "Selected Tag") {
-            this.toggleItems(tasks, "show all")
-            this.toggleItems(tasks, "selected tag", tag)
+        if (selectedSort === 'Selected Tag') {
+            this.toggleItems(tasks, 'show all')
+            this.toggleItems(tasks, 'selected tag', tag)
             this.setState({
                 tasks: tasks,
                 selectedTag: tag
@@ -393,7 +393,7 @@ class ToDo extends Component {
     addTag = () => {
         let tags = this.clone(this.state.tags)
         const newTag = prompt("Enter a new tag")
-        if (newTag === "" || tags.includes(newTag)) {
+        if (newTag === '' || tags.includes(newTag)) {
             alert("Invalid tag or duplicate")
         } else {
             tags = [...tags, newTag]
@@ -407,10 +407,10 @@ class ToDo extends Component {
     removeTag = () => {
         const { selectedTag } = this.state
         let tags = this.clone(this.state.tags)
-        tags = tags.filter(tag => tag !== selectedTag || tag === "None")
+        tags = tags.filter(tag => tag !== selectedTag || tag === 'None')
         this.setState({
             tags: tags,
-            selectedTag: "None"
+            selectedTag: 'None'
         })
     }
 
@@ -444,7 +444,7 @@ class ToDo extends Component {
         let tasks = this.clone(this.state.tasks)
         let settings = this.clone(this.state.settings)
         settings.hideInactive = !settings.hideInactive
-        tasks = this.sortItemsBy(tasks, "toggle inactive")
+        tasks = this.sortItemsBy(tasks, 'toggle inactive')
         this.setState({
             tasks: tasks,
             settings: settings
@@ -486,7 +486,7 @@ class ToDo extends Component {
             <Container>
                 <Notifications />
                 <Row>
-                    <Col className="todo" sm="10" md="7" lg="5" xl="5">
+                    <Col className='todo' sm='10' md='7' lg='5' xl='5'>
                         <AddTask
                             tasks={tasks}
                             addItem={this.addItem}
@@ -497,9 +497,9 @@ class ToDo extends Component {
                             selectedPriority={selectedPriority}
                             selectedDate={selectedDate}
                             selectedTag={selectedTag} />
-                        <Row className="row-1 no-gutters">
+                        <Row className='row-1 no-gutters'>
                             <Col>
-                                <div className="calendar">
+                                <div className='calendar'>
                                     <Calendar
                                         value={selectedDate}
                                         handleOnChange={this.changeDate}
@@ -507,35 +507,35 @@ class ToDo extends Component {
                                 </div>
                             </Col>
                             <Col>
-                                <div className="priority--top">
+                                <div className='priority--top'>
                                     <Priority
                                         value={selectedPriority}
                                         handleOnChange={this.changePriority} />
                                 </div>
                             </Col>
                         </Row>
-                        <Row className="row-2 no-gutters">
+                        <Row className='row-2 no-gutters'>
                             <Col
-                                className="sort padding-right"
-                                xs="5">
+                                className='sort padding-right'
+                                xs='5'>
                                 <Input
-                                    type="select"
-                                    className="select-sort"
+                                    type='select'
+                                    className='select-sort'
                                     value={selectedSort}
                                     innerRef={this.selectSortBy}
                                     onChange={this.sortItems}
                                 >
-                                    <option value="None">Sort: None</option>
-                                    <option value="Priority">Priority</option>
-                                    <option value="Date Due">Date Due</option>
-                                    <option value="A-Z">A-Z</option>
-                                    <option value="Tags">Tags</option>
-                                    <option value="Selected Tag">Selected Tag</option>
+                                    <option value='None'>Sort: None</option>
+                                    <option value='Priority'>Priority</option>
+                                    <option value='Date Due'>Date Due</option>
+                                    <option value='A-Z'>A-Z</option>
+                                    <option value='Tags'>Tags</option>
+                                    <option value='Selected Tag'>Selected Tag</option>
                                 </Input>
                             </Col>
                             <Col
-                                className="manage-tags"
-                                xs="7"
+                                className='manage-tags'
+                                xs='7'
                             >
                                 <Tags
                                     tags={tags}
@@ -547,7 +547,7 @@ class ToDo extends Component {
                                 />
                             </Col>
                         </Row>
-                        <List className="list">
+                        <List className='list'>
                             <TransitionGroup>
                                 {tasks.map((task, index) =>
                                     (task.hidden) ?
@@ -557,7 +557,7 @@ class ToDo extends Component {
                                             <CSSTransition
                                                 key={task.id}
                                                 timeout={500}
-                                                classNames="fade"
+                                                classNames='fade'
                                             >
                                                 <Task
                                                     tasks={tasks}
@@ -583,39 +583,39 @@ class ToDo extends Component {
                                 )}
                             </TransitionGroup>
                         </List>
-                        <Row className="row-3 no-gutters">
+                        <Row className='row-3 no-gutters'>
                             <Button
-                                className="settings-button"
+                                className='settings-button'
                                 outline
-                                color="secondary"
-                                onClick={() => this.toggleModal("settingsModal")}
+                                color='secondary'
+                                onClick={() => this.toggleModal('settingsModal')}
                             >
                                 {"⚙"}
                             </Button>
                             <Button
-                                className="stats-button"
+                                className='stats-button'
                                 outline
-                                color="secondary"
-                                onClick={() => this.toggleModal("statsModal")}
+                                color='secondary'
+                                onClick={() => this.toggleModal('statsModal')}
                             >
                                 {"⭐"}
                             </Button>
                             <Button
-                                className="cat-button"
+                                className='cat-button'
                                 outline
-                                color="secondary"
-                                onClick={() => this.toggleModal("shopModal")}
+                                color='secondary'
+                                onClick={() => this.toggleModal('shopModal')}
                             >
                                 {"🐱"}
                             </Button>
                         </Row>
-                        <Row className="settings no-gutters">
+                        <Row className='settings no-gutters'>
                         </Row>
                     </Col>
                 </Row>
                 <CustomModal
                     isOpen={modals.settingsModal}
-                    modalType="settingsModal"
+                    modalType='settingsModal'
                     header="Settings"
                     toggleModal={this.toggleModal}
                 >
@@ -628,9 +628,9 @@ class ToDo extends Component {
                     />
                 </CustomModal>
                 <CustomModal
-                    className="rainbow-background"
+                    className='rainbow-background'
                     isOpen={modals.statsModal}
-                    modalType="statsModal"
+                    modalType='statsModal'
                     header="Stats"
                     toggleModal={this.toggleModal}
                 >
@@ -640,11 +640,11 @@ class ToDo extends Component {
                 </CustomModal>
                 <CustomModal
                     isOpen={modals.shopModal}
-                    modalType="shopModal"
+                    modalType='shopModal'
                     header="Cat Gif Shop!"
                     toggleModal={this.toggleModal}
                 >
-                    <div className="align-center">
+                    <div className='align-center'>
                         <Shop
                             stats={stats}
                             deductStars={this.deductStars}

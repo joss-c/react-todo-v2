@@ -12,8 +12,8 @@ import { Tags } from './Tags'
 export const Task = (props) => {
     return (
         <React.Fragment>
-            <Row className="no-gutters">
-                <Col xs="9">
+            <Row className='no-gutters'>
+                <Col xs='9'>
                     <TaskText
                         settings={props.settings}
                         task={props.task}
@@ -28,12 +28,12 @@ export const Task = (props) => {
                         />
                     </TaskText>
                 </Col>
-                <Col xs="3">
+                <Col xs='3'>
                     <TransitionGroup>
                         <CSSTransition
                             key={props.task.id}
                             timeout={500}
-                            classNames="fade">
+                            classNames='fade'>
                             <TaskButtons
                                 task={props.task}
                                 index={props.index}
@@ -51,7 +51,7 @@ export const Task = (props) => {
                 <Row>
                     <Col>
                         <Calendar
-                            value={props.convertDate(props.task.dateDue, "ISO")}
+                            value={props.convertDate(props.task.dateDue, 'ISO')}
                             handleOnChange={(event) => props.editDate(event, props.index)}
                             convertDate={props.convertDate}
                         />
@@ -63,7 +63,7 @@ export const Task = (props) => {
                         />
                     </Col>
                 </Row>
-                <Row className="margin-top-2">
+                <Row className='margin-top-2'>
                     <Col xs={{ size: 6, offset: 6 }}>
                         <Tags
                             tags={props.tags}

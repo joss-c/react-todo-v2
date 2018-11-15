@@ -28,11 +28,11 @@ export class AddTask extends Component {
             text: inputElementValue,
             priority: convertPriority(selectedPriority),
             timeCreated: Date.now(),
-            dateDue: convertDate(selectedDate, "timestamp"),
+            dateDue: convertDate(selectedDate, 'timestamp'),
             instance: itemInstances,
             editPanelHidden: true,
             settingsHidden: true,
-            tag: (selectedTag === "None") ? "None" : selectedTag,
+            tag: (selectedTag === 'None') ? 'None' : selectedTag,
         }
         addItem(newItem)
         this.inputElement.current.value = ""
@@ -43,22 +43,22 @@ export class AddTask extends Component {
         return (
             <Form onSubmit={this.createItem}>
                 <FormGroup>
-                    <Row className="row-0 no-gutters">
-                        <Col className="padding-right" xs="9">
+                    <Row className='row-0 no-gutters'>
+                        <Col className='padding-right' xs='9'>
                             <Input 
-                                type="text"
-                                className="input--add-task"
+                                type='text'
+                                className='input--add-task'
                                 onChange={inputChange}
                                 innerRef={this.inputElement}
-                                placeholder="Enter Task">
+                                placeholder='Enter Task'>
                             </Input>
                         </Col>
-                        <Col xs="3">
+                        <Col xs='3'>
                             <Button
-                                className="add-button"
-                                outline color="primary"
+                                className='add-button'
+                                outline color='primary'
                                 disabled={buttonDisabled}
-                                type="submit"
+                                type='submit'
                             >
                                 {"Add"}
                             </Button>

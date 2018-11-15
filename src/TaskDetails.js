@@ -4,33 +4,33 @@ import { Row, Col } from 'reactstrap'
 
 export const TaskDetails = ({ task, articulateDateDue }) => 
     <Row>
-        <Col className="task-details">
+        <Col className='task-details'>
             <TransitionGroup>
-                <div className="date-due x-small">
-                    {(task.tag === "None") ?
+                <div className='date-due x-small'>
+                    {(task.tag === 'None') ?
                         null :
-                        <span className="tag">{task.tag}</span>}
+                        <span className='tag'>{task.tag}</span>}
                     {(task.active) ?
                         `Due: ${articulateDateDue(task.dateDue)}` :
                         <React.Fragment>
-                            <span className="x-small">
+                            <span className='x-small'>
                                 {"Complete "}
                             </span>
                             <CSSTransition
                                 in={!task.active}
                                 timeout={1000}
-                                classNames="star"
+                                classNames='star'
                             >
-                                <span className="star x-small">
+                                <span className='star x-small'>
                                     {"★"}
                                 </span>
                             </CSSTransition>
                             <CSSTransition
                                 in={!task.active}
                                 timeout={1000}
-                                classNames="plus-one"
+                                classNames='plus-one'
                             >
-                                <span className="plus-one x-small">
+                                <span className='plus-one x-small'>
                                     {" +1"}
                                 </span>
                             </CSSTransition>

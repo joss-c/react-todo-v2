@@ -12,8 +12,8 @@ export const Stats = ({ stats }) => {
             return total
         }, 0)
     return (
-        <div className="align-center">
-            <div className="star-big">
+        <div className='align-center'>
+            <div className='star-big'>
                 {"★"}
             </div>
             <h1>{`Stars: ${totalTasksCompleted + stats.bonusStars - stats.starsUsed}`}</h1>

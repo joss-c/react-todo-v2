@@ -2,7 +2,7 @@ import React from 'react'
 
 export const List = (props) => {
     return (
-        <div className="list">
+        <div className='list'>
             {props.children}
         </div>
     )

@@ -6,29 +6,29 @@ export const Tags = (props) => {
     return (
         <React.Fragment>
             <Input 
-                type="select"
-                className="select-tag"
+                type='select'
+                className='select-tag'
                 value={selectedTag}
                 onChange={changeTag}
             >
                 {tags.map((tag, index) => <option key={index} value={tag}>
-                    {(tag === "None") ? "Tag: None" : tag}
+                    {(tag === 'None') ? 'Tag: None' : tag}
                 </option>)}
             </Input>
             {(!showButtons) ? null :
                 <React.Fragment>
                     <Button
                         outline
-                        color="secondary"
-                        size="sm"
+                        color='secondary'
+                        size='sm'
                         onClick={removeTag}
                     >
                         {"-"}
                     </Button>
                     <Button
                         outline
-                        color="secondary"
-                        size="sm"
+                        color='secondary'
+                        size='sm'
                         onClick={addTag}
                     >
                         {"+"}
