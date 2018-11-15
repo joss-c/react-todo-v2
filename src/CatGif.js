@@ -5,9 +5,7 @@ import { ClipLoader } from 'react-spinners'
 export class CatGif extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            loading: true
-        }
+        this.state = { loading: true }
     }
 
     componentDidMount() {
@@ -42,7 +40,11 @@ export class CatGif extends Component {
                 </div>
                 :
                 <div className='align-center'>
-                    <img style={{ width: '280px' }} src={gif[0].url} alt="This should be a cat gif..." />
+                    <img
+                        style={{ width: '280px' }}
+                        src={gif[0].url}
+                        alt="This should be a cat gif..."
+                    />
                 </div>
         )
     }
