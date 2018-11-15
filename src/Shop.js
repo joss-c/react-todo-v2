@@ -28,9 +28,9 @@ export class Shop extends Component {
             <React.Fragment>
                 <Row>
                     <Col xs={{ offset: 8 }}>
-                        <Button color="primary" outline>
+                        <h4>
                             {"Stars "}<Badge color="primary">{totalStars}</Badge>
-                        </Button>
+                        </h4>
                     </Col>
                 </Row>
                 <Row className="margin-top-10">
@@ -44,7 +44,7 @@ export class Shop extends Component {
                             disabled={buttonDisabled || totalStars < 2}
                             onClick={() => this.buyGif(2)}
                         >
-                            {"2⭐"}
+                            {"⭐2"}
                         </Button>
                     </Col>
                 </Row>
