@@ -11,9 +11,7 @@ export class CatGif extends Component {
     }
 
     componentDidMount() {
-        axios({
-            method: 'get',
-            url: 'https://api.thecatapi.com/v1/images/search?limit=1&mime_types=gif&format=json&order=RANDOM',
+        axios.get('https://api.thecatapi.com/v1/images/search?limit=1&mime_types=gif&format=json&order=RANDOM', {
             headers: { 'x-api-key': 'f5568fae-d85b-4310-8e88-cb282e0e2bac' },
             timeout: 20000
         })
