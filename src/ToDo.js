@@ -628,6 +628,7 @@ class ToDo extends Component {
                     />
                 </CustomModal>
                 <CustomModal
+                    className="rainbow-background"
                     isOpen={modals.statsModal}
                     modalType="statsModal"
                     header="Stats"
