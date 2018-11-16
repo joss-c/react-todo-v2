@@ -141,10 +141,14 @@ class ToDo extends Component {
                         timeCreated: task.timeCreated,
                         timeCompleted: Date.now()
                     }
+                    if (this.state.settings.hideInactive) {
+                        tasks = this.sortItemsBy(tasks, 'active')
+                    }
                     this.setState({
                         tasks: tasks,
                         stats: stats
                     })
+                    // Stars stuff
                     const tasksCompleted = Object.keys(stats.tasksCompleted).length
                     if (tasksCompleted % 5 === 0) {
                         setTimeout(() => {
@@ -291,7 +295,7 @@ class ToDo extends Component {
                     .thenBy('dateDue')
                     .thenBy('text')
             )
-        } else if (selectedSort === 'toggle inactive') {
+        } else if (selectedSort === 'active') {
             return tasks.sort(firstBy('active', -1))
         }
     }
@@ -301,6 +305,7 @@ class ToDo extends Component {
         const selectedSort = this.selectSortBy.current.value
         if (manual) {
             if (selectedSort === 'None') {
+                console.log("correct")
                 tasks = this.sortItemsBy(tasks, 'Manual', index)
                 this.setState({ tasks: tasks })
             } else {
@@ -447,7 +452,7 @@ class ToDo extends Component {
         let tasks = this.clone(this.state.tasks)
         let settings = this.clone(this.state.settings)
         settings.hideInactive = !settings.hideInactive
-        tasks = this.sortItemsBy(tasks, 'toggle inactive')
+        tasks = this.sortItemsBy(tasks, 'active')
         this.setState({
             tasks: tasks,
             settings: settings
