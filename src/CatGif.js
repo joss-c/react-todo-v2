@@ -50,10 +50,10 @@ export class CatGif extends Component {
                     />
                 </div>
                 :
-                <Card body className="text-center">
+                <Card body className='text-center'>
                     <div className='align-center'>
                         <img
-                            style={{ width: '260px' }}
+                            style={{ width: '100%' }}
                             src={gif[0].url}
                             alt="This should be a cat gif..."
                         />
@@ -61,7 +61,7 @@ export class CatGif extends Component {
                     <p></p>
                     <Button
                         onClick={() => this.handleSave(gif[0].url)}
-                        color={(saveButtonClicked) ? "success" : "info"}
+                        color={(saveButtonClicked) ? 'success' : 'info'}
                     >
                         {(saveButtonClicked) ? "Saved!" : "Save Kitty"}
                     </Button>
