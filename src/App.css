@@ -153,6 +153,18 @@
     margin-top: 10px
 }
 
+.grey-background {
+    background-color: #e5e5e5
+}
+
+.extra-padding {
+    padding: 10px;
+}
+
+.curved-border {
+    border-radius: 0.25rem;
+}
+
 .date-due {
     float: right;
     margin-top: 9px;
@@ -326,18 +338,9 @@ li {
     filter: drop-shadow(1px 0px 1px black);
     -webkit-filter: drop-shadow(1px 0px 1px black);
   }
-  .star-enter {
-
-  }
-  .star-enter-active {
+.star-enter-active {
     animation: golden 1s;
-  }
-  .star-exit {
-
-  }
-  .star-exit-active {
-
-  }
+}
 
 .fade-enter {
     opacity: 0.01;

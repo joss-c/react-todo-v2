@@ -59,7 +59,10 @@ export class Shop extends Component {
                     </Col>
                 </Row>
                 <Row className='margin-top-10'>
-                    <Col xs={{ size: 10, offset: 1 }}>
+                    <Col
+                        className='grey-background extra-padding curved-border'
+                        xs={{ size: 10, offset: 1 }}
+                    >
                         <span className='shop-items'>
                             {"1 x Cat Gif: "}
                         </span>
