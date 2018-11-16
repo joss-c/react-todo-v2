@@ -416,10 +416,12 @@ class ToDo extends Component {
     }
 
     editTaskTag = (event, index) => {
+        const { selectedSort } = this.state
         let tasks = this.clone(this.state.tasks)
         let task = tasks[index]
         task.tag = event.target.value
         task.editPanelHidden = true
+        tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({ tasks: tasks })
     }
 
