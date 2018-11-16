@@ -78,6 +78,7 @@ class ToDo extends Component {
     componentDidUpdate(prevProps, prevState) {
         const { tasks, settings, stats, tags } = this.state
         const { saveData } = this.props
+        console.log(this.state)
         if (prevState.tasks !== tasks) {
             saveData(tasks, 'tasks')
         }
@@ -233,9 +234,9 @@ class ToDo extends Component {
     toggleItems = (tasks, type, tag) => {
         let tasksCopy = this.clone(tasks)
         if (type === 'selected tag') {
-            tasksCopy.forEach(task => (task.tag !== tag) && (task.hidden = true))
+            tasksCopy.forEach(task => (task.tag !== tag || task.tag === 'None') && (task.hidden = true))
         } else if (type === 'tags only') {
-            tasksCopy.forEach(task => (task.tag === null) && (task.hidden = true))
+            tasksCopy.forEach(task => (task.tag === 'None') && (task.hidden = true))
         } else if (type === 'show all') {
             tasksCopy.forEach(task => (task.hidden === true) && (task.hidden = false))
         }
@@ -257,7 +258,7 @@ class ToDo extends Component {
                 firstBy('active', -1)
                     .thenBy('priority')
                     .thenBy('dateDue')
-                    .thenBy('task')
+                    .thenBy('text')
             )
         } else if (selectedSort === 'Date Due') {
             tasks = showAll
@@ -265,13 +266,13 @@ class ToDo extends Component {
                 firstBy('active', -1)
                     .thenBy('dateDue')
                     .thenBy('priority')
-                    .thenBy('task')
+                    .thenBy('text')
             )
         } else if (selectedSort === 'A-Z') {
             tasks = showAll
             return tasks.sort(
                 firstBy('active', -1)
-                    .thenBy('task')
+                    .thenBy('text')
             )
         } else if (selectedSort === 'Tags') {
             tasks = showAll
@@ -280,7 +281,7 @@ class ToDo extends Component {
                 firstBy('tag')
                     .thenBy('priority')
                     .thenBy('dateDue')
-                    .thenBy('task')
+                    .thenBy('text')
             )
         } else if (selectedSort === 'Selected Tag') {
             tasks = this.toggleItems(tasks, 'selected tag', this.state.selectedTag)
@@ -288,7 +289,7 @@ class ToDo extends Component {
                 firstBy('tag')
                     .thenBy('priority')
                     .thenBy('dateDue')
-                    .thenBy('task')
+                    .thenBy('text')
             )
         } else if (selectedSort === 'toggle inactive') {
             return tasks.sort(firstBy('active', -1))
@@ -379,8 +380,8 @@ class ToDo extends Component {
         let tasks = this.clone(this.state.tasks)
         const tag = event.target.value
         if (selectedSort === 'Selected Tag') {
-            this.toggleItems(tasks, 'show all')
-            this.toggleItems(tasks, 'selected tag', tag)
+            tasks = this.toggleItems(tasks, 'show all')
+            tasks = this.toggleItems(tasks, 'selected tag', tag)
             this.setState({
                 tasks: tasks,
                 selectedTag: tag
