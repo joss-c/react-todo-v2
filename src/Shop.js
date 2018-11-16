@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
-import { Row, Col, Button, Badge } from 'reactstrap'
+import { Row, Col, Button, Badge, Collapse, Card } from 'reactstrap'
 import { CatGif } from './CatGif'
+import { CustomModal } from './CustomModal'
 
 export class Shop extends Component {
     constructor(props) {
         super(props)
         this.state = {
             showGif: false,
-            buttonDisabled: false
+            buttonDisabled: false,
+            savedKitties: false,
+            innerModal: false,
+            currentCatGif: ''
         }
     }
 
@@ -18,13 +22,35 @@ export class Shop extends Component {
         })
         this.props.deductStars(stars)
     }
-    
+
+    toggleSavedKitties = () => {
+        this.setState({ savedKitties: !this.state.savedKitties })
+    }
+
+    toggleInnerModal = (gif) => {
+        this.setState({
+            innerModal: !this.state.innerModal,
+            currentCatGif: gif
+        })
+    }
+
     render() {
-        const { stats } = this.props
-        const { buttonDisabled } = this.state
+        const { stats, inventory, saveKitty } = this.props
+        const { buttonDisabled, savedKitties, innerModal, currentCatGif } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
         return (
             <React.Fragment>
+                <CustomModal
+                    isOpen={innerModal}
+                    toggleModal={this.toggleInnerModal}
+                >
+                    <img
+                        style={{ width: '100%' }}
+                        src={currentCatGif}
+                        alt="This should be a cat gif.."
+                    >
+                    </img>
+                </CustomModal>
                 <Row>
                     <Col xs={{ offset: 8 }}>
                         <h4>
@@ -49,8 +75,38 @@ export class Shop extends Component {
                 </Row>
                 <div className='cat-gif'>
                     {(!this.state.showGif) ? null :
-                        <CatGif />}
+                        <CatGif saveKitty={saveKitty} />}
                 </div>
+                <Row>
+                    <Col xs={{ offset: 2 }}>
+                        <p></p>
+                        <Button
+                            onClick={this.toggleSavedKitties}
+                        >
+                            {"Saved Kitties"}
+                        </Button>
+                        <Collapse isOpen={savedKitties}>
+                            {inventory.catGifs.map((gif, index) =>
+                                <div key={index}>
+                                    <Card>
+                                        <Row>
+                                            <Col>
+                                                <span>{`Kitty ${index + 1}`}</span>
+                                                <Button
+                                                    id='Popover'
+                                                    color='link'
+                                                    onClick={() => this.toggleInnerModal(gif)}
+                                                >
+                                                    {"View"}
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Card>
+                                </div>
+                            )}
+                        </Collapse>
+                    </Col>
+                </Row>
             </React.Fragment>
         )
     }

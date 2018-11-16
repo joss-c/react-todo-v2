@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { Button, Card } from 'reactstrap'
 import { ClipLoader } from 'react-spinners'
 
 export class CatGif extends Component {
     constructor(props) {
         super(props)
-        this.state = { loading: true }
+        this.state = { 
+            loading: true,
+            saveButtonClicked: false
+        }
     }
 
     componentDidMount() {
@@ -28,8 +32,13 @@ export class CatGif extends Component {
             })
     }
 
+    handleSave = (kitty) => {
+        this.props.saveKitty(kitty)
+        this.setState({ saveButtonClicked: true })
+    }
+
     render() {
-        const { loading, gif } = this.state
+        const { loading, gif, saveButtonClicked } = this.state
         return (
             (loading) ?
                 <div className='align-center'>
@@ -41,13 +50,23 @@ export class CatGif extends Component {
                     />
                 </div>
                 :
-                <div className='align-center'>
-                    <img
-                        style={{ width: '280px' }}
-                        src={gif[0].url}
-                        alt="This should be a cat gif..."
-                    />
-                </div>
+                <Card body className="text-center">
+                    <div className='align-center'>
+                        <img
+                            style={{ width: '260px' }}
+                            src={gif[0].url}
+                            alt="This should be a cat gif..."
+                        />
+                    </div>
+                    <p></p>
+                    <Button
+                        onClick={() => this.handleSave(gif[0].url)}
+                        color={(saveButtonClicked) ? "success" : "info"}
+                    >
+                        {(saveButtonClicked) ? "Saved!" : "Save Kitty"}
+                    </Button>
+                </Card>
+
         )
     }
 }

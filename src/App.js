@@ -6,6 +6,7 @@ import './App.css';
 class App extends Component {
     render() {
         const tasks = localStorage.getItem('tasks')
+        const inventory = localStorage.getItem('inventory')
         const settings = localStorage.getItem('settings')
         const stats = localStorage.getItem('stats_5')
         const tags = localStorage.getItem('tags_2')
@@ -13,6 +14,7 @@ class App extends Component {
         return (
             <ToDo
                 tasks={tasks}
+                inventory={inventory}
                 settings={settings}
                 stats={stats}
                 tags={tags}

@@ -34,6 +34,10 @@ class ToDo extends Component {
                     dateDue: getDate('today'),
                     tag: 'None'
                 }],
+            inventory: (this.props.inventory) ? JSON.parse(this.props.inventory) :
+                {
+                    catGifs: []
+                },
             settings: (this.props.settings) ? JSON.parse(this.props.settings) :
                 {
                     style: {
@@ -76,11 +80,14 @@ class ToDo extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { tasks, settings, stats, tags } = this.state
+        const { tasks, inventory, settings, stats, tags } = this.state
         const { saveData } = this.props
         console.log(this.state)
         if (prevState.tasks !== tasks) {
             saveData(tasks, 'tasks')
+        }
+        if (prevState.inventory !== inventory) {
+            saveData(inventory, 'inventory')
         }
         if (prevState.settings !== settings) {
             saveData(settings, 'settings')
@@ -471,9 +478,16 @@ class ToDo extends Component {
         this.setState({ stats: stats })
     }
 
+    saveKitty = (kitty) => {
+        let inventory = this.clone(this.state.inventory)
+        inventory.catGifs.push(kitty)
+        this.setState({ inventory: inventory })
+    }
+
     render() {
         const {
             tasks,
+            inventory,
             settings,
             stats,
             tags,
@@ -655,6 +669,8 @@ class ToDo extends Component {
                     <div className='align-center'>
                         <Shop
                             stats={stats}
+                            inventory={inventory}
+                            saveKitty={this.saveKitty}
                             deductStars={this.deductStars}
                         />
                     </div>
