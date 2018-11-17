@@ -17,6 +17,80 @@ import {
 import { CatGif } from './CatGif'
 import { CustomModal } from './CustomModal'
 
+const ShopItems = (props) => {
+    const { buttonDisabled, totalStars, buyGif } = props
+    return (
+        <Row className='margin-top-10'>
+            <Col
+                xs={{ size: 10, offset: 1 }}
+            >
+                <Card className='margin-bottom-10'>
+                    <CardHeader>{"Items"}</CardHeader>
+                    <CardBody>
+                        <Card className='align-center'>
+                            <CardBody>
+                                <CardText>{"1 x Cat Gif: ⭐2"}</CardText>
+                                <Button
+                                    className='buy-button'
+                                    color='warning'
+                                    disabled={buttonDisabled || totalStars < 2}
+                                    onClick={() => buyGif(2)}
+                                >
+                                    {"Retrieve Cuteness"}
+                                </Button>
+                            </CardBody>
+                        </Card>
+                    </CardBody>
+                </Card>
+            </Col>
+        </Row>
+    )
+}
+
+const SavedKitties = (props) => {
+    const { toggleSavedKitties, savedKitties, inventory, toggleModal } = props
+    return (
+        <Row>
+            <Col xs={{ offset: 2 }}>
+                <p></p>
+                <Button
+                    className='margin-bottom-5'
+                    onClick={toggleSavedKitties}
+                >
+                    {"Saved Kitties"}
+                </Button>
+                <Collapse isOpen={savedKitties}>
+                    <Table striped>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kitty</th>
+                                <th>Gif</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {inventory.catGifs.map((gif, index) =>
+                                <tr>
+                                    <th scope="row">{index + 1}</th>
+                                    <td>{`Unnamed`}</td>
+                                    <td>
+                                        <Button
+                                            color='link'
+                                            onClick={() => toggleModal(gif.url)}
+                                        >
+                                            {"View"}
+                                        </Button>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                </Collapse>
+            </Col>
+        </Row>
+    )
+}
+
 export class Shop extends Component {
     constructor(props) {
         super(props)
@@ -79,68 +153,19 @@ export class Shop extends Component {
                         </h4>
                     </Col>
                 </Row>
-                <Row className='margin-top-10'>
-                    <Col
-                        xs={{ size: 10, offset: 1 }}
-                    >
-                        <Card className='margin-bottom-10'>
-                            <CardHeader>{"Items"}</CardHeader>
-                            <CardBody>
-                                <Card className='align-center'>
-                                    <CardBody>
-                                        <CardText>{"1 x Cat Gif: ⭐2"}</CardText>
-                                        <Button
-                                            className='buy-button'
-                                            color='warning'
-                                            disabled={buttonDisabled || totalStars < 2}
-                                            onClick={() => this.buyGif(2)}
-                                        >
-                                            {"Retrieve Cuteness"}
-                                        </Button>
-                                    </CardBody>
-                                </Card>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+                <ShopItems
+                    buttonDisabled={buttonDisabled}
+                    totalStars={totalStars}
+                    buyGif={this.buyGif}
+                />
                 {(!this.state.showGif) ? null :
                     <CatGif saveKitty={saveKitty} />}
-                <Row>
-                    <Col xs={{ offset: 2 }}>
-                        <p></p>
-                        <Button
-                            className='margin-bottom-5'
-                            onClick={this.toggleSavedKitties}
-                        >
-                            {"Saved Kitties"}
-                        </Button>
-                        <Collapse isOpen={savedKitties}>
-                            <Table striped>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Kitty</th>
-                                        <th>Gif</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {inventory.catGifs.map((gif, index) =>
-                                        <tr>
-                                            <th scope="row">{index + 1}</th>
-                                            <td>{`Unnamed`}</td>
-                                            <td><Button
-                                                color='link'
-                                                onClick={() => this.toggleInnerModal(gif.url)}
-                                            >
-                                                {"View"}
-                                            </Button></td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </Table>
-                        </Collapse>
-                    </Col>
-                </Row>
+                <SavedKitties
+                    toggleSavedKitties={this.toggleSavedKitties}
+                    savedKitties={savedKitties}
+                    inventory={inventory}
+                    toggleModal={this.toggleInnerModal}
+                />
             </React.Fragment>
         )
     }
