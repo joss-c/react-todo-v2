@@ -87,7 +87,7 @@ class ToDo extends Component {
             saveData(tasks, 'tasks')
         }
         if (prevState.inventory !== inventory) {
-            saveData(inventory, 'inventory')
+            saveData(inventory, 'inventory_1')
         }
         if (prevState.settings !== settings) {
             saveData(settings, 'settings')
@@ -480,7 +480,7 @@ class ToDo extends Component {
 
     saveKitty = (kitty) => {
         let inventory = this.clone(this.state.inventory)
-        inventory.catGifs.push(kitty)
+        inventory.catGifs = [...inventory.catGifs, kitty]
         this.setState({ inventory: inventory })
     }
 

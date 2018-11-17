@@ -32,7 +32,12 @@ export class CatGif extends Component {
             })
     }
 
-    handleSave = (kitty) => {
+    handleSave = (url) => {
+        const kitty = {
+            url: url,
+            name: null,
+            popoverOpen: false
+        }
         this.props.saveKitty(kitty)
         this.setState({ saveButtonClicked: true })
     }

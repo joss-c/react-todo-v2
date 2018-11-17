@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
-import { 
+import {
     Row,
-    Col, 
-    Button, 
-    Badge, 
+    Col,
+    Button,
+    Badge,
     Collapse,
-    Card, 
-    CardHeader, 
-    CardFooter, 
-    CardBody, 
-    CardTitle,
-    CardText 
+    Card,
+    CardHeader,
+    CardBody,
+    CardText,
+    Popover,
+    PopoverHeader,
+    PopoverBody,
+    Table
 } from 'reactstrap'
 import { CatGif } from './CatGif'
 import { CustomModal } from './CustomModal'
@@ -64,7 +66,7 @@ export class Shop extends Component {
                     </img>
                 </CustomModal>
                 <Row>
-                    <Col xs={{ size: 6, offset: 6}}>
+                    <Col xs={{ size: 6, offset: 6 }}>
                         <h4 className='align-center'>
                             {"Stars "}
                             <Badge
@@ -113,24 +115,29 @@ export class Shop extends Component {
                             {"Saved Kitties"}
                         </Button>
                         <Collapse isOpen={savedKitties}>
-                            {inventory.catGifs.map((gif, index) =>
-                                <div key={index}>
-                                    <Card className='extra-padding-10 margin-bottom-2'>
-                                        <Row>
-                                            <Col>
-                                                <span>{`Kitty ${index + 1}`}</span>
-                                                <Button
-                                                    id='Popover'
-                                                    color='link'
-                                                    onClick={() => this.toggleInnerModal(gif)}
-                                                >
-                                                    {"View"}
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </Card>
-                                </div>
-                            )}
+                            <Table striped>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Kitty</th>
+                                        <th>Gif</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {inventory.catGifs.map((gif, index) =>
+                                        <tr>
+                                            <th scope="row">{index + 1}</th>
+                                            <td>{`Unnamed`}</td>
+                                            <td><Button
+                                                color='link'
+                                                onClick={() => this.toggleInnerModal(gif.url)}
+                                            >
+                                                {"View"}
+                                            </Button></td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </Table>
                         </Collapse>
                     </Col>
                 </Row>
