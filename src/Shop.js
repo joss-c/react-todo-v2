@@ -76,7 +76,7 @@ const SavedKitties = (props) => {
                                     <td>
                                         <Button
                                             color='link'
-                                            onClick={() => toggleModal(gif.url)}
+                                            onClick={() => toggleModal(gif)}
                                         >
                                             {"View"}
                                         </Button>
@@ -116,10 +116,16 @@ export class Shop extends Component {
     }
 
     toggleInnerModal = (gif) => {
-        this.setState({
-            innerModal: !this.state.innerModal,
-            currentCatGif: gif
-        })
+        if (this.state.innerModal) {
+            this.setState({
+                innerModal: false
+            })
+        } else {
+            this.setState({
+                innerModal: true,
+                currentCatGif: gif
+            })
+        }
     }
 
     render() {
@@ -130,11 +136,12 @@ export class Shop extends Component {
             <React.Fragment>
                 <CustomModal
                     isOpen={innerModal}
+                    header={currentCatGif.name}
                     toggleModal={this.toggleInnerModal}
                 >
                     <img
                         style={{ width: '100%' }}
-                        src={currentCatGif}
+                        src={currentCatGif.url}
                         alt="This should be a cat gif.."
                     >
                     </img>

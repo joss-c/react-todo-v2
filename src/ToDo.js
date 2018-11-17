@@ -87,7 +87,7 @@ class ToDo extends Component {
             saveData(tasks, 'tasks')
         }
         if (prevState.inventory !== inventory) {
-            saveData(inventory, 'inventory_1')
+            saveData(inventory, 'inventory_2')
         }
         if (prevState.settings !== settings) {
             saveData(settings, 'settings')
