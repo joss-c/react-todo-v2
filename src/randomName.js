@@ -5,7 +5,9 @@ const randomName = () => {
     const randomConsonant = () => consonants[Math.floor(Math.random() * consonants.length)]
     const randomVowel = () => vowels[Math.floor(Math.random() * vowels.length)]
     const randomEnding = () => endings[Math.floor(Math.random() * endings.length)]
-    return randomConsonant() + randomVowel() + randomConsonant() + randomEnding()
+    let newName = randomConsonant() + randomVowel() + randomConsonant() + randomEnding()
+    newName = newName.charAt(0).toUpperCase() + newName.slice(1)
+    return newName
 }
 
 export { randomName }
