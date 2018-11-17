@@ -54,7 +54,7 @@ const SavedKitties = (props) => {
             <Col xs={{ offset: 2 }}>
                 <p></p>
                 <Button
-                    className='margin-bottom-5'
+                    className='margin-bottom-10'
                     onClick={toggleSavedKitties}
                 >
                     {"Saved Kitties"}
@@ -72,7 +72,7 @@ const SavedKitties = (props) => {
                             {inventory.catGifs.map((gif, index) =>
                                 <tr>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{`Unnamed`}</td>
+                                    <td>{gif.name}</td>
                                     <td>
                                         <Button
                                             color='link'

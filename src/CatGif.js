@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { Button, Card, CardTitle } from 'reactstrap'
 import { ClipLoader } from 'react-spinners'
+import { randomName } from './randomName'
 
 export class CatGif extends Component {
     constructor(props) {
@@ -35,7 +36,7 @@ export class CatGif extends Component {
     handleSave = (url) => {
         const kitty = {
             url: url,
-            name: null,
+            name: randomName(),
             popoverOpen: false
         }
         this.props.saveKitty(kitty)
