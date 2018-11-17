@@ -73,7 +73,7 @@
 }
 
 .row-2 {
-    margin-bottom: 6px
+    margin-bottom: 4px
 }
 
 .calendar {
@@ -141,6 +141,10 @@
     justify-content: center
 }
 
+.align-right {
+    text-align: right
+}
+
 .margin-top-2 {
     margin-top: 2px
 }
@@ -153,16 +157,40 @@
     margin-top: 10px
 }
 
-.grey-background {
-    background-color: #e5e5e5
+.margin-bottom-2 {
+    margin-bottom: 2px;
 }
 
-.extra-padding {
+.margin-bottom-5 {
+    margin-bottom: 5px;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.grey-background {
+    background-color: #f3f3f3
+}
+
+.extra-padding-10 {
     padding: 10px;
 }
 
-.curved-border {
-    border-radius: 0.25rem;
+.extra-padding-20 {
+    padding: 20px
+}
+
+.rounded-border {
+    border-radius: 0.25rem; 
+}
+
+.drop-shadow {
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
+}
+
+.drop-shadow--white {
+    filter: drop-shadow(1px 1px 1px white);
 }
 
 .date-due {
@@ -210,10 +238,6 @@
     margin-top : 5px;
     margin-left: 5px;
     font-size: small
-}
-
-.cat-gif {
-    margin-top: 20px
 }
 
 .shop-items {
@@ -363,6 +387,14 @@ li {
     text-shadow: #ccc 0 1px 0, #c9c9c9 0 2px 0, #bbb 0 3px 0, #b9b9b9 0 4px 0, #aaa 0 5px 0,rgba(0,0,0,.1) 0 6px 1px, rgba(0,0,0,.1) 0 0 5px, rgba(0,0,0,.3) 0 1px 3px, rgba(0,0,0,.15) 0 3px 5px, rgba(0,0,0,.2) 0 5px 10px, rgba(0,0,0,.2) 0 10px 10px, rgba(0,0,0,.1) 0 20px 20px;
 }
 
+.golden-background {
+    animation: golden-background 2s infinite;
+}
+
+.golden-text {
+    animation: golden_2 2s infinite;
+}
+
 .rainbow-background {
     background: linear-gradient(124deg, rgba(255,36,0,0.5), rgba(232, 29, 29, 0.5), rgba(232, 183, 29, 0.5), rgba(227, 232, 29, 0.5), rgba(29, 232, 64, 0.05), rgba(29, 221, 232, 0.5), rgba(43, 29, 232, 0.5), rgba(221, 0, 243, 0.5), rgba(221, 0, 243, 0.5));
     background-size: 1000% 1000%;
@@ -423,4 +455,12 @@ li {
     50%  {color: gold;}
     65%  {color: #fff5be;}
     100% {color: gold;}
+}
+
+@keyframes golden-background {
+    0%   {background-color: gold;}
+    35%  {background-color: #fff5be}
+    50%  {background-color: gold;}
+    65%  {background-color: #fff5be;}
+    100% {background-color: gold;}
 }

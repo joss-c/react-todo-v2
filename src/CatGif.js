@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Button, Card } from 'reactstrap'
+import { Button, Card, CardTitle } from 'reactstrap'
 import { ClipLoader } from 'react-spinners'
 
 export class CatGif extends Component {
@@ -51,17 +51,19 @@ export class CatGif extends Component {
                 </div>
                 :
                 <Card body className='text-center'>
-                    <div className='align-center'>
+                    <CardTitle>{"Here's your kitty! ♥"}</CardTitle>
+                    <div className='align-center margin-bottom-5'>
                         <img
+                            className='rounded-border'
                             style={{ width: '100%' }}
                             src={gif[0].url}
                             alt="This should be a cat gif..."
                         />
                     </div>
-                    <p></p>
                     <Button
                         onClick={() => this.handleSave(gif[0].url)}
                         color={(saveButtonClicked) ? 'success' : 'info'}
+                        disabled={saveButtonClicked}
                     >
                         {(saveButtonClicked) ? "Saved!" : "Save Kitty"}
                     </Button>

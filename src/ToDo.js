@@ -663,17 +663,15 @@ class ToDo extends Component {
                 <CustomModal
                     isOpen={modals.shopModal}
                     modalType='shopModal'
-                    header="Cat Gif Shop!"
+                    header="Le Catte Gif Shoppe"
                     toggleModal={this.toggleModal}
                 >
-                    <div className='align-center'>
-                        <Shop
-                            stats={stats}
-                            inventory={inventory}
-                            saveKitty={this.saveKitty}
-                            deductStars={this.deductStars}
-                        />
-                    </div>
+                    <Shop
+                        stats={stats}
+                        inventory={inventory}
+                        saveKitty={this.saveKitty}
+                        deductStars={this.deductStars}
+                    />
                 </CustomModal>
             </Container>
         )
