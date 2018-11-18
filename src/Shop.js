@@ -12,10 +12,16 @@ import {
     Popover,
     PopoverHeader,
     PopoverBody,
-    Table
+    Table,
+    TabContent,
+    TabPane,
+    Nav,
+    NavItem,
+    NavLink
 } from 'reactstrap'
 import { CatGif } from './CatGif'
 import { CustomModal } from './CustomModal'
+import classnames from 'classnames'
 
 const ShopItems = (props) => {
     const { buttonDisabled, totalStars, buyGif } = props
@@ -48,17 +54,10 @@ const ShopItems = (props) => {
 }
 
 const SavedKitties = (props) => {
-    const { toggleSavedKitties, savedKitties, inventory, toggleModal } = props
+    const { savedKitties, inventory, toggleModal } = props
     return (
-        <Row>
+        <Row className='margin-top-10'>
             <Col xs={{ offset: 2 }}>
-                <p></p>
-                <Button
-                    className='margin-bottom-10'
-                    onClick={toggleSavedKitties}
-                >
-                    {"Saved Kitties"}
-                </Button>
                 <Collapse isOpen={savedKitties}>
                     <Table striped>
                         <thead>
@@ -99,7 +98,8 @@ export class Shop extends Component {
             buttonDisabled: false,
             savedKitties: false,
             innerModal: false,
-            currentCatGif: ''
+            currentCatGif: '',
+            activeTab: '1'
         }
     }
 
@@ -128,6 +128,15 @@ export class Shop extends Component {
         }
     }
 
+    toggleTab(tab) {
+        if (this.state.activeTab !== tab) {
+            this.setState({
+                activeTab: tab,
+                savedKitties: !this.state.savedKitties
+            })
+        }
+    }
+
     render() {
         const { stats, inventory, saveKitty } = this.props
         const { buttonDisabled, savedKitties, innerModal, currentCatGif } = this.state
@@ -146,33 +155,57 @@ export class Shop extends Component {
                     >
                     </img>
                 </CustomModal>
-                <Row>
-                    <Col xs={{ size: 6, offset: 6 }}>
-                        <h4 className='align-center'>
-                            {"Stars "}
-                            <Badge
-                                className='golden-text'
-                                color='primary'>
-                                <span className='drop-shadow'>
-                                    {totalStars}
-                                </span>
-                            </Badge>
-                        </h4>
-                    </Col>
-                </Row>
-                <ShopItems
-                    buttonDisabled={buttonDisabled}
-                    totalStars={totalStars}
-                    buyGif={this.buyGif}
-                />
-                {(!this.state.showGif) ? null :
-                    <CatGif saveKitty={saveKitty} />}
-                <SavedKitties
-                    toggleSavedKitties={this.toggleSavedKitties}
-                    savedKitties={savedKitties}
-                    inventory={inventory}
-                    toggleModal={this.toggleInnerModal}
-                />
+                <Nav tabs>
+                    <NavItem>
+                        <NavLink
+                            className={classnames({ active: this.state.activeTab === '1' })}
+                            onClick={() => this.toggleTab('1')}
+                        >
+                            {"Shop"}
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink
+                            className={classnames({ active: this.state.activeTab === '2' })}
+                            onClick={() => this.toggleTab('2')}
+                        >
+                            {"Saved Kitties"}
+                        </NavLink>
+                    </NavItem>
+                </Nav>
+                <TabContent activeTab={this.state.activeTab}>
+                    <TabPane tabId="1">
+                        <Row className='margin-top-10'>
+                            <Col xs={{ size: 6, offset: 6 }}>
+                                <h4 className='align-center'>
+                                    {"Stars "}
+                                    <Badge
+                                        className='golden-text'
+                                        color='primary'>
+                                        <span className='drop-shadow'>
+                                            {totalStars}
+                                        </span>
+                                    </Badge>
+                                </h4>
+                            </Col>
+                        </Row>
+                        <ShopItems
+                            buttonDisabled={buttonDisabled}
+                            totalStars={totalStars}
+                            buyGif={this.buyGif}
+                        />
+                        {(!this.state.showGif) ? null :
+                            <CatGif saveKitty={saveKitty} />}
+                    </TabPane>
+                    <TabPane tabId="2">
+                        <SavedKitties
+                            toggleSavedKitties={this.toggleSavedKitties}
+                            savedKitties={savedKitties}
+                            inventory={inventory}
+                            toggleModal={this.toggleInnerModal}
+                        />
+                    </TabPane>
+                </TabContent>
             </React.Fragment>
         )
     }
