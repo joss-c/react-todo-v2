@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Button, Card, CardTitle } from 'reactstrap'
+import { Button, Card, CardTitle, CardHeader, Row, Col } from 'reactstrap'
 import { ClipLoader } from 'react-spinners'
 import { randomName } from './randomName'
 
@@ -9,7 +9,8 @@ export class CatGif extends Component {
         super(props)
         this.state = { 
             loading: true,
-            saveButtonClicked: false
+            saveButtonClicked: false,
+            newKittyName: ''
         }
     }
 
@@ -25,6 +26,7 @@ export class CatGif extends Component {
                 console.log(gif[0].url)
                 this.setState({
                     loading: false,
+                    newKittyName: randomName(),
                     gif
                 })
             })
@@ -36,7 +38,7 @@ export class CatGif extends Component {
     handleSave = (url) => {
         const kitty = {
             url: url,
-            name: randomName(),
+            name: this.state.newKittyName,
             popoverOpen: false
         }
         this.props.saveKitty(kitty)
@@ -44,7 +46,8 @@ export class CatGif extends Component {
     }
 
     render() {
-        const { loading, gif, saveButtonClicked } = this.state
+        const { loading, gif, saveButtonClicked, newKittyName } = this.state
+        const { hideCatGif } = this.props
         return (
             (loading) ?
                 <div className='align-center'>
@@ -57,8 +60,24 @@ export class CatGif extends Component {
                 </div>
                 :
                 <Card body className='text-center'>
-                    <CardTitle>{"Here's your kitty! ♥"}</CardTitle>
-                    <div className='align-center margin-bottom-5'>
+                    <CardTitle>
+                        <Row>
+                            <Col className='align-left' xs='9'>
+                                <CardTitle>
+                                    {`Here's your new kitty! - ${newKittyName}`}
+                                </CardTitle>
+                            </Col>
+                            <Col className='align-right' xs='3'>
+                                <Button
+                                    outline
+                                    onClick={hideCatGif}
+                                >
+                                    {"X"}
+                                </Button>
+                            </Col>
+                        </Row>
+                    </CardTitle>
+                    <div className='align-center margin-bottom-5 margin-top-5'>
                         <img
                             className='rounded-border'
                             style={{ width: '100%' }}

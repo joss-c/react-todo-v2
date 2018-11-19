@@ -112,16 +112,19 @@ export class Shop extends Component {
         }
     }
 
-    componentDidUpdate() {
-        console.log(this.props.inventory)
-    }
-
     buyGif = (stars) => {
         this.setState({
             showGif: true,
             buttonDisabled: true
         })
         this.props.deductStars(stars)
+    }
+
+    hideCatGif = () => {
+        this.setState({
+            showGif: false,
+            buttonDisabled: false
+        })
     }
 
     togglesavedKitties = () => {
@@ -208,7 +211,10 @@ export class Shop extends Component {
                             buyGif={this.buyGif}
                         />
                         {(!this.state.showGif) ? null :
-                            <CatGif saveKitty={saveKitty} />}
+                            <CatGif
+                                saveKitty={saveKitty}
+                                hideCatGif={this.hideCatGif}
+                            />}
                     </TabPane>
                     <TabPane tabId="2">
                         <SavedKitties
