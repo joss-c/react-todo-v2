@@ -54,17 +54,18 @@ const ShopItems = (props) => {
 }
 
 const SavedKitties = (props) => {
-    const { savedKitties, inventory, toggleModal } = props
+    const { showSavedKitties, inventory, toggleModal } = props
     return (
         <Row className='margin-top-10'>
             <Col xs={{ offset: 2 }}>
-                <Collapse isOpen={savedKitties}>
+                <Collapse isOpen={showSavedKitties}>
                     <Table striped>
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Kitty</th>
                                 <th>Gif</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,6 +81,7 @@ const SavedKitties = (props) => {
                                             {"View"}
                                         </Button>
                                     </td>
+                                    <td><Button color='danger'>x</Button></td>
                                 </tr>
                             )}
                         </tbody>
@@ -96,7 +98,7 @@ export class Shop extends Component {
         this.state = {
             showGif: false,
             buttonDisabled: false,
-            savedKitties: false,
+            showSavedKitties: false,
             innerModal: false,
             currentCatGif: '',
             activeTab: '1'
@@ -111,8 +113,8 @@ export class Shop extends Component {
         this.props.deductStars(stars)
     }
 
-    toggleSavedKitties = () => {
-        this.setState({ savedKitties: !this.state.savedKitties })
+    togglesavedKitties = () => {
+        this.setState({ showSavedKitties: !this.state.showSavedKitties })
     }
 
     toggleInnerModal = (gif) => {
@@ -132,14 +134,14 @@ export class Shop extends Component {
         if (this.state.activeTab !== tab) {
             this.setState({
                 activeTab: tab,
-                savedKitties: !this.state.savedKitties
+                showSavedKitties: !this.state.showSavedKitties
             })
         }
     }
 
     render() {
         const { stats, inventory, saveKitty } = this.props
-        const { buttonDisabled, savedKitties, innerModal, currentCatGif } = this.state
+        const { buttonDisabled, showSavedKitties, innerModal, currentCatGif } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
         return (
             <React.Fragment>
@@ -199,8 +201,8 @@ export class Shop extends Component {
                     </TabPane>
                     <TabPane tabId="2">
                         <SavedKitties
-                            toggleSavedKitties={this.toggleSavedKitties}
-                            savedKitties={savedKitties}
+                            toggleshowSavedKitties={this.toggleshowSavedKitties}
+                            showSavedKitties={showSavedKitties}
                             inventory={inventory}
                             toggleModal={this.toggleInnerModal}
                         />
