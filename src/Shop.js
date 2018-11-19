@@ -57,7 +57,7 @@ const SavedKitties = (props) => {
     const { showSavedKitties, deleteKitty, inventory, toggleModal } = props
     return (
         <Row className='margin-top-10'>
-            <Col xs={{ offset: 2 }}>
+            <Col>
                 <Collapse isOpen={showSavedKitties}>
                     <Table striped>
                         <thead>
