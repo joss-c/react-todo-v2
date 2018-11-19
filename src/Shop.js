@@ -54,7 +54,7 @@ const ShopItems = (props) => {
 }
 
 const SavedKitties = (props) => {
-    const { showSavedKitties, inventory, toggleModal } = props
+    const { showSavedKitties, deleteKitty, inventory, toggleModal } = props
     return (
         <Row className='margin-top-10'>
             <Col xs={{ offset: 2 }}>
@@ -71,7 +71,7 @@ const SavedKitties = (props) => {
                         <tbody>
                             {inventory.catGifs.map((gif, index) =>
                                 <tr>
-                                    <th scope="row">{index + 1}</th>
+                                    <th scope='row'>{index + 1}</th>
                                     <td>{gif.name}</td>
                                     <td>
                                         <Button
@@ -81,7 +81,14 @@ const SavedKitties = (props) => {
                                             {"View"}
                                         </Button>
                                     </td>
-                                    <td><Button color='danger'>x</Button></td>
+                                    <td>
+                                        <Button
+                                            color='danger'
+                                            onClick={() => deleteKitty(index)}
+                                        >
+                                            {"x"}
+                                        </Button>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>
@@ -103,6 +110,10 @@ export class Shop extends Component {
             currentCatGif: '',
             activeTab: '1'
         }
+    }
+
+    componentDidUpdate() {
+        console.log(this.props.inventory)
     }
 
     buyGif = (stars) => {
@@ -140,7 +151,7 @@ export class Shop extends Component {
     }
 
     render() {
-        const { stats, inventory, saveKitty } = this.props
+        const { stats, inventory, saveKitty, deleteKitty } = this.props
         const { buttonDisabled, showSavedKitties, innerModal, currentCatGif } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
         return (
@@ -202,6 +213,7 @@ export class Shop extends Component {
                     <TabPane tabId="2">
                         <SavedKitties
                             toggleshowSavedKitties={this.toggleshowSavedKitties}
+                            deleteKitty={deleteKitty}
                             showSavedKitties={showSavedKitties}
                             inventory={inventory}
                             toggleModal={this.toggleInnerModal}

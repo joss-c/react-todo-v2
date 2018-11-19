@@ -189,9 +189,7 @@ class ToDo extends Component {
 
     deleteItem = (key) => {
         let tasks = this.clone(this.state.tasks)
-        tasks = tasks.filter((item, index) =>
-            index !== key
-        )
+        tasks = tasks.filter((item, index) => index !== key)
         this.setState({ tasks: tasks })
     }
 
@@ -484,6 +482,12 @@ class ToDo extends Component {
         this.setState({ inventory: inventory })
     }
 
+    deleteKitty = (kitty) => {
+        let inventory = this.clone(this.state.inventory)
+        inventory.catGifs = inventory.catGifs.filter((item, index) => index !== kitty)
+        this.setState({ inventory: inventory })
+    }
+
     render() {
         const {
             tasks,
@@ -670,6 +674,7 @@ class ToDo extends Component {
                         stats={stats}
                         inventory={inventory}
                         saveKitty={this.saveKitty}
+                        deleteKitty={this.deleteKitty}
                         deductStars={this.deductStars}
                     />
                 </CustomModal>
