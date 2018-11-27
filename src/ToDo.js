@@ -261,12 +261,11 @@ class ToDo extends Component {
         const showAll = this.toggleItems(tasks, 'show all')
         if (selectedSort === 'Manual') {
             const moveTo = moveFrom - 1
+            tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
             if (this.state.settings.hideInactive) {
-                tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
-                return tasks = this.sortItemsBy(tasks, 'active')
-            } else {
-                return tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
+                tasks = this.sortItemsBy(tasks, 'active')
             }
+            return tasks
         }
         if (selectedSort === 'None') {
             return showAll
