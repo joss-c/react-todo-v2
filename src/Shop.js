@@ -62,9 +62,9 @@ const SavedKitties = (props) => {
                     <Table striped>
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Kitty</th>
-                                <th>Gif</th>
+                                <th>{"#"}</th>
+                                <th>{"Kitty"}</th>
+                                <th>{"Gif"}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -155,7 +155,7 @@ export class Shop extends Component {
 
     render() {
         const { stats, inventory, saveKitty, deleteKitty } = this.props
-        const { buttonDisabled, showSavedKitties, innerModal, currentCatGif } = this.state
+        const { buttonDisabled, showSavedKitties, innerModal, currentCatGif, showGif } = this.state
         const totalStars = Object.keys(stats.tasksCompleted).length + stats.bonusStars - stats.starsUsed
         return (
             <React.Fragment>
@@ -210,15 +210,14 @@ export class Shop extends Component {
                             totalStars={totalStars}
                             buyGif={this.buyGif}
                         />
-                        {(!this.state.showGif) ? null :
+                        {(showGif) &&
                             <CatGif
                                 saveKitty={saveKitty}
                                 hideCatGif={this.hideCatGif}
                             />}
                     </TabPane>
-                    <TabPane tabId="2">
+                    <TabPane tabId='2'>
                         <SavedKitties
-                            toggleshowSavedKitties={this.toggleshowSavedKitties}
                             deleteKitty={deleteKitty}
                             showSavedKitties={showSavedKitties}
                             inventory={inventory}

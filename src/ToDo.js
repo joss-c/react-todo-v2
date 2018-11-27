@@ -164,7 +164,12 @@ class ToDo extends Component {
                     }
                     if (tasksCompleted % 10 === 0) {
                         setTimeout(() => {
-                            this.notify('⭐+2 STARS BONUS⭐', 'custom', 2000, { background: '#fff5be', text: '#000000' })
+                            this.notify(
+                                '⭐+2 STARS BONUS⭐', 
+                                'custom', 
+                                2000, 
+                                { background: '#fff5be', text: '#000000' }
+                            )
                             stats.bonusStars += 2
                             this.setState({ stats: stats })
                         }, 500)
@@ -256,8 +261,12 @@ class ToDo extends Component {
         const showAll = this.toggleItems(tasks, 'show all')
         if (selectedSort === 'Manual') {
             const moveTo = moveFrom - 1
-            return tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
-            //return tasks.sort(firstBy('active', -1))
+            if (this.state.settings.hideInactive) {
+                tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
+                return tasks = this.sortItemsBy(tasks, 'active')
+            } else {
+                return tasks = this.props.arrayMove(tasks, moveFrom, moveTo)
+            }
         }
         if (selectedSort === 'None') {
             return showAll
