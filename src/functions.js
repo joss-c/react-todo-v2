@@ -25,7 +25,7 @@ const getDate = (time) => {
 }
 
 const countDays  = (array, length, sum) => {
-    if (array[length] - array[length-1] === 1) {
+    if (array[length] - array[length-1] === 86400000) {
         sum += 1
         return countDays(array, length - 1, sum)
     } else {

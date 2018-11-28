@@ -120,7 +120,7 @@ class ToDo extends Component {
         }
         // Log current day in stats as timestamp
         const logAppUsage = (() => {
-            const today = this.props.getDate("today")
+            const today = this.props.getDate('today')
             let stats = this.clone(this.state.stats)
             let { daysAppUsed } = stats
             const lastLoggedDay = daysAppUsed[daysAppUsed.length-1]
