@@ -54,6 +54,7 @@ class ToDo extends Component {
                     tasksCompleted: {},
                     bonusStars: 0,
                     starsUsed: 0,
+                    daysAppUsed: []
                 },
             modals: {
                 settingsModal: false,
@@ -79,6 +80,13 @@ class ToDo extends Component {
         this.notifyStyle = { background: '#007bff', text: '#ffffff' }
     }
 
+    componentDidMount() {
+        this.hideEditPanels()
+        this.sortItems()
+        console.log(this.state)
+        this.notify("You got this! 😊", 'custom', 2000, this.notifyStyle)
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { tasks, inventory, settings, stats, tags } = this.state
         const { saveData } = this.props
@@ -93,7 +101,7 @@ class ToDo extends Component {
             saveData(settings, 'settings')
         }
         if (prevState.stats !== stats) {
-            saveData(stats, 'stats_5')
+            saveData(stats, 'stats_6')
         }
         if (prevState.tags !== tags) {
             saveData(tags, 'tags_2')
@@ -109,13 +117,18 @@ class ToDo extends Component {
                 this.setState({ stats: revisedStats })
             }
         }
-    }
-
-    componentDidMount() {
-        this.hideEditPanels()
-        this.sortItems()
-        console.log(this.state)
-        this.notify("You got this! 😊", 'custom', 2000, this.notifyStyle)
+        // Log current day in stats as timestamp
+        const logAppUsage = (() => {
+            const today = this.props.getDate("today")
+            let stats = this.clone(this.state.stats)
+            let { daysAppUsed } = stats
+            const lastLoggedDay = daysAppUsed[daysAppUsed.length-1]
+            if (lastLoggedDay !== today) {
+                daysAppUsed.push(today)
+                console.log("Logging present-day timestamp to stats")
+                this.setState({ stats: stats })
+            }
+        })()
     }
 
     clone = (object) => {
