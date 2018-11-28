@@ -8,7 +8,7 @@ class App extends Component {
         const tasks = localStorage.getItem('tasks')
         const inventory = localStorage.getItem('inventory_3')
         const settings = localStorage.getItem('settings')
-        const stats = localStorage.getItem('stats_9')
+        const stats = localStorage.getItem('stats_10')
         const tags = localStorage.getItem('tags_2')
         const saveData = (data, fileName) => localStorage.setItem(fileName, JSON.stringify(data))
         return (

@@ -102,7 +102,7 @@ class ToDo extends Component {
             saveData(settings, 'settings')
         }
         if (prevState.stats !== stats) {
-            saveData(stats, 'stats_9')
+            saveData(stats, 'stats_10')
         }
         if (prevState.tags !== tags) {
             saveData(tags, 'tags_2')
