@@ -23,6 +23,9 @@ export const Stats = ({ stats }) => {
             <div>
                 {`This week: ${totalTasksCompletedOneWeek}`}
             </div>
+            <div>
+                {`Consecutive days app used: ${stats.consecutiveDaysUsed}`}
+            </div>
         </div>
     )
 }

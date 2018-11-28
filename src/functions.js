@@ -24,6 +24,15 @@ const getDate = (time) => {
     }
 }
 
+const countDays  = (array, length, sum) => {
+    if (array[length] - array[length-1] === 1) {
+        sum += 1
+        return countDays(array, length - 1, sum)
+    } else {
+        return sum
+    }
+}
+
 const articulateDateDue = (dateDue) => {
     let today = convertDate(Date.now(), 'ISO')
     today = convertDate(today, 'timestamp')
@@ -50,4 +59,4 @@ const arrayMove = (arr, fromIndex, toIndex) => {
     return arrCopy
 }
 
-export { convertDate, getDate, articulateDateDue, arrayMove }
+export { convertDate, getDate, countDays, articulateDateDue, arrayMove }

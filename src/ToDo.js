@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Notifications, { notify } from 'react-notify-toast'
 import uuid from 'uuid'
-import { convertDate, getDate, articulateDateDue, arrayMove } from './functions'
+import { convertDate, getDate, countDays, articulateDateDue, arrayMove } from './functions'
 import { randomMessage } from './randomMessage'
 import { firstBy } from './thenBy.min.js'
 import { Container, Row, Col, Input, Button } from 'reactstrap'
@@ -54,7 +54,8 @@ class ToDo extends Component {
                     tasksCompleted: {},
                     bonusStars: 0,
                     starsUsed: 0,
-                    daysAppUsed: []
+                    daysAppUsed: [],
+                    consecutiveDaysUsed: 0,
                 },
             modals: {
                 settingsModal: false,
@@ -101,7 +102,7 @@ class ToDo extends Component {
             saveData(settings, 'settings')
         }
         if (prevState.stats !== stats) {
-            saveData(stats, 'stats_6')
+            saveData(stats, 'stats_9')
         }
         if (prevState.tags !== tags) {
             saveData(tags, 'tags_2')
@@ -125,6 +126,8 @@ class ToDo extends Component {
             const lastLoggedDay = daysAppUsed[daysAppUsed.length-1]
             if (lastLoggedDay !== today) {
                 daysAppUsed.push(today)
+                // Count consecutive days app used
+                stats.consecutiveDaysUsed = this.props.countDays(daysAppUsed, daysAppUsed.length-1, 0) + 1
                 console.log("Logging present-day timestamp to stats")
                 this.setState({ stats: stats })
             }
@@ -707,6 +710,7 @@ class ToDo extends Component {
 ToDo.defaultProps = {
     convertDate: convertDate,
     getDate: getDate,
+    countDays: countDays,
     articulateDateDue: articulateDateDue,
     arrayMove: arrayMove
 }
