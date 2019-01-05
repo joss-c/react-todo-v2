@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Input, CustomInput } from 'reactstrap'
 
-export const Settings = ({ settings, selectedStyle, changeStyle, changeColor, toggleInactiveTasks }) => {
+export const Settings = ({ settings, selectedStyle, changeStyle, changeColor, toggleInactiveTasks, toggleAddTasksToTop }) => {
     return (
         <React.Fragment>
             <fieldset>
@@ -53,10 +53,20 @@ export const Settings = ({ settings, selectedStyle, changeStyle, changeColor, to
                         <Col>
                             <CustomInput
                                 type='checkbox'
-                                id='checkbox'
-                                label='Show completed tasks'
+                                id='hidInactive'
+                                label="Show completed tasks"
                                 checked={!settings.hideInactive}
                                 onChange={toggleInactiveTasks} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <CustomInput
+                                type='checkbox'
+                                id='addTasksToTop'
+                                label="Add tasks to top of list"
+                                checked={settings.addTasksToTop}
+                                onChange={toggleAddTasksToTop} />
                         </Col>
                     </Row>
                     <div>-----------</div>

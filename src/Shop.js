@@ -175,6 +175,7 @@ export class Shop extends Component {
                     <NavItem>
                         <NavLink
                             className={classnames({ active: this.state.activeTab === '1' })}
+                            style={{ cursor:'pointer' }}
                             onClick={() => this.toggleTab('1')}
                         >
                             {"Shop"}
@@ -183,6 +184,7 @@ export class Shop extends Component {
                     <NavItem>
                         <NavLink
                             className={classnames({ active: this.state.activeTab === '2' })}
+                            style={{ cursor:'pointer' }}
                             onClick={() => this.toggleTab('2')}
                         >
                             {"Saved Kitties"}

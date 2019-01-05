@@ -47,7 +47,8 @@ class ToDo extends Component {
                         backgroundColor: '#ffffff',
                         font: ''
                     },
-                    hideInactive: false
+                    hideInactive: false,
+                    addTasksToTop: false
                 },
             stats: (this.props.stats) ? JSON.parse(this.props.stats) :
                 {
@@ -99,7 +100,7 @@ class ToDo extends Component {
             saveData(inventory, 'inventory_3')
         }
         if (prevState.settings !== settings) {
-            saveData(settings, 'settings')
+            saveData(settings, 'settings_2')
         }
         if (prevState.stats !== stats) {
             saveData(stats, 'stats_10')
@@ -139,9 +140,13 @@ class ToDo extends Component {
     }
 
     addItem = (newItem) => {
-        const { selectedSort } = this.state
+        const { selectedSort, settings } = this.state
         let tasks = this.clone(this.state.tasks)
-        tasks = [...tasks, newItem]
+        if (settings.addTasksToTop) {
+            tasks = [newItem, ...tasks]
+        } else {
+            tasks = [...tasks, newItem]
+        }
         tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({
             tasks: tasks,
@@ -488,6 +493,14 @@ class ToDo extends Component {
         })
     }
 
+    toggleAddTasksToTop = () => {
+        let settings = this.clone(this.state.settings)
+        console.log(settings)
+        settings.addTasksToTop = !settings.addTasksToTop
+        console.log("after", settings)
+        this.setState({ settings: settings })
+    }
+
     toggleModal = (modalType) => {
         let modals = this.clone(this.state.modals)
         modals[modalType] = !modals[modalType]
@@ -675,6 +688,7 @@ class ToDo extends Component {
                         changeStyle={this.changeStyle}
                         changeColor={this.changeColor}
                         toggleInactiveTasks={this.toggleInactiveTasks}
+                        toggleAddTasksToTop={this.toggleAddTasksToTop}
                     />
                 </CustomModal>
                 <CustomModal
