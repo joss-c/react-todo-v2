@@ -12,7 +12,12 @@ const randomMessage = () => {
         "Impressive 😎",
         "Incredible! 👏",
         "Nice moves! 🕺",
-        "Making progress! 😊"
+        "Making progress! 😊",
+        "You're unstoppable! 😲",
+        "You're on fiyah!!!",
+        "Don't stop now!",
+        "You're pretty neat.",
+        "YES!!! 😊"
     ]
     return messages[Math.floor(Math.random() * messages.length)]
 }

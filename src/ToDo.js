@@ -222,6 +222,7 @@ class ToDo extends Component {
 
     deleteChecklistTask = (taskIndex, checklistTaskIndex) => {
         let tasks = this.clone(this.state.tasks)
+        const checklist = tasks[taskIndex].checklist
         let checklistTask = tasks[taskIndex].checklist[checklistTaskIndex]
         if (checklistTask.complete) {
             // Remove checklist task
@@ -230,6 +231,10 @@ class ToDo extends Component {
         } else {
             checklistTask.complete = true
         }
+        const tasksComplete = tasks[taskIndex].checklist.reduce((sum, task) => {
+            return (task.complete) ? sum + 1 : sum
+        }, 0)
+        if (tasksComplete == checklist.length) this.encouragingMessage()
         this.setState({ tasks: tasks })
     }
 
@@ -554,6 +559,12 @@ class ToDo extends Component {
         let tasks = this.clone(this.state.tasks)
         tasks[index].checklist.push(task)
         this.setState({ tasks: tasks })
+    }
+
+    encouragingMessage = () => {
+        setTimeout(() => {
+            this.notify(randomMessage(), 'custom', 2000, this.notifyStyle)
+        }, 500)
     }
 
     render() {
