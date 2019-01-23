@@ -1,6 +1,6 @@
 import React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Button } from 'reactstrap'
 import { TaskText } from './TaskText'
 import { TaskDetails } from './TaskDetails'
 import { TaskButtons } from './TaskButtons'
@@ -8,6 +8,7 @@ import { TaskEditBox } from './TaskEditBox'
 import { Calendar } from './Calendar'
 import { Priority } from './Priority'
 import { Tags } from './Tags'
+import { Checklist } from './Checklist'
 
 export const Task = (props) => {
     return (
@@ -64,7 +65,16 @@ export const Task = (props) => {
                     </Col>
                 </Row>
                 <Row className='margin-top-2'>
-                    <Col xs={{ size: 6, offset: 6 }}>
+                    <Col>
+                        <Button
+                            color='link'
+                            onClick={() => props.showChecklist(props.index)}
+                            disabled={props.task.checklist.length > 0}
+                        >
+                            {"Add checklist ▾"}
+                        </Button>
+                    </Col>
+                    <Col>
                         <Tags
                             tags={props.tags}
                             index={props.index}
@@ -75,6 +85,14 @@ export const Task = (props) => {
                         />
                     </Col>
                 </Row>
+                <Checklist
+                    task={props.task}
+                    index={props.index}
+                    settings={props.settings}
+                    addTask={props.addChecklistTask}
+                    deleteTask={props.deleteChecklistTask}
+                    hide={props.hideEditPanels}
+                />
             </TaskEditBox>
         </React.Fragment>
     )

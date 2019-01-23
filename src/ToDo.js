@@ -32,7 +32,8 @@ class ToDo extends Component {
                     instance: 1,
                     editPanelHidden: true,
                     dateDue: getDate('today'),
-                    tag: 'None'
+                    tag: 'None',
+                    checklist: []
                 }],
             inventory: (this.props.inventory) ? JSON.parse(this.props.inventory) :
                 {
@@ -83,7 +84,7 @@ class ToDo extends Component {
     }
 
     componentDidMount() {
-        this.hideEditPanels()
+        this.state.tasks.forEach(task => (task.editPanelHidden === false) && (task.editPanelHidden = true))
         this.sortItems()
         console.log(this.state)
         this.notify("You got this! 😊", 'custom', 2000, this.notifyStyle)
@@ -94,7 +95,7 @@ class ToDo extends Component {
         const { saveData } = this.props
         console.log(this.state)
         if (prevState.tasks !== tasks) {
-            saveData(tasks, 'tasks')
+            saveData(tasks, 'tasks_3b')
         }
         if (prevState.inventory !== inventory) {
             saveData(inventory, 'inventory_3')
@@ -139,13 +140,13 @@ class ToDo extends Component {
         return JSON.parse(JSON.stringify(object))
     }
 
-    addItem = (newItem) => {
+    addTask = (newTask) => {
         const { selectedSort, settings } = this.state
         let tasks = this.clone(this.state.tasks)
         if (settings.addTasksToTop) {
-            tasks = [newItem, ...tasks]
+            tasks = [newTask, ...tasks]
         } else {
-            tasks = [...tasks, newItem]
+            tasks = [...tasks, newTask]
         }
         tasks = this.sortItemsBy(tasks, selectedSort)
         this.setState({
@@ -204,7 +205,7 @@ class ToDo extends Component {
                         stats: stats
                     })
                 } else {
-                    this.deleteItem(index)
+                    this.deleteTask(index)
                 }
             }
             catch (err) {
@@ -213,9 +214,22 @@ class ToDo extends Component {
         }
     }
 
-    deleteItem = (key) => {
+    deleteTask = (key) => {
         let tasks = this.clone(this.state.tasks)
-        tasks = tasks.filter((item, index) => index !== key)
+        tasks = tasks.filter((task, index) => index !== key)
+        this.setState({ tasks: tasks })
+    }
+
+    deleteChecklistTask = (taskIndex, checklistTaskIndex) => {
+        let tasks = this.clone(this.state.tasks)
+        let checklistTask = tasks[taskIndex].checklist[checklistTaskIndex]
+        if (checklistTask.complete) {
+            // Remove checklist task
+            const updatedChecklist = tasks[taskIndex].checklist.filter((task, index) => index !== checklistTaskIndex)
+            tasks[taskIndex].checklist = updatedChecklist
+        } else {
+            checklistTask.complete = true
+        }
         this.setState({ tasks: tasks })
     }
 
@@ -373,9 +387,14 @@ class ToDo extends Component {
         tasks.forEach((task) => {
             if (task.editPanelHidden === false && task !== targetTask) {
                 task.editPanelHidden = true
+                // If no checklist, hide checklist
+                if (task.checklist.length < 1) task.checklistHidden = true
             }
         })
         tasks[index].editPanelHidden = !targetPanelState
+        // If no checklist, hide checklist
+        if (tasks[index].checklist.length < 1) tasks[index].checklistHidden = true
+        console.log(tasks[index].checklist.length)
         this.setState({
             tasks: tasks,
             editTaskText: targetTask.text
@@ -478,8 +497,9 @@ class ToDo extends Component {
     }
 
     hideEditPanels = () => {
-        const { tasks } = this.state
+        let tasks = this.clone(this.state.tasks)
         tasks.forEach(task => (task.editPanelHidden === false) && (task.editPanelHidden = true))
+        this.setState({ tasks: tasks })
     }
 
     toggleInactiveTasks = () => {
@@ -525,6 +545,18 @@ class ToDo extends Component {
         this.setState({ inventory: inventory })
     }
 
+    showChecklist = (index) => {
+        let tasks = this.clone(this.state.tasks)
+        tasks[index].checklistHidden = false
+        this.setState({ tasks: tasks })
+    }
+
+    addChecklistTask = (task, index) => {
+        let tasks = this.clone(this.state.tasks)
+        tasks[index].checklist.push(task)
+        this.setState({ tasks: tasks })
+    }
+
     render() {
         const {
             tasks,
@@ -552,7 +584,7 @@ class ToDo extends Component {
                     <Col className='todo' sm='10' md='7' lg='5' xl='5'>
                         <AddTask
                             tasks={tasks}
-                            addItem={this.addItem}
+                            addTask={this.addTask}
                             inputChange={this.inputChange}
                             convertPriority={this.convertPriority}
                             convertDate={convertDate}
@@ -641,6 +673,10 @@ class ToDo extends Component {
                                                     editTaskTag={this.editTaskTag}
                                                     addTag={this.addTag}
                                                     removeTag={this.removeTag}
+                                                    showChecklist={this.showChecklist}
+                                                    addChecklistTask={this.addChecklistTask}
+                                                    deleteChecklistTask={this.deleteChecklistTask}
+                                                    hideEditPanels={this.hideEditPanels}
                                                 />
                                             </CSSTransition>
                                 )}

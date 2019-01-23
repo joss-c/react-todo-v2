@@ -5,7 +5,7 @@ import './App.css';
 
 class App extends Component {
     render() {
-        const tasks = localStorage.getItem('tasks')
+        const tasks = localStorage.getItem('tasks_3b')
         const inventory = localStorage.getItem('inventory_3')
         const settings = localStorage.getItem('settings_2')
         const stats = localStorage.getItem('stats_10')

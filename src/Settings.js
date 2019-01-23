@@ -42,7 +42,7 @@ export const Settings = ({ settings, selectedStyle, changeStyle, changeColor, to
                             className='change-color'
                             type='color'
                             value={settings.style.colorLow}
-                            onChange={(event) => this.changeColor(event, 'colorLow')}>
+                            onChange={(event) => changeColor(event, 'colorLow')}>
                         </input>
                         <label>Low Priority</label>
                     </div>

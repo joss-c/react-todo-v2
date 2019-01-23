@@ -11,7 +11,7 @@ export class AddTask extends Component {
         const { 
             tasks,
             selectedPriority,
-            addItem,
+            addTask,
             convertPriority,
             convertDate,
             selectedDate,
@@ -21,7 +21,7 @@ export class AddTask extends Component {
         const itemInstances = tasks.reduce(function (total, task) {
             return total + (inputElementValue === task.text ? 1 : 0)
         }, 1)
-        const newItem = {
+        const newTask = {
             active: true,
             id: uuid().substring(0, 12),
             hidden: false,
@@ -33,8 +33,9 @@ export class AddTask extends Component {
             editPanelHidden: true,
             settingsHidden: true,
             tag: (selectedTag === 'None') ? 'None' : selectedTag,
+            checklist: []
         }
-        addItem(newItem)
+        addTask(newTask)
         this.inputElement.current.value = ""
         event.preventDefault()
     }

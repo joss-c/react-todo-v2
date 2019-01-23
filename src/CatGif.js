@@ -93,7 +93,6 @@ export class CatGif extends Component {
                         {(saveButtonClicked) ? "Saved!" : "Save Kitty"}
                     </Button>
                 </Card>
-
         )
     }
 }
