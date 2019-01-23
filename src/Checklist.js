@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Col, Button, Input, Form, FormGroup } from 'reactstrap'
+import { Row, Col, Button, Input, Form, FormGroup, Progress } from 'reactstrap'
 
 export class Checklist extends Component {
     constructor(props) {
@@ -36,8 +36,22 @@ export class Checklist extends Component {
     render() {
         const props = this.props
         const { addButtonDisabled } = this.state
+        const totalTasks = props.task.checklist.length
+        // Count completed checklist tasks
+        const tasksComplete = props.task.checklist.reduce((sum, task) => {
+            return (task.complete) ? sum + 1 : sum
+        }, 0)
+        const percentageComplete = (100 / totalTasks) * tasksComplete
         return (
             <React.Fragment>
+                <Progress
+                    hidden={(totalTasks < 1) ? true : false}
+                    className='margin-top-2'
+                    striped
+                    animated={(percentageComplete == 100) ? false : true}
+                    value={percentageComplete}
+                    color={(percentageComplete == 100) ? 'success' : null}
+                />
                 <div className='margin-top-2'></div>
                 {/* Checklist will show by default if list is not empty */}
                 {(props.task.checklistHidden && props.task.checklist.length < 1)

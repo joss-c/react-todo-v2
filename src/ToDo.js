@@ -93,7 +93,7 @@ class ToDo extends Component {
     componentDidUpdate(prevProps, prevState) {
         const { tasks, inventory, settings, stats, tags } = this.state
         const { saveData } = this.props
-        console.log(this.state)
+        // console.log(this.state)
         if (prevState.tasks !== tasks) {
             saveData(tasks, 'tasks_3b')
         }
@@ -394,7 +394,6 @@ class ToDo extends Component {
         tasks[index].editPanelHidden = !targetPanelState
         // If no checklist, hide checklist
         if (tasks[index].checklist.length < 1) tasks[index].checklistHidden = true
-        console.log(tasks[index].checklist.length)
         this.setState({
             tasks: tasks,
             editTaskText: targetTask.text
