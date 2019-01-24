@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Col, Button, Input, Form, FormGroup, Progress } from 'reactstrap'
+import { hexToRGB } from './functions'
 
 export class Checklist extends Component {
     constructor(props) {
@@ -42,6 +43,14 @@ export class Checklist extends Component {
             return (task.complete) ? sum + 1 : sum
         }, 0)
         const percentageComplete = (100 / totalTasks) * tasksComplete
+        // Get priority color of parent task
+        const priorityColor = (props.task.priority == 3)
+            ? 'colorLow'
+            : (props.task.priority == 2)
+                ? 'colorMedium'
+                : (props.task.priority == 1)
+                    ? 'colorHigh'
+                    : null
         return (
             <React.Fragment>
                 <Progress
@@ -66,7 +75,7 @@ export class Checklist extends Component {
                                         style={{
                                             backgroundColor: (task.complete)
                                                 ? '#E5E5E577'
-                                                : props.settings.style.colorLow + '77',
+                                                : hexToRGB(props.settings.style[priorityColor], 0.5),
                                             padding: '2% 3% 3% 3%'
                                         }}
                                     >

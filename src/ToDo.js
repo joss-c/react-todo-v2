@@ -76,6 +76,7 @@ class ToDo extends Component {
         this.selectSortBy = React.createRef()
         this.notify = notify.createShowQueue()
         this.styles = {
+            // In order: low, medium, high, background
             Default: ['#bee5eb', '#ffeeba', '#f5c6cb', '#ffffff'],
             Marie: ['#fce8f7', '#f2b5e2', '#f46ed0', '#ffffff'],
             Halloween: ['#feeeb8', '#ffa100', '#e76427', '#000000']
