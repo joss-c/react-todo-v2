@@ -92,6 +92,7 @@ export const Task = (props) => {
                     addTask={props.addChecklistTask}
                     deleteTask={props.deleteChecklistTask}
                     hide={props.hideEditPanels}
+                    sortTask={props.sortChecklistTask}
                 />
             </TaskEditBox>
         </React.Fragment>

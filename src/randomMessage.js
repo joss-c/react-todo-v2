@@ -17,7 +17,12 @@ const randomMessage = () => {
         "You're on fiyah!!!",
         "Don't stop now!",
         "You're pretty neat.",
-        "YES!!! 😊"
+        "YES!!! 😊",
+        "Pretty dope tbh",
+        "You're like a rocket! 🚀",
+        "Whoa slow down! I can't keep up!",
+        "Jaw to the floor 😲",
+        "Proud of you 😉"
     ]
     return messages[Math.floor(Math.random() * messages.length)]
 }

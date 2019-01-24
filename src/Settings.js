@@ -12,11 +12,13 @@ export const Settings = ({ settings, selectedStyle, changeStyle, changeColor, to
                             className='select-style'
                             type='select'
                             value={selectedStyle}
-                            onChange={changeStyle}>
-                            <option value='None'>None</option>
-                            <option value='Default'>Default</option>
-                            <option value='Marie'>Marie</option>
-                            <option value='Halloween'>Halloween</option>
+                            onChange={changeStyle}
+                        >
+                                <option value='None'>None</option>
+                                <option value='Default'>Default</option>
+                                <option value='Marie'>Marie</option>
+                                <option value='Marie_2'>Marie 2</option>
+                                <option value='Halloween'>Halloween</option>
                         </Input>
                     </div>
                     <div>

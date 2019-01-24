@@ -44,22 +44,16 @@ export class Checklist extends Component {
         }, 0)
         const percentageComplete = (100 / totalTasks) * tasksComplete
         // Get priority color of parent task
-        const priorityColor = (props.task.priority == 3)
-            ? 'colorLow'
-            : (props.task.priority == 2)
-                ? 'colorMedium'
-                : (props.task.priority == 1)
-                    ? 'colorHigh'
-                    : null
+        const priorityColor = ['colorHigh', 'colorMedium', 'colorLow'][props.task.priority - 1]
         return (
             <React.Fragment>
                 <Progress
                     hidden={(totalTasks < 1) ? true : false}
                     className='margin-top-2'
                     striped
-                    animated={(percentageComplete == 100) ? false : true}
+                    animated={(percentageComplete === 100) ? false : true}
                     value={percentageComplete}
-                    color={(percentageComplete == 100) ? 'success' : null}
+                    color={(percentageComplete === 100) ? 'success' : null}
                 />
                 <div className='margin-top-2'></div>
                 {/* Checklist will show by default if list is not empty */}
@@ -69,7 +63,7 @@ export class Checklist extends Component {
                     <React.Fragment>
                         {props.task.checklist.map((task, index) =>
                             <Row className='no-gutters'>
-                                <Col xs='10'>
+                                <Col xs='8'>
                                     <div
                                         className='task'
                                         style={{
@@ -83,6 +77,17 @@ export class Checklist extends Component {
                                             {task.text}
                                         </span>
                                     </div>
+                                </Col>
+                                <Col xs='2'>
+                                    <Button
+                                        className='checklist-button'
+                                        size='sm'
+                                        outline
+                                        color='secondary'
+                                        onClick={() => props.sortTask(props.index, index)}
+                                    >
+                                        {"↑"}
+                                    </Button>
                                 </Col>
                                 <Col xs='2'>
                                     <Button

@@ -79,6 +79,7 @@ class ToDo extends Component {
             // In order: low, medium, high, background
             Default: ['#bee5eb', '#ffeeba', '#f5c6cb', '#ffffff'],
             Marie: ['#fce8f7', '#f2b5e2', '#f46ed0', '#ffffff'],
+            Marie_2: ['#85cdf3', '#ba93f0', '#e317de', '#faefff'],
             Halloween: ['#feeeb8', '#ffa100', '#e76427', '#000000']
         }
         this.notifyStyle = { background: '#007bff', text: '#ffffff' }
@@ -562,6 +563,14 @@ class ToDo extends Component {
         this.setState({ tasks: tasks })
     }
 
+    sortChecklistTask = (taskIndex, moveFrom) => {
+        let tasks = this.clone(this.state.tasks)
+        const moveTo = moveFrom - 1
+        const checklist = tasks[taskIndex].checklist
+        tasks[taskIndex].checklist = this.props.arrayMove(checklist, moveFrom, moveTo)
+        this.setState({ tasks: tasks })
+    }
+
     encouragingMessage = () => {
         setTimeout(() => {
             this.notify(randomMessage(), 'custom', 2000, this.notifyStyle)
@@ -688,6 +697,7 @@ class ToDo extends Component {
                                                     addChecklistTask={this.addChecklistTask}
                                                     deleteChecklistTask={this.deleteChecklistTask}
                                                     hideEditPanels={this.hideEditPanels}
+                                                    sortChecklistTask={this.sortChecklistTask}
                                                 />
                                             </CSSTransition>
                                 )}
