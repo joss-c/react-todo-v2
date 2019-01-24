@@ -571,6 +571,25 @@ class ToDo extends Component {
         this.setState({ tasks: tasks })
     }
 
+    editChecklistTask = (taskIndex, checklistTaskIndex) => {
+        let tasks = this.clone(this.state.tasks)
+        let checklist = tasks[taskIndex].checklist
+        // Close all other instances of checklist tasks being edited
+        checklist.forEach((task) => task.editTask = false)
+        checklist[checklistTaskIndex].editTask = true
+        this.setState({ tasks: tasks })
+    }
+
+    editChecklistTaskText = (event, taskIndex, checklistTaskIndex, editedText) => {
+        event.stopPropagation()
+        let tasks = this.clone(this.state.tasks)
+        let checklistTask = tasks[taskIndex].checklist[checklistTaskIndex]
+        checklistTask.text = editedText
+        checklistTask.editTask = false
+        console.log("THIS SHOULD BE WORKING", tasks)
+        this.setState({ tasks: tasks })
+    }
+
     encouragingMessage = () => {
         setTimeout(() => {
             this.notify(randomMessage(), 'custom', 2000, this.notifyStyle)
@@ -698,6 +717,8 @@ class ToDo extends Component {
                                                     deleteChecklistTask={this.deleteChecklistTask}
                                                     hideEditPanels={this.hideEditPanels}
                                                     sortChecklistTask={this.sortChecklistTask}
+                                                    editChecklistTask={this.editChecklistTask}
+                                                    editChecklistTaskText={this.editChecklistTaskText}
                                                 />
                                             </CSSTransition>
                                 )}

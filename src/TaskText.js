@@ -17,24 +17,27 @@ export const TaskText = ({ settings, task, index, toggleEditItem, handleTextChan
                             settings.style.colorHigh
             }}
         >
-            <span 
+            <span
                 style={{
-                textDecorationLine: (task.active) ?
-                    'none' :
-                    'line-through'
+                    textDecorationLine: (task.active) ?
+                        'none' :
+                        'line-through'
                 }}
             >
-                {(task.editPanelHidden) ?
+                {(task.editPanelHidden)
+                    ?
                     <Row>
                         <Col>
                             {task.text}
                             <span className='instance'>
-                                {(task.instance > 1) ?
-                                    ` (${task.instance})` :
-                                    null}
+                                {(task.instance > 1) 
+                                    ? ` (${task.instance})`
+                                    : null
+                                }
                             </span>
                         </Col>
-                    </Row> :
+                    </Row>
+                    :
                     <span>
                         <Row className='edit-text no-gutters'>
                             <Col xs='10'>

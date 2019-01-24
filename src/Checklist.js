@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Row, Col, Button, Input, Form, FormGroup, Progress } from 'reactstrap'
 import { hexToRGB } from './functions'
+import TextareaAutosize from 'react-autosize-textarea'
 
 export class Checklist extends Component {
     constructor(props) {
         super(props)
         this.state = {
             addButtonDisabled: true,
-            currentText: ""
+            currentTaskText: '',
         }
         this.inputElement = React.createRef()
     }
@@ -27,11 +28,33 @@ export class Checklist extends Component {
         const inputValue = this.inputElement.current.value
         const task = {
             text: inputValue,
-            complete: false
+            complete: false,
+            editTask: false
         }
         this.inputElement.current.value = ''
         this.props.addTask(task, index)
         this.setState({ addButtonDisabled: true })
+    }
+
+    styleChecklistTask = (complete) => {
+        const props = this.props
+        // Get priority color of parent task
+        const priorityColor = ['colorHigh', 'colorMedium', 'colorLow'][props.task.priority - 1]
+        return {
+            backgroundColor: (complete)
+                ? '#E5E5E577'
+                : hexToRGB(props.settings.style[priorityColor], 0.5),
+            padding: '2% 3% 3% 3%'
+        }
+    }
+
+    handleTextChange = (event) => {
+        this.setState({ currentTaskText: event.target.value })
+    }
+
+    handleTaskOnClick = (checklistTaskIndex, taskText) => {
+        this.props.editTask(this.props.index, checklistTaskIndex)
+        this.setState({ currentTaskText: taskText })
     }
 
     render() {
@@ -43,8 +66,6 @@ export class Checklist extends Component {
             return (task.complete) ? sum + 1 : sum
         }, 0)
         const percentageComplete = (100 / totalTasks) * tasksComplete
-        // Get priority color of parent task
-        const priorityColor = ['colorHigh', 'colorMedium', 'colorLow'][props.task.priority - 1]
         return (
             <React.Fragment>
                 <Progress
@@ -66,16 +87,36 @@ export class Checklist extends Component {
                                 <Col xs='8'>
                                     <div
                                         className='task'
-                                        style={{
-                                            backgroundColor: (task.complete)
-                                                ? '#E5E5E577'
-                                                : hexToRGB(props.settings.style[priorityColor], 0.5),
-                                            padding: '2% 3% 3% 3%'
-                                        }}
+                                        style={this.styleChecklistTask(task.complete)}
+                                        onClick={() => this.handleTaskOnClick(index, task.text)}
                                     >
-                                        <span style={{ textDecorationLine: (task.complete) ? 'line-through' : 'none' }}>
-                                            {task.text}
-                                        </span>
+                                        {(task.editTask)
+                                            ?
+                                            <Row className='no-gutters' style={{ paddingTop: '3px' }}>
+                                                <Col xs='10'>
+                                                    <TextareaAutosize
+                                                        className='edit-text-element'
+                                                        onChange={(event) => this.handleTextChange(event)}
+                                                        onClick={(event) => event.stopPropagation()}
+                                                        defaultValue={task.text}
+                                                    />
+                                                </Col>
+                                                <Col xs='2'>
+                                                    <Button
+                                                        className='edit-text-button'
+                                                        color='secondary'
+                                                        size='sm'
+                                                        onClick={(event) => props.editText(event, props.index, index, this.state.currentTaskText)}
+                                                    >
+                                                        {"OK"}
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                            :
+                                            <span style={{ textDecorationLine: (task.complete) ? 'line-through' : 'none' }}>
+                                                {task.text}
+                                            </span>
+                                        }
                                     </div>
                                 </Col>
                                 <Col xs='2'>
