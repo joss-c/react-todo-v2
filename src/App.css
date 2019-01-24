@@ -219,7 +219,8 @@
 .checklist-button {
     margin-left: 2px;
     width: 97%;
-    height: 95%
+    height: 95%;
+    max-height: 35px;
 }
 
 .edit-task {
