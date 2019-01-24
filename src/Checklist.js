@@ -121,7 +121,7 @@ export class Checklist extends Component {
                                             outline
                                             color='primary'
                                             disabled={addButtonDisabled}
-                                            style={{ height: 'calc(2.25rem + 2px)' }}
+                                            style={{ height: 'calc(2.25rem + 2px)', maxHeight: 'calc(2.25rem + 2px)' }}
                                         >
                                             {"Add"}
                                         </Button>
