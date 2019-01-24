@@ -104,6 +104,11 @@ export class Checklist extends Component {
                                                 <Col xs='2'>
                                                     <Button
                                                         className='edit-text-button'
+                                                        style={{
+                                                            padding: '0px',
+                                                            width: '100%',
+                                                            minHeight: '30px'
+                                                        }}
                                                         color='secondary'
                                                         size='sm'
                                                         onClick={(event) => props.editText(event, props.index, index, this.state.currentTaskText)}
