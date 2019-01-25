@@ -3,6 +3,7 @@ import TextareaAutosize from 'react-autosize-textarea'
 import { Row, Col, Button } from 'reactstrap'
 
 export const TaskText = ({ settings, task, index, toggleEditItem, handleTextChange, editText, children }) => {
+    const containsChecklist = task.checklist.length > 0
     return (
         <div
             className={(task.active) ? 'task' : 'task animate-background'}
@@ -14,7 +15,11 @@ export const TaskText = ({ settings, task, index, toggleEditItem, handleTextChan
                         settings.style.colorLow :
                         (task.priority === 2) ?
                             settings.style.colorMedium :
-                            settings.style.colorHigh
+                            settings.style.colorHigh,
+                borderTopLeftRadius: '0.25rem',
+                borderTopRightRadius: '0.25rem',
+                borderBottomRightRadius: (containsChecklist) ? '0rem' : '0.25rem',
+                borderBottomLeftRadius: (containsChecklist) ? '0rem' : '0.25rem'
             }}
         >
             <span

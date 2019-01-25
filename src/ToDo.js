@@ -86,7 +86,11 @@ class ToDo extends Component {
     }
 
     componentDidMount() {
-        this.state.tasks.forEach(task => (task.editPanelHidden === false) && (task.editPanelHidden = true))
+        // Hide all edit panels and close all instances of checklist text edits
+        this.state.tasks.forEach((task) => {
+            (task.editPanelHidden === false) && (task.editPanelHidden = true)
+            task.checklist.forEach(checklistTask => (checklistTask.editTask === true) && (checklistTask.editTask = false))
+        })
         this.sortItems()
         console.log(this.state)
         this.notify("You got this! 😊", 'custom', 2000, this.notifyStyle)

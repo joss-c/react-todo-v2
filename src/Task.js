@@ -1,6 +1,6 @@
 import React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { Row, Col, Button } from 'reactstrap'
+import { Row, Col, Button, Progress } from 'reactstrap'
 import { TaskText } from './TaskText'
 import { TaskDetails } from './TaskDetails'
 import { TaskButtons } from './TaskButtons'
@@ -11,6 +11,14 @@ import { Tags } from './Tags'
 import { Checklist } from './Checklist'
 
 export const Task = (props) => {
+
+    // Count completed checklist tasks
+    const totalTasks = props.task.checklist.length
+    const tasksComplete = props.task.checklist.reduce((sum, task) => {
+        return (task.complete) ? sum + 1 : sum
+    }, 0)
+    const percentageComplete = (100 / totalTasks) * tasksComplete
+
     return (
         <React.Fragment>
             <Row className='no-gutters'>
@@ -28,6 +36,22 @@ export const Task = (props) => {
                             articulateDateDue={props.articulateDateDue}
                         />
                     </TaskText>
+                    {(props.task.checklist.length > 0) &&
+                            <Progress
+                                striped
+                                color={(percentageComplete === 100) && 'success'}
+                                style={{ 
+                                    height: '8px',
+                                    position: 'relative',
+                                    zIndex: '-100',
+                                    marginTop: '-6px',
+                                    marginBottom: '2px',
+                                    borderRadius: '0.25rem',
+                                    backgroundImage: 'linear-gradient(to bottom,#d6d6d6 0,#e8e8e8 100%)'
+                                }}
+                                value={percentageComplete}
+                            />
+            }
                 </Col>
                 <Col xs='3'>
                     <TransitionGroup>
@@ -95,6 +119,7 @@ export const Task = (props) => {
                     sortTask={props.sortChecklistTask}
                     editTask={props.editChecklistTask}
                     editText={props.editChecklistTaskText}
+                    percentageComplete={percentageComplete}
                 />
             </TaskEditBox>
         </React.Fragment>
