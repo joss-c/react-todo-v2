@@ -51,7 +51,7 @@ export const Task = (props) => {
                                 }}
                                 value={percentageComplete}
                             />
-            }
+                    }
                 </Col>
                 <Col xs='3'>
                     <TransitionGroup>

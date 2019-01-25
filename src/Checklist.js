@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Row, Col, Button, Input, Form, FormGroup, Progress } from 'reactstrap'
 import { hexToRGB } from './functions'
 import TextareaAutosize from 'react-autosize-textarea'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import uuid from 'uuid'
 
 export class Checklist extends Component {
     constructor(props) {
@@ -29,7 +31,8 @@ export class Checklist extends Component {
         const task = {
             text: inputValue,
             complete: false,
-            editTask: false
+            editTask: false,
+            id: uuid().substring(0, 10)
         }
         this.inputElement.current.value = ''
         this.props.addTask(task, index)
@@ -77,72 +80,80 @@ export class Checklist extends Component {
                     ? null
                     :
                     <React.Fragment>
-                        {props.task.checklist.map((task, index) =>
-                            <Row className='no-gutters'>
-                                <Col xs='8'>
-                                    <div
-                                        className='task'
-                                        style={this.styleChecklistTask(task.complete)}
-                                        onClick={() => this.handleTaskOnClick(index, task.text)}
-                                    >
-                                        {(task.editTask)
-                                            ?
-                                            <Row className='no-gutters' style={{ paddingTop: '3px' }}>
-                                                <Col xs='10'>
-                                                    <TextareaAutosize
-                                                        className='edit-text-element'
-                                                        onChange={(event) => this.handleTextChange(event)}
-                                                        onClick={(event) => event.stopPropagation()}
-                                                        defaultValue={task.text}
-                                                    />
-                                                </Col>
-                                                <Col xs='2'>
-                                                    <Button
-                                                        className='edit-text-button'
-                                                        style={{
-                                                            padding: '0px',
-                                                            width: '100%',
-                                                            minHeight: '30px'
-                                                        }}
-                                                        color='secondary'
-                                                        size='sm'
-                                                        onClick={(event) => props.editText(event, props.index, index, this.state.currentTaskText)}
-                                                    >
-                                                        {"OK"}
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                            :
-                                            <span style={{ textDecorationLine: (task.complete) ? 'line-through' : 'none' }}>
-                                                {task.text}
-                                            </span>
-                                        }
-                                    </div>
-                                </Col>
-                                <Col xs='2'>
-                                    <Button
-                                        className='checklist-button'
-                                        size='sm'
-                                        outline
-                                        color='secondary'
-                                        onClick={() => props.sortTask(props.index, index)}
-                                    >
-                                        {"↑"}
-                                    </Button>
-                                </Col>
-                                <Col xs='2'>
-                                    <Button
-                                        className='checklist-button'
-                                        size='sm'
-                                        outline
-                                        color={(task.complete) ? 'danger' : 'success'}
-                                        onClick={() => props.deleteTask(props.index, index)}
-                                    >
-                                        {(task.complete) ? "✕" : "✓"}
-                                    </Button>
-                                </Col>
-                            </Row>
-                        )}
+                        <TransitionGroup>
+                            {props.task.checklist.map((task, index) =>
+                                <CSSTransition
+                                    key={task.id}
+                                    timeout={100}
+                                    classNames='fade'
+                                >
+                                    <Row className='no-gutters'>
+                                        <Col xs='8'>
+                                            <div
+                                                className='task'
+                                                style={this.styleChecklistTask(task.complete)}
+                                                onClick={() => this.handleTaskOnClick(index, task.text)}
+                                            >
+                                                {(task.editTask)
+                                                    ?
+                                                    <Row className='no-gutters' style={{ paddingTop: '3px' }}>
+                                                        <Col xs='10'>
+                                                            <TextareaAutosize
+                                                                className='edit-text-element'
+                                                                onChange={(event) => this.handleTextChange(event)}
+                                                                onClick={(event) => event.stopPropagation()}
+                                                                defaultValue={task.text}
+                                                            />
+                                                        </Col>
+                                                        <Col xs='2'>
+                                                            <Button
+                                                                className='edit-text-button'
+                                                                style={{
+                                                                    padding: '0px',
+                                                                    width: '100%',
+                                                                    minHeight: '30px'
+                                                                }}
+                                                                color='secondary'
+                                                                size='sm'
+                                                                onClick={(event) => props.editText(event, props.index, index, this.state.currentTaskText)}
+                                                            >
+                                                                {"OK"}
+                                                            </Button>
+                                                        </Col>
+                                                    </Row>
+                                                    :
+                                                    <span style={{ textDecorationLine: (task.complete) ? 'line-through' : 'none' }}>
+                                                        {task.text}
+                                                    </span>
+                                                }
+                                            </div>
+                                        </Col>
+                                        <Col xs='2'>
+                                            <Button
+                                                className='checklist-button'
+                                                size='sm'
+                                                outline
+                                                color='secondary'
+                                                onClick={(event) => props.sortTask(event, props.index, index)}
+                                            >
+                                                {"↑"}
+                                            </Button>
+                                        </Col>
+                                        <Col xs='2'>
+                                            <Button
+                                                className='checklist-button'
+                                                size='sm'
+                                                outline
+                                                color={(task.complete) ? 'danger' : 'success'}
+                                                onClick={() => props.deleteTask(props.index, index)}
+                                            >
+                                                {(task.complete) ? "✕" : "✓"}
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </CSSTransition>
+                            )}
+                        </TransitionGroup>
                         <Form onSubmit={(event) => this.addChecklistTask(event, props.index)}>
                             <FormGroup style={{ marginBottom: 0 }}>
                                 <Row className='margin-top-2 no-gutters'>

@@ -567,7 +567,7 @@ class ToDo extends Component {
         this.setState({ tasks: tasks })
     }
 
-    sortChecklistTask = (taskIndex, moveFrom) => {
+    sortChecklistTask = (event, taskIndex, moveFrom) => {
         let tasks = this.clone(this.state.tasks)
         const moveTo = moveFrom - 1
         const checklist = tasks[taskIndex].checklist
@@ -694,7 +694,7 @@ class ToDo extends Component {
                                             null :
                                             <CSSTransition
                                                 key={task.id}
-                                                timeout={500}
+                                                timeout={100}
                                                 classNames='fade'
                                             >
                                                 <Task
